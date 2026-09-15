@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1600" width="1280" height="1600" role="img" aria-label="OUR TEAM">
+  <defs>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a2b44"/>
+      <stop offset="1" stop-color="#2a4468"/>
+    </linearGradient>
+    <radialGradient id="g2b" cx="0.75" cy="0.15" r="0.9">
+      <stop offset="0" stop-color="#8fa9c9" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#6d8cb3" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="g2grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="1600" fill="url(#g2)"/>
+  <rect width="1280" height="1600" fill="url(#g2grid)"/>
+  <rect width="1280" height="1600" fill="url(#g2b)"/>
+  <rect x="102" y="1141" width="100" height="171" rx="33" fill="#ffffff" opacity="0.052"/><rect x="256" y="1113" width="142" height="199" rx="47" fill="#ffffff" opacity="0.070"/><rect x="410" y="904" width="124" height="408" rx="41" fill="#ffffff" opacity="0.075"/><rect x="563" y="833" width="98" height="479" rx="33" fill="#ffffff" opacity="0.095"/><rect x="717" y="672" width="118" height="640" rx="39" fill="#ffffff" opacity="0.090"/><rect x="870" y="740" width="110" height="572" rx="37" fill="#ffffff" opacity="0.088"/><rect x="1024" y="808" width="126" height="504" rx="42" fill="#ffffff" opacity="0.050"/>
+  <path d="M0 1248 C 384 880.0000000000001, 793.6 1152, 1280 672 L 1280 1600 L 0 1600 Z" fill="#000000" opacity="0.22"/>
+  <path d="M0 1376 C 435.20000000000005 1056, 844.8000000000001 1312, 1280 896.0000000000001" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2"/>
+  <g transform="translate(640 672)" opacity="0.07">
+    <circle r="218" fill="#ffffff"/>
+    <path d="M0 -166 L 141 141 L -141 141 Z" fill="#1a2b44"/>
+  </g>
+  <text x="58" y="1504" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="600" letter-spacing="3" fill="#ffffff" fill-opacity="0.28">OUR TEAM</text>
+</svg>

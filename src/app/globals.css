@@ -1,26 +1,201 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   Advisor Technologies design tokens
+   Palette derived from the corporate mark: deep navy + graphite charcoal.
+   ========================================================================== */
+
+@theme {
+  /* Brand navy, taken from the logo's arc/monogram */
+  --color-navy-50: #f2f5f9;
+  --color-navy-100: #e4ebf3;
+  --color-navy-200: #c6d4e5;
+  --color-navy-300: #9db3cf;
+  --color-navy-400: #6d8cb3;
+  --color-navy-500: #486a95;
+  --color-navy-600: #2a4468;
+  --color-navy-700: #23395a;
+  --color-navy-800: #1a2b44;
+  --color-navy-900: #121e30;
+  --color-navy-950: #0a1220;
+
+  /* Graphite, taken from the logo's swoosh */
+  --color-graphite-50: #f5f6f7;
+  --color-graphite-100: #e9eaec;
+  --color-graphite-200: #d5d7da;
+  --color-graphite-300: #b3b7bc;
+  --color-graphite-400: #8a8f96;
+  --color-graphite-500: #676c73;
+  --color-graphite-600: #4d5157;
+  --color-graphite-700: #3c4045;
+  --color-graphite-800: #2b2e32;
+  --color-graphite-900: #1c1e21;
+
+  /* Surfaces */
+  --color-canvas: #f4f4f2;
+  --color-surface: #ffffff;
+  --color-ink: #12161c;
+
+  /* Type */
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  /* Radii */
+  --radius-card: 1.5rem;
+  --radius-panel: 2rem;
+  --radius-hero: 2.5rem;
+
+  /* Elevation */
+  --shadow-soft: 0 1px 2px rgb(10 18 32 / 0.04), 0 8px 24px -12px rgb(10 18 32 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(10 18 32 / 0.04), 0 24px 48px -20px rgb(10 18 32 / 0.22);
+  --shadow-float: 0 2px 8px rgb(10 18 32 / 0.06), 0 32px 64px -24px rgb(10 18 32 / 0.32);
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ==========================================================================
+   Base
+   ========================================================================== */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: --alpha(var(--color-navy-900) / 10%);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01" on, "cv11" on;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-navy-600);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-navy-600);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+      /* Staggered reveals must not hold content back when motion is off. */
+      transition-delay: 0ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+/* Fluid display type used for section and hero headlines */
+@utility text-display {
+  font-size: clamp(2.5rem, 1.4rem + 4.6vw, 5.5rem);
+  line-height: 0.96;
+  letter-spacing: -0.045em;
+}
+
+@utility text-headline {
+  font-size: clamp(1.875rem, 1.2rem + 2.4vw, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+@utility text-title {
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+/* Small uppercase label used above section headings */
+@utility eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Frosted pill surface: navbar, chips, floating cards */
+@utility glass {
+  background-color: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+@utility glass-dark {
+  background-color: rgb(10 18 32 / 0.55);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* Reveal-on-scroll, toggled by <Reveal /> */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s var(--ease-out-soft),
+    transform 0.7s var(--ease-out-soft);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+@utility reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Horizontal auto-scrolling strip */
+@utility animate-marquee {
+  animation: marquee 44s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Hide scrollbar on horizontally scrollable rails */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

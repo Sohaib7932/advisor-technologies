@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" role="img" aria-label="HEADQUARTERS">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#121e30"/>
+      <stop offset="1" stop-color="#23395a"/>
+    </linearGradient>
+    <radialGradient id="g1b" cx="0.75" cy="0.15" r="0.9">
+      <stop offset="0" stop-color="#8fa9c9" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#6d8cb3" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="g1grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#g1)"/>
+  <rect width="1920" height="1080" fill="url(#g1grid)"/>
+  <rect width="1920" height="1080" fill="url(#g1b)"/>
+  <rect x="154" y="696" width="182" height="190" rx="61" fill="#ffffff" opacity="0.107"/><rect x="384" y="775" width="224" height="111" rx="75" fill="#ffffff" opacity="0.103"/><rect x="614" y="538" width="212" height="348" rx="71" fill="#ffffff" opacity="0.076"/><rect x="845" y="568" width="227" height="318" rx="76" fill="#ffffff" opacity="0.055"/><rect x="1075" y="711" width="156" height="175" rx="52" fill="#ffffff" opacity="0.069"/><rect x="1306" y="814" width="79" height="72" rx="26" fill="#ffffff" opacity="0.076"/><rect x="1536" y="724" width="269" height="162" rx="90" fill="#ffffff" opacity="0.107"/>
+  <path d="M0 842.4 C 576 594, 1190.4 777.6, 1920 453.59999999999997 L 1920 1080 L 0 1080 Z" fill="#000000" opacity="0.22"/>
+  <path d="M0 928.8 C 652.8000000000001 712.8000000000001, 1267.2 885.5999999999999, 1920 604.8000000000001" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2"/>
+  <g transform="translate(960 454)" opacity="0.07">
+    <circle r="184" fill="#ffffff"/>
+    <path d="M0 -140 L 119 119 L -119 119 Z" fill="#121e30"/>
+  </g>
+  <text x="86" y="1015" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="27" font-weight="600" letter-spacing="3" fill="#ffffff" fill-opacity="0.28">HEADQUARTERS</text>
+</svg>

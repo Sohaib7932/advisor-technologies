@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 960" width="1280" height="960" role="img" aria-label="SERVICE WORKSHOP">
+  <defs>
+    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#23395a"/>
+      <stop offset="1" stop-color="#0a1220"/>
+    </linearGradient>
+    <radialGradient id="g3b" cx="0.75" cy="0.15" r="0.9">
+      <stop offset="0" stop-color="#8fa9c9" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#6d8cb3" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="g3grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="960" fill="url(#g3)"/>
+  <rect width="1280" height="960" fill="url(#g3grid)"/>
+  <rect width="1280" height="960" fill="url(#g3b)"/>
+  <rect x="102" y="425" width="79" height="362" rx="26" fill="#ffffff" opacity="0.067"/><rect x="256" y="647" width="135" height="140" rx="45" fill="#ffffff" opacity="0.107"/><rect x="410" y="607" width="106" height="180" rx="35" fill="#ffffff" opacity="0.074"/><rect x="563" y="495" width="173" height="292" rx="58" fill="#ffffff" opacity="0.065"/><rect x="717" y="501" width="132" height="286" rx="44" fill="#ffffff" opacity="0.041"/><rect x="870" y="490" width="166" height="297" rx="55" fill="#ffffff" opacity="0.100"/><rect x="1024" y="653" width="72" height="134" rx="24" fill="#ffffff" opacity="0.062"/>
+  <path d="M0 748.8000000000001 C 384 528, 793.6 691.1999999999999, 1280 403.2 L 1280 960 L 0 960 Z" fill="#000000" opacity="0.22"/>
+  <path d="M0 825.6 C 435.20000000000005 633.6, 844.8000000000001 787.1999999999999, 1280 537.6" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2"/>
+  <g transform="translate(640 403)" opacity="0.07">
+    <circle r="163" fill="#ffffff"/>
+    <path d="M0 -125 L 106 106 L -106 106 Z" fill="#23395a"/>
+  </g>
+  <text x="58" y="902" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="25" font-weight="600" letter-spacing="3" fill="#ffffff" fill-opacity="0.28">SERVICE WORKSHOP</text>
+</svg>

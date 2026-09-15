@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000" width="1400" height="1000" role="img" aria-label="F-8 MARKAZ, ISLAMABAD">
+  <defs>
+    <linearGradient id="g14" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a4468"/>
+      <stop offset="1" stop-color="#121e30"/>
+    </linearGradient>
+    <radialGradient id="g14b" cx="0.75" cy="0.15" r="0.9">
+      <stop offset="0" stop-color="#8fa9c9" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#6d8cb3" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="g14grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1400" height="1000" fill="url(#g14)"/>
+  <rect width="1400" height="1000" fill="url(#g14grid)"/>
+  <rect width="1400" height="1000" fill="url(#g14b)"/>
+  <rect x="112" y="527" width="114" height="293" rx="38" fill="#ffffff" opacity="0.092"/><rect x="280" y="437" width="65" height="383" rx="22" fill="#ffffff" opacity="0.095"/><rect x="448" y="688" width="184" height="132" rx="61" fill="#ffffff" opacity="0.060"/><rect x="616" y="458" width="108" height="362" rx="36" fill="#ffffff" opacity="0.087"/><rect x="784" y="625" width="175" height="195" rx="58" fill="#ffffff" opacity="0.066"/><rect x="952" y="708" width="164" height="112" rx="55" fill="#ffffff" opacity="0.095"/><rect x="1120" y="565" width="134" height="255" rx="45" fill="#ffffff" opacity="0.063"/>
+  <path d="M0 780 C 420 550, 868 720, 1400 420 L 1400 1000 L 0 1000 Z" fill="#000000" opacity="0.22"/>
+  <path d="M0 860 C 476.00000000000006 660, 924 820, 1400 560" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2"/>
+  <g transform="translate(700 420)" opacity="0.07">
+    <circle r="170" fill="#ffffff"/>
+    <path d="M0 -130 L 110 110 L -110 110 Z" fill="#2a4468"/>
+  </g>
+  <text x="63" y="940" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" font-weight="600" letter-spacing="3" fill="#ffffff" fill-opacity="0.28">F-8 MARKAZ, ISLAMABAD</text>
+</svg>
