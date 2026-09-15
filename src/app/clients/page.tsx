@@ -29,9 +29,7 @@ export default function ClientsPage() {
   return (
     <>
       <PageHero
-        breadcrumb="Clients"
         eyebrow="Valued clients"
-        image="/images/clients.svg"
         title={
           <>
             Serving Pakistan&rsquo;s

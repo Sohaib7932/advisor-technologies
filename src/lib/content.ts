@@ -120,7 +120,7 @@ export const services: Service[] = [
     short: "Supply, installation and fixing",
     body: "Supply, installation and fixing of plant & machinery, furniture, office stationery, computer stationery and all kinds of general order supplies related to the various industries.",
     icon: "machinery",
-    image: "/images/plant-machinery.svg",
+    image: "/images/plant-machinery-furniture.png",
     highlights: [
       "Industrial plant & machinery",
       "Office and institutional furniture",
@@ -134,7 +134,7 @@ export const services: Service[] = [
     short: "Design, deploy, maintain",
     body: "Consultancy and servicing of information systems, network solutions, services & installations, customised office automation software solutions, web design, development and maintenance.",
     icon: "network",
-    image: "/images/it-networks.svg",
+    image: "/images/it-consultancy.png",
     highlights: [
       "LAN & WAN design and rollout",
       "Office automation software",

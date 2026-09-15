@@ -8,7 +8,7 @@ export function Hero() {
       <div className="relative isolate flex min-h-[46rem] flex-col overflow-hidden rounded-[1.75rem] bg-navy-950 sm:min-h-[46rem] sm:rounded-hero lg:min-h-[min(88vh,52rem)]">
         {/* Backdrop */}
         <Image
-          src="/images/hero.svg"
+          src="/images/hero-image.png"
           alt="Advisor Technologies head office in Islamabad"
           fill
           priority

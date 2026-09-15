@@ -36,7 +36,7 @@ export function ProductPreview() {
               delay={(index % 4) * 60}
               className="group relative flex flex-col rounded-card bg-surface p-6 shadow-soft ring-1 ring-navy-900/6 transition-all duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift"
             >
-              <span className="flex size-11 items-center justify-center rounded-xl bg-navy-600/10 text-navy-600 transition-colors duration-300 group-hover:bg-navy-600 group-hover:text-white">
+              <span className="flex h-14 w-10 items-center justify-center rounded-full bg-navy-600/10 text-navy-600 transition-colors duration-300 group-hover:bg-navy-600 group-hover:text-white">
                 <Icon name={product.icon} className="size-5" />
               </span>
               <span className="eyebrow mt-5 text-graphite-400">

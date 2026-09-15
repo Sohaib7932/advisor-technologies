@@ -21,9 +21,7 @@ export default function ServicesPage() {
   return (
     <>
       <PageHero
-        breadcrumb="Services"
         eyebrow="Activity scope"
-        image="/images/workshop.svg"
         title={
           <>
             Six divisions,

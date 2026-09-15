@@ -84,7 +84,7 @@ export function CapabilitiesBento() {
 
                   <span
                     className={cn(
-                      "relative inline-flex size-11 w-fit items-center justify-center rounded-xl transition-colors duration-300",
+                      "relative inline-flex h-16 w-11 items-center justify-center rounded-full transition-colors duration-300",
                       withImage
                         ? "bg-white/12 text-white ring-1 ring-white/20 backdrop-blur-sm"
                         : "bg-navy-600/10 text-navy-600 group-hover:bg-navy-600 group-hover:text-white",

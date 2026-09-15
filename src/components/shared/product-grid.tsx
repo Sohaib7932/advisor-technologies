@@ -77,8 +77,8 @@ export function ProductGrid() {
           >
             <span
               className={cn(
-                "flex size-12 shrink-0 items-center justify-center rounded-xl bg-navy-600/10 text-navy-600 transition-colors duration-300 group-hover:bg-navy-600 group-hover:text-white",
-                index === 0 && "lg:size-14",
+                "flex h-16 w-11 shrink-0 items-center justify-center rounded-full bg-navy-600/10 text-navy-600 transition-colors duration-300 group-hover:bg-navy-600 group-hover:text-white",
+                index === 0 && "lg:h-18 lg:w-12",
               )}
             >
               <Icon

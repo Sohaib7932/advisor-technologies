@@ -25,9 +25,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        breadcrumb="About"
         eyebrow="About us"
-        image="/images/team.svg"
         title={
           <>
             A recognised name for{" "}

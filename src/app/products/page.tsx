@@ -32,9 +32,7 @@ export default function ProductsPage() {
   return (
     <>
       <PageHero
-        breadcrumb="Products"
         eyebrow="Product line"
-        image="/images/warehouse.svg"
         title={
           <>
             A catalogue built for

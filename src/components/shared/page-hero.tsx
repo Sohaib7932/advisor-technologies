@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/section-heading";
 
@@ -11,14 +10,12 @@ export function PageHero({
   eyebrow,
   title,
   lead,
-  image = "/images/office.svg",
-  breadcrumb,
+  image = "/images/hero-image.png",
 }: {
   eyebrow: string;
   title: React.ReactNode;
   lead?: string;
   image?: string;
-  breadcrumb: string;
 }) {
   return (
     <section className="px-2 pt-2 sm:px-3 sm:pt-3">
@@ -37,22 +34,6 @@ export function PageHero({
         />
 
         <Container className="relative pt-32 pb-16 sm:pt-40 sm:pb-20 lg:pt-44 lg:pb-24">
-          <nav aria-label="Breadcrumb" className="mb-8">
-            <ol className="flex items-center gap-2 text-xs text-navy-300">
-              <li>
-                <Link href="/" className="transition-colors hover:text-white">
-                  Home
-                </Link>
-              </li>
-              <li aria-hidden className="text-navy-500">
-                /
-              </li>
-              <li aria-current="page" className="text-white">
-                {breadcrumb}
-              </li>
-            </ol>
-          </nav>
-
           <Eyebrow tone="light">{eyebrow}</Eyebrow>
           <h1 className="mt-6 max-w-4xl text-display text-white">{title}</h1>
           {lead && (

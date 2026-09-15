@@ -38,17 +38,17 @@ export function Principles() {
 
           {/* Image with the four principles overlapping its lower edge */}
           <Reveal delay={120} className="lg:col-span-6 lg:col-start-7">
-            <div className="relative aspect-16/10 overflow-hidden rounded-panel sm:aspect-2/1 lg:aspect-16/10">
+            <div className="group/image relative aspect-16/10 overflow-hidden rounded-panel sm:aspect-2/1 lg:aspect-16/10">
               <Image
-                src="/images/operations.svg"
-                alt="Advisor Technologies engineers on site"
+                src="/images/objective-principle.png?v=2"
+                alt="Advisor Technologies engineer coordinating industrial operations"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
+                className="object-cover transition-transform duration-700 ease-out-soft group-hover/image:scale-[1.03]"
               />
               <div
                 aria-hidden
-                className="absolute inset-0 bg-linear-to-t from-navy-950/80 via-navy-950/20 to-transparent"
+                className="absolute inset-0 bg-linear-to-t from-navy-950/80 via-navy-950/20 to-transparent transition-opacity duration-500 group-hover/image:opacity-70"
               />
             </div>
 
@@ -60,9 +60,9 @@ export function Principles() {
                   as="li"
                   key={principle.title}
                   delay={200 + index * 80}
-                  className="flex gap-3.5 rounded-2xl bg-white/95 p-4 shadow-lift ring-1 ring-white/50 backdrop-blur-xl"
+                  className="group/principle flex gap-3.5 rounded-2xl bg-white/95 p-4 shadow-lift ring-1 ring-white/50 backdrop-blur-xl transition-transform duration-300 ease-out-soft hover:-translate-y-1 hover:shadow-float"
                 >
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-navy-600/10 text-navy-700">
+                  <span className="flex h-12 w-9 shrink-0 items-center justify-center rounded-full bg-navy-600/10 text-navy-700 transition-transform duration-300 ease-out-soft group-hover/principle:rotate-3 group-hover/principle:bg-navy-600/15">
                     <Icon name={principle.icon} className="size-4.5" />
                   </span>
                   <span className="min-w-0">

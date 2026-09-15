@@ -18,9 +18,7 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        breadcrumb="Contact"
         eyebrow="Contact us"
-        image="/images/contact.svg"
         title={
           <>
             Let&rsquo;s discuss
