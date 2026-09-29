@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { PageHero } from "@/components/shared/page-hero";
+import { HeroFacts, PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
+import { PrincipleCard } from "@/components/home/principle-card";
 import { Container, Section } from "@/components/ui/container";
 import { SectionHeading, Eyebrow } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
+import { FloodCard } from "@/components/ui/flood-card";
 import { Icon } from "@/components/ui/icons";
 import {
   aboutParagraphs,
   objectiveParagraphs,
   principles,
   sectors,
+  stats,
   values,
 } from "@/lib/content";
 import { site } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -34,6 +38,12 @@ export default function AboutPage() {
           </>
         }
         lead="Exclusive territory agents to a number of world-class industrial manufacturing brands, focused on delivering high quality brands alongside international standards of after-sales service."
+        aside={
+          <HeroFacts
+            label="At a glance"
+            facts={stats.map((stat) => ({ value: stat.value, label: stat.label }))}
+          />
+        }
       />
 
       {/* Story */}
@@ -41,30 +51,62 @@ export default function AboutPage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-5">
-              <div className="relative aspect-4/5 overflow-hidden rounded-panel">
-                <Image
-                  src="/images/about.svg"
-                  alt="The Advisor Technologies team"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover"
-                />
+              {/* Layered photographs: the plant floor, with the network room
+                  inset over its corner and a floating credential. */}
+              <div className="relative pr-10 pb-14 sm:pr-16 sm:pb-20">
+                <div className="group/photo relative aspect-4/5 overflow-hidden rounded-panel shadow-lift">
+                  <Image
+                    src="/images/plant-machinery-furniture.png"
+                    alt="Plant, machinery and office furniture supplied by Advisor Technologies"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    className="object-cover transition-transform duration-700 ease-out-soft group-hover/photo:scale-105"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 bg-linear-to-t from-navy-950/60 via-transparent to-transparent"
+                  />
+                </div>
+                <div className="absolute right-0 bottom-0 w-[52%] overflow-hidden rounded-card shadow-float ring-6 ring-canvas">
+                  <div className="relative aspect-4/3">
+                    <Image
+                      src="/images/it-consultancy.png"
+                      alt="Network and server installation"
+                      fill
+                      sizes="(max-width: 1024px) 50vw, 20vw"
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="absolute top-6 -left-2 flex items-center gap-3 rounded-2xl bg-white/90 py-3 pr-5 pl-3 shadow-lift ring-1 ring-navy-900/8 backdrop-blur-md sm:-left-5">
+                  <span className="grid size-10 place-items-center rounded-xl bg-navy-950 text-white">
+                    <Icon name="shield" className="size-5" />
+                  </span>
+                  <span className="text-sm leading-tight font-semibold text-navy-900">
+                    Exclusive territory
+                    <span className="block text-xs font-medium text-graphite-500">
+                      agents in Pakistan
+                    </span>
+                  </span>
+                </div>
               </div>
 
               {/* Registration details */}
               <dl className="mt-4 grid grid-cols-2 gap-3">
-                <div className="rounded-2xl bg-surface p-5 ring-1 ring-navy-900/8">
-                  <dt className="eyebrow text-graphite-400">NTN</dt>
-                  <dd className="mt-2 font-display text-lg font-semibold text-navy-900">
-                    {site.registration.ntn}
-                  </dd>
-                </div>
-                <div className="rounded-2xl bg-surface p-5 ring-1 ring-navy-900/8">
-                  <dt className="eyebrow text-graphite-400">STN</dt>
-                  <dd className="mt-2 font-display text-lg font-semibold text-navy-900">
-                    {site.registration.stn}
-                  </dd>
-                </div>
+                {[
+                  { label: "NTN", value: site.registration.ntn },
+                  { label: "STN", value: site.registration.stn },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-2xl bg-navy-950 p-5 text-white shadow-soft"
+                  >
+                    <dt className="eyebrow text-navy-300">{item.label}</dt>
+                    <dd className="mt-2 font-display text-lg font-semibold tabular-nums">
+                      {item.value}
+                    </dd>
+                  </div>
+                ))}
               </dl>
             </Reveal>
 
@@ -82,7 +124,14 @@ export default function AboutPage() {
               <div className="mt-8 space-y-6">
                 {aboutParagraphs.map((paragraph, index) => (
                   <Reveal key={index} delay={index * 70}>
-                    <p className="text-base leading-relaxed text-graphite-600">
+                    <p
+                      className={cn(
+                        "leading-relaxed",
+                        index === 0
+                          ? "text-lg font-medium text-navy-900"
+                          : "text-base text-graphite-600",
+                      )}
+                    >
                       {paragraph}
                     </p>
                   </Reveal>
@@ -95,7 +144,7 @@ export default function AboutPage() {
                   {sectors.map((sector) => (
                     <li
                       key={sector}
-                      className="rounded-full bg-navy-900/5 px-4 py-2 text-sm font-medium text-navy-800 ring-1 ring-navy-900/8"
+                      className="rounded-full bg-surface px-4 py-2 text-sm font-medium text-navy-800 shadow-soft ring-1 ring-navy-900/8 transition-colors duration-300 hover:bg-navy-950 hover:text-white"
                     >
                       {sector}
                     </li>
@@ -103,6 +152,61 @@ export default function AboutPage() {
                 </ul>
               </Reveal>
             </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Objective & principles */}
+      <Section
+        id="principles"
+        tone="dark"
+        className="relative isolate overflow-hidden"
+      >
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-[radial-gradient(50%_60%_at_85%_30%,rgb(42_68_104/0.55),transparent_70%)]"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-[radial-gradient(35%_45%_at_0%_100%,rgb(31_107_255/0.16),transparent_70%)]"
+        />
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+            <Reveal className="lg:col-span-5">
+              <Eyebrow tone="light">Objective</Eyebrow>
+              <h2 className="mt-5 text-headline text-white">
+                Complete solutions,
+                <span className="block text-navy-400">end to end</span>
+              </h2>
+              <div className="mt-8 space-y-5">
+                {objectiveParagraphs.map((paragraph, index) => (
+                  <p
+                    key={index}
+                    className={cn(
+                      "leading-relaxed",
+                      index === 0
+                        ? "text-lg text-navy-100"
+                        : "text-base text-navy-300",
+                    )}
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            </Reveal>
+
+            <ul className="grid gap-3 sm:grid-cols-2 lg:col-span-7">
+              {principles.map((principle, index) => (
+                <Reveal as="li" key={principle.title} delay={index * 90}>
+                  <PrincipleCard
+                    index={index}
+                    title={principle.title}
+                    body={principle.body}
+                    icon={principle.icon}
+                  />
+                </Reveal>
+              ))}
+            </ul>
           </div>
         </Container>
       </Section>
@@ -123,72 +227,16 @@ export default function AboutPage() {
 
           <ul className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((value, index) => (
-              <Reveal
-                as="li"
-                key={value.title}
-                delay={index * 80}
-                className="group relative overflow-hidden rounded-card bg-canvas p-7 ring-1 ring-navy-900/8 transition-all duration-500 ease-out-soft hover:-translate-y-1 hover:bg-navy-950 hover:shadow-lift"
-              >
-                <span className="flex size-12 items-center justify-center rounded-xl bg-navy-600/10 text-navy-600 transition-colors duration-500 group-hover:bg-white/12 group-hover:text-white">
-                  <Icon name={value.icon} className="size-5.5" />
-                </span>
-                <h3 className="mt-6 font-display text-xl font-semibold text-ink transition-colors duration-500 group-hover:text-white">
-                  {value.title}
-                </h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-graphite-600 transition-colors duration-500 group-hover:text-navy-200">
-                  {value.blurb}
-                </p>
+              <Reveal as="li" key={value.title} delay={index * 80}>
+                <FloodCard
+                  index={index}
+                  icon={value.icon}
+                  title={value.title}
+                  body={value.blurb}
+                />
               </Reveal>
             ))}
           </ul>
-        </Container>
-      </Section>
-
-      {/* Objective & principles */}
-      <Section id="principles">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-5">
-              <Reveal>
-                <Eyebrow>Objective</Eyebrow>
-                <h2 className="mt-5 text-headline text-ink">
-                  Complete solutions,
-                  <span className="block text-navy-500">end to end</span>
-                </h2>
-                <div className="mt-8 space-y-5">
-                  {objectiveParagraphs.map((paragraph, index) => (
-                    <p
-                      key={index}
-                      className="text-base leading-relaxed text-graphite-600"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </Reveal>
-            </div>
-
-            <ul className="grid gap-3 sm:grid-cols-2 lg:col-span-6 lg:col-start-7">
-              {principles.map((principle, index) => (
-                <Reveal
-                  as="li"
-                  key={principle.title}
-                  delay={index * 80}
-                  className="flex flex-col rounded-card bg-surface p-7 shadow-soft ring-1 ring-navy-900/6"
-                >
-                  <span className="flex size-11 items-center justify-center rounded-xl bg-navy-600 text-white">
-                    <Icon name={principle.icon} className="size-5" />
-                  </span>
-                  <h3 className="mt-5 font-display text-lg font-semibold text-ink">
-                    {principle.title}
-                  </h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-graphite-600">
-                    {principle.body}
-                  </p>
-                </Reveal>
-              ))}
-            </ul>
-          </div>
         </Container>
       </Section>
 

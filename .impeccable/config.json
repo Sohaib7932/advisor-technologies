@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-09-29T09:10:59.026Z",
+        "reason": "Claude: one-shot sheen animation on the hero wordmark; rest state is solid white, not a static gradient heading"
+      }
+    ]
+  }
+}

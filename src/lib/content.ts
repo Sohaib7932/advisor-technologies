@@ -148,7 +148,7 @@ export const services: Service[] = [
     short: "Hardware and communications",
     body: "Supply of computers, laptops and accessories, installation and service of PABX exchange systems, off-the-shelf software, complete office equipment & supplies and general items.",
     icon: "computer",
-    image: "/images/computing.svg",
+    image: "/images/computing-office.png",
     highlights: [
       "Desktops, laptops & workstations",
       "PABX exchange installation",
@@ -162,7 +162,7 @@ export const services: Service[] = [
     short: "Surveillance and screening",
     body: "Supply, service and maintenance of CCTV cameras, walkthrough gates and accessories, complete access control systems and queue management systems.",
     icon: "security",
-    image: "/images/security.svg",
+    image: "/images/security-accesscontrol.png",
     highlights: [
       "CCTV supply & maintenance",
       "Walkthrough gates & screening",
@@ -176,7 +176,7 @@ export const services: Service[] = [
     short: "All types of printing work",
     body: "All types of printing work, from institutional forms, registers and secure stationery through to large-format and promotional printing.",
     icon: "print",
-    image: "/images/printing.svg",
+    image: "/images/printing-service.png",
     highlights: [
       "Institutional forms & registers",
       "Computer stationery",
@@ -190,7 +190,7 @@ export const services: Service[] = [
     short: "Civil, electrical and mechanical",
     body: "Repairing of all types of machinery & equipment, light & heavy transport, buildings & structures, roads & water supplies, and all types of electrical & mechanical works.",
     icon: "wrench",
-    image: "/images/maintenance.svg",
+    image: "/images/repair-maintenance.png",
     highlights: [
       "Machinery & equipment overhaul",
       "Light & heavy transport repair",
@@ -320,38 +320,79 @@ export const productCategories = [
   "Works & Supply",
 ] as const;
 
+/**
+ * Presentation for each catalogue group: its photograph, icon, one-line
+ * summary, and the service division an enquiry about it belongs to.
+ */
+export const productCategoryDetails: Record<
+  ProductCategory,
+  { icon: IconName; image: string; blurb: string; serviceId: string }
+> = {
+  Infrastructure: {
+    icon: "machinery",
+    image: "/images/repair-maintenance.png",
+    blurb: "Heavy plant and machinery, supplied, installed, fixed and maintained on site.",
+    serviceId: "plant-machinery",
+  },
+  "IT Hardware": {
+    icon: "computer",
+    image: "/images/computing-office.png",
+    blurb: "Desktops, notebooks, servers, printers, imaging and displays from world-class brands.",
+    serviceId: "computing",
+  },
+  Connectivity: {
+    icon: "satellite",
+    image: "/images/it-consultancy.png",
+    blurb: "Networks, satellite links and web services that keep every site connected.",
+    serviceId: "it-networks",
+  },
+  "Works & Supply": {
+    icon: "package",
+    image: "/images/printing-service.png",
+    blurb: "Temporary offices, civil and mechanical works, and general order supply.",
+    serviceId: "maintenance",
+  },
+};
+
 /* -------------------------------------------------------------------------- */
 /* Clients                                                                    */
 /* -------------------------------------------------------------------------- */
 
-export type Client = { name: string; sector: string };
+export type Client = {
+  name: string;
+  sector: string;
+  /** Path under /public. */
+  logo?: string;
+  /** The logo artwork has its own background, so it should fill its tile. */
+  logoFill?: boolean;
+};
 
 export const clients: Client[] = [
-  { name: "Hashwani Hotels Limited", sector: "Hospitality" },
-  { name: "Islamabad Club", sector: "Hospitality" },
-  { name: "Ministry of Ports & Shipping", sector: "Federal Ministry" },
-  { name: "Capital Development Authority", sector: "Civic Authority" },
-  { name: "NADRA Islamabad / Karachi", sector: "Federal Authority" },
-  { name: "National Tariff Commission, Ministry of Commerce", sector: "Federal Ministry" },
-  { name: "Chief Commissioner Office ICT", sector: "Civic Authority" },
-  { name: "National Police Academy Islamabad", sector: "Law Enforcement" },
-  { name: "Islamabad Social Security Institutions", sector: "Public Welfare" },
-  { name: "Ministry of Education & Technical Training", sector: "Federal Ministry" },
-  { name: "Narcotics Control Division Islamabad", sector: "Federal Division" },
-  { name: "Ministry of Parliamentary Affairs", sector: "Federal Ministry" },
-  { name: "Ministry of Kashmir Affairs", sector: "Federal Ministry" },
-  { name: "Pakistan Housing Authority Foundation", sector: "Federal Authority" },
-  { name: "Directorate General Post Clearance Audit", sector: "Revenue & Audit" },
-  { name: "Excise & Taxation Department ICT", sector: "Revenue & Audit" },
-  { name: "National Counter Terrorism Authority", sector: "Federal Authority" },
-  { name: "Ministry of Information & Broadcasting", sector: "Federal Ministry" },
-  { name: "Wafaqi Mohtasib Secretariat Islamabad", sector: "Federal Authority" },
-  { name: "Ministry of Religious Affairs Islamabad", sector: "Federal Ministry" },
-  { name: "IESCO, Islamabad", sector: "Power Utility" },
-  { name: "Nai Zindagi Trust Islamabad", sector: "NGO" },
-  { name: "Women Welfare Department ICT", sector: "Public Welfare" },
-  { name: "Marine Fisheries Department Karachi", sector: "Federal Department" },
-  { name: "Pakistan Marine Academy Karachi", sector: "Education" },
+  { name: "Hashwani Hotels Limited", sector: "Hospitality", logo: "/clients-logos/hashwani.jpg" },
+  { name: "Islamabad Club", sector: "Hospitality", logo: "/clients-logos/islamabad-club.png" },
+  { name: "Ministry of Ports & Shipping", sector: "Federal Ministry", logo: "/clients-logos/Ministry-ports.png" },
+  { name: "Capital Development Authority", sector: "Civic Authority", logo: "/clients-logos/CDA.png" },
+  { name: "NADRA Islamabad / Karachi", sector: "Federal Authority", logo: "/clients-logos/nadra.svg" },
+  { name: "National Tariff Commission, Ministry of Commerce", sector: "Federal Ministry", logo: "/clients-logos/NTC.jpg" },
+  { name: "Chief Commissioner Office ICT", sector: "Civic Authority", logo: "/clients-logos/CCO.jpg" },
+  { name: "National Police Academy Islamabad", sector: "Law Enforcement", logo: "/clients-logos/NPA.jpg" },
+  { name: "Islamabad Social Security Institutions", sector: "Public Welfare", logo: "/clients-logos/social-security.jpg" },
+  { name: "Ministry of Education & Technical Training", sector: "Federal Ministry", logo: "/clients-logos/ministry-education.jpg" },
+  { name: "Narcotics Control Division Islamabad", sector: "Federal Division", logo: "/clients-logos/norcotics.png" },
+  { name: "Ministry of Parliamentary Affairs", sector: "Federal Ministry", logo: "/clients-logos/ministry-parliamentary.jpg" },
+  { name: "Ministry of Kashmir Affairs", sector: "Federal Ministry", logo: "/clients-logos/ministry-kashmir.png" },
+  { name: "Pakistan Housing Authority Foundation", sector: "Federal Authority", logo: "/clients-logos/PHA.jpg" },
+  { name: "Directorate General Post Clearance Audit", sector: "Revenue & Audit", logo: "/clients-logos/general-post-clearance-audit.webp", logoFill: true },
+  { name: "Excise & Taxation Department ICT", sector: "Revenue & Audit", logo: "/clients-logos/excise.jpg" },
+  { name: "National Counter Terrorism Authority", sector: "Federal Authority", logo: "/clients-logos/NCT.jpg" },
+  { name: "Ministry of Information & Broadcasting", sector: "Federal Ministry", logo: "/clients-logos/ministry-information.jpg" },
+  { name: "Wafaqi Mohtasib Secretariat Islamabad", sector: "Federal Authority", logo: "/clients-logos/wafaqi.png" },
+  { name: "Ministry of Religious Affairs Islamabad", sector: "Federal Ministry", logo: "/clients-logos/ministry-religious-affair.png" },
+  { name: "IESCO, Islamabad", sector: "Power Utility", logo: "/clients-logos/iesco-logo.webp" },
+  { name: "Nai Zindagi Trust Islamabad", sector: "NGO", logo: "/clients-logos/naizindagitrust_logo.jpg", logoFill: true },
+  { name: "Women Welfare Department ICT", sector: "Public Welfare", logo: "/clients-logos/women-welfare.jpg" },
+  { name: "Marine Fisheries Department Karachi", sector: "Federal Department", logo: "/clients-logos/marine-fisheries.jpg" },
+  { name: "Pakistan Marine Academy Karachi", sector: "Education", logo: "/clients-logos/Pakistan_Marine_Academy.webp", logoFill: true },
 ];
 
 /* -------------------------------------------------------------------------- */

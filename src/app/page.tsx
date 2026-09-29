@@ -14,8 +14,8 @@ export default function HomePage() {
       <Intro />
       <CapabilitiesBento />
       <Principles />
-      <ProductPreview />
       <ClientsStrip />
+      <ProductPreview />
       <Process />
       <Cta />
     </>

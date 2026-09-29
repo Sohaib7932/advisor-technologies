@@ -1,9 +1,10 @@
-import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone } from "@/components/ui/icons";
 import { site } from "@/lib/site";
+import { GhostFibersBackground } from "@/components/backgrounds/lazy-backgrounds";
+import { palette } from "@/components/backgrounds/palette";
 
 export function Cta({
   title = "Have a requirement or a tender in hand?",
@@ -15,16 +16,29 @@ export function Cta({
   return (
     <section className="px-2 pb-2 sm:px-3 sm:pb-3">
       <Reveal className="relative isolate overflow-hidden rounded-[1.75rem] bg-navy-900 sm:rounded-hero">
-        <Image
-          src="/images/office.svg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover opacity-45"
-        />
+        {/* Surface gradient first: it is what shows until the WebGL layer
+            loads, and the fallback if it never does. */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-linear-to-br from-navy-950 via-navy-900/85 to-navy-800/70"
+          className="absolute inset-0 bg-[linear-gradient(160deg,#061426_0%,#0f3a66_52%,#050b14_100%)]"
+        />
+        <div aria-hidden className="absolute inset-0">
+          <GhostFibersBackground
+            lineColor={palette.deepNavy}
+            glowColor={palette.cyan}
+            layers={6}
+            scale={1.4}
+            speed={0.14}
+            twist={0.12}
+            lineSharpness={14}
+            glowIntensity={1.2}
+            brightness={1.5}
+            vignette={0.7}
+          />
+        </div>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-linear-to-r from-navy-950/90 via-navy-950/55 to-navy-950/20"
         />
 
         <Container className="relative py-20 md:py-24 lg:py-28">

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { PageHero } from "@/components/shared/page-hero";
+import { HeroFacts, PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
 import { Container, Section } from "@/components/ui/container";
-import { SectionHeading, Eyebrow } from "@/components/ui/section-heading";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
-import { clients } from "@/lib/content";
+import { FloodCard } from "@/components/ui/flood-card";
+import { clients, type IconName } from "@/lib/content";
+import { ClientLogo } from "@/components/ui/client-logo";
 
 export const metadata: Metadata = {
   title: "Our Clients",
@@ -25,18 +27,51 @@ const sectorOrder = Object.keys(grouped).sort(
   (a, b) => grouped[b].length - grouped[a].length || a.localeCompare(b),
 );
 
+const reasons: { title: string; body: string; icon: IconName }[] = [
+  {
+    title: "Procurement-ready",
+    body: "Documentation, NTN and STN registration and pricing prepared to public-sector tender standards.",
+    icon: "notebook",
+  },
+  {
+    title: "Single point of contact",
+    body: "Equipment, installation, civil works and after-sales service handled under one contract.",
+    icon: "handshake",
+  },
+  {
+    title: "Nationwide delivery",
+    body: "Active supply contracts from Islamabad and Rawalpindi through to Karachi.",
+    icon: "package",
+  },
+];
+
 export default function ClientsPage() {
   return (
     <>
       <PageHero
-        eyebrow="Valued clients"
+        eyebrow="Clients"
         title={
           <>
             Serving Pakistan&rsquo;s
             <span className="text-navy-400"> public institutions</span>
           </>
         }
+        image="/images/security-accesscontrol.png"
         lead={`${clients.length} ministries, authorities, utilities, academies and enterprises rely on Advisor Technologies for supply, installation and maintenance.`}
+        aside={
+          <HeroFacts
+            label="Our client base"
+            facts={[
+              { value: `${clients.length}+`, label: "Institutional clients" },
+              {
+                value: grouped["Federal Ministry"]?.length ?? 0,
+                label: "Federal ministries",
+              },
+              { value: sectorOrder.length, label: "Sectors served" },
+              { value: 2, label: "Cities of operation" },
+            ]}
+          />
+        }
       />
 
       {/* Full list, grouped by sector */}
@@ -61,31 +96,38 @@ export default function ClientsPage() {
                   <h3 className="font-display text-lg font-semibold text-navy-900">
                     {sector}
                   </h3>
-                  <span className="h-px flex-1 bg-navy-900/10" />
-                  <span className="text-sm tabular-nums text-graphite-400">
+                  <span className="h-px flex-1 bg-linear-to-r from-navy-900/15 to-transparent" />
+                  <span className="grid min-w-8 place-items-center rounded-full bg-navy-950 px-2 py-1 font-display text-xs font-semibold text-white tabular-nums">
                     {String(grouped[sector].length).padStart(2, "0")}
                   </span>
                 </Reveal>
 
                 <ul className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-                  {grouped[sector].map((client, index) => (
-                    <Reveal
-                      as="li"
-                      key={client.name}
-                      delay={Math.min(index * 50 + sectorIndex * 20, 300)}
-                      className="group flex items-center gap-3.5 rounded-2xl bg-surface p-5 ring-1 ring-navy-900/6 transition-all duration-400 ease-out-soft hover:-translate-y-0.5 hover:shadow-soft hover:ring-navy-900/15"
-                    >
-                      <span
-                        aria-hidden
-                        className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-navy-600/10 font-display text-sm font-bold text-navy-700 transition-colors duration-300 group-hover:bg-navy-600 group-hover:text-white"
+                  {grouped[sector].map((client, index) => {
+                    return (
+                      <Reveal
+                        as="li"
+                        key={client.name}
+                        delay={Math.min(index * 50 + sectorIndex * 20, 300)}
                       >
-                        {initials(client.name)}
-                      </span>
-                      <span className="min-w-0 text-[0.9375rem] leading-snug font-medium text-navy-900">
-                        {client.name}
-                      </span>
-                    </Reveal>
-                  ))}
+                        <div className="group flex h-full items-center gap-4 rounded-2xl bg-surface p-4 shadow-soft ring-1 ring-navy-900/6 transition-[translate,box-shadow] duration-300 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift">
+                          <ClientLogo
+                            client={client}
+                            sizes="64px"
+                            className="size-16 rounded-2xl shadow-soft transition-transform duration-500 ease-out-soft group-hover:scale-105"
+                          />
+                          <span className="min-w-0">
+                            <span className="block text-[0.9375rem] leading-snug font-medium text-navy-900">
+                              {client.name}
+                            </span>
+                            <span className="mt-1 block text-xs text-graphite-500">
+                              {client.sector}
+                            </span>
+                          </span>
+                        </div>
+                      </Reveal>
+                    );
+                  })}
                 </ul>
               </div>
             ))}
@@ -94,38 +136,30 @@ export default function ClientsPage() {
       </Section>
 
       {/* Why institutions choose us */}
-      <Section tone="dark" className="py-16 md:py-20 lg:py-24">
+      <Section tone="surface">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
-            <Reveal className="lg:col-span-4">
-              <Eyebrow tone="light">Why institutions choose us</Eyebrow>
-            </Reveal>
-            <div className="grid gap-8 sm:grid-cols-3 lg:col-span-8">
-              {[
-                {
-                  title: "Procurement-ready",
-                  body: "Documentation, NTN and STN registration and pricing prepared to public-sector tender standards.",
-                },
-                {
-                  title: "Single point of contact",
-                  body: "Equipment, installation, civil works and after-sales service handled under one contract.",
-                },
-                {
-                  title: "Nationwide delivery",
-                  body: "Active supply contracts from Islamabad and Rawalpindi through to Karachi.",
-                },
-              ].map((item, index) => (
-                <Reveal key={item.title} delay={index * 90}>
-                  <h3 className="font-display text-lg font-semibold text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2.5 text-sm leading-relaxed text-navy-300">
-                    {item.body}
-                  </p>
-                </Reveal>
-              ))}
-            </div>
-          </div>
+          <SectionHeading
+            eyebrow="Why institutions choose us"
+            lead="Practical reasons we are a straightforward supplier to work with, from tender through to handover."
+            title={
+              <>
+                Built for how{" "}
+                <span className="text-navy-500">institutions buy</span>
+              </>
+            }
+          />
+          <ul className="mt-14 grid gap-3 md:grid-cols-3 lg:gap-4">
+            {reasons.map((item, index) => (
+              <Reveal as="li" key={item.title} delay={index * 90}>
+                <FloodCard
+                  index={index}
+                  icon={item.icon}
+                  title={item.title}
+                  body={item.body}
+                />
+              </Reveal>
+            ))}
+          </ul>
         </Container>
       </Section>
 
@@ -135,13 +169,4 @@ export default function ClientsPage() {
       />
     </>
   );
-}
-
-/** Two-letter monogram used in place of a client logo. */
-function initials(name: string) {
-  const words = name
-    .replace(/[^\p{L}\s]/gu, " ")
-    .split(/\s+/)
-    .filter((word) => word.length > 2 && !/^(the|and|of|for)$/i.test(word));
-  return (words[0]?.[0] ?? "") + (words[1]?.[0] ?? "");
 }

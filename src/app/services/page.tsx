@@ -3,6 +3,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
 import { Process } from "@/components/home/process";
+import { HeroDivisions } from "@/components/home/hero-divisions";
 import { Container, Section } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { Eyebrow } from "@/components/ui/section-heading";
@@ -21,38 +22,24 @@ export default function ServicesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Activity scope"
+        eyebrow="Services"
         title={
           <>
             Six divisions,
             <span className="text-navy-400"> one accountable partner</span>
           </>
         }
+        image="/images/repair-maintenance.png"
         lead="From heavy plant and institutional furniture through to networks, surveillance, printing and civil works, delivered, installed and maintained by qualified engineers."
+        aside={
+          <div className="lg:flex lg:justify-end">
+            <HeroDivisions />
+          </div>
+        }
       />
 
-      {/* Quick index */}
-      <Container className="relative -mt-8 sm:-mt-10">
-        <Reveal className="grid gap-2 rounded-panel bg-surface p-3 shadow-lift ring-1 ring-navy-900/8 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service) => (
-            <a
-              key={service.id}
-              href={`#${service.id}`}
-              className="group flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-colors hover:bg-canvas"
-            >
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-navy-600/10 text-navy-600 transition-colors group-hover:bg-navy-600 group-hover:text-white">
-                <Icon name={service.icon} className="size-4.5" />
-              </span>
-              <span className="min-w-0 text-sm font-medium text-navy-900">
-                {service.title}
-              </span>
-            </a>
-          ))}
-        </Reveal>
-      </Container>
-
       {/* Detailed divisions, alternating sides */}
-      <Section className="pt-16 md:pt-20 lg:pt-24">
+      <Section>
         <Container>
           <div className="space-y-20 md:space-y-28">
             {services.map((service, index) => {
@@ -70,23 +57,30 @@ export default function ServicesPage() {
                       flipped ? "lg:order-2 lg:col-start-7" : "lg:col-start-1",
                     )}
                   >
-                    <div className="relative aspect-4/3 overflow-hidden rounded-panel bg-navy-950">
+                    <div className="group/visual relative isolate aspect-4/3 overflow-hidden rounded-panel bg-navy-950 shadow-lift">
                       <Image
                         src={service.image}
                         alt={service.title}
                         fill
                         sizes="(max-width: 1024px) 100vw, 50vw"
-                        className="object-cover"
+                        className="-z-10 object-cover transition-transform duration-700 ease-out-soft group-hover/visual:scale-105"
                       />
                       <div
                         aria-hidden
-                        className="absolute inset-0 bg-linear-to-t from-navy-950/60 to-transparent"
+                        className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-t from-navy-950/75 via-navy-950/10 to-navy-950/20"
                       />
-                      <span
-                        aria-hidden
-                        className="absolute top-5 left-5 font-display text-sm font-semibold tracking-widest text-white/60"
-                      >
-                        {String(index + 1).padStart(2, "0")}
+
+                      <div className="pointer-events-none absolute inset-x-6 top-6 flex items-center justify-between">
+                        <span className="inline-flex h-14 w-10 items-center justify-center rounded-full bg-white/12 text-white ring-1 ring-white/20 backdrop-blur-sm">
+                          <Icon name={service.icon} className="size-5" />
+                        </span>
+                        <span className="font-display text-sm font-semibold tracking-widest text-white/70 tabular-nums">
+                          {String(index + 1).padStart(2, "0")} /{" "}
+                          {String(services.length).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <span className="pointer-events-none absolute bottom-6 left-6 rounded-full bg-white/12 px-4 py-1.5 text-[0.6875rem] font-semibold tracking-[0.14em] text-white uppercase ring-1 ring-white/20 backdrop-blur-sm">
+                        {service.short}
                       </span>
                     </div>
                   </Reveal>
@@ -98,24 +92,23 @@ export default function ServicesPage() {
                       flipped ? "lg:order-1 lg:col-start-1" : "lg:col-start-8",
                     )}
                   >
-                    <span className="flex size-12 items-center justify-center rounded-xl bg-navy-600 text-white">
-                      <Icon name={service.icon} className="size-5.5" />
-                    </span>
-                    <Eyebrow className="mt-6">{service.short}</Eyebrow>
-                    <h2 className="mt-4 text-title font-semibold text-ink">
+                    <Eyebrow>Division {String(index + 1).padStart(2, "0")}</Eyebrow>
+                    <h2 className="mt-5 text-headline text-ink">
                       {service.title}
                     </h2>
-                    <p className="mt-5 text-base leading-relaxed text-graphite-600">
+                    <p className="mt-6 text-base leading-relaxed text-graphite-600">
                       {service.body}
                     </p>
 
-                    <ul className="mt-7 grid gap-2.5 sm:grid-cols-2">
+                    <ul className="mt-8 grid gap-2 sm:grid-cols-2">
                       {service.highlights.map((highlight) => (
                         <li
                           key={highlight}
-                          className="flex items-start gap-2.5 text-sm text-navy-900"
+                          className="flex items-start gap-3 rounded-2xl bg-surface p-3.5 text-sm font-medium text-navy-900 shadow-soft ring-1 ring-navy-900/6"
                         >
-                          <Check className="mt-0.5 size-4 shrink-0 text-navy-500" />
+                          <span className="grid size-5 shrink-0 place-items-center rounded-full bg-navy-950 text-white">
+                            <Check className="size-3" />
+                          </span>
                           {highlight}
                         </li>
                       ))}
@@ -123,8 +116,7 @@ export default function ServicesPage() {
 
                     <Button
                       href={`/contact?requirement=${encodeURIComponent(service.title)}#enquiry`}
-                      variant="secondary"
-                      className="mt-8"
+                      className="mt-9"
                       withArrow
                     >
                       Enquire about this

@@ -3,8 +3,8 @@ import { Container, Section } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { Eyebrow } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icons";
 import { principles } from "@/lib/content";
+import { PrincipleCard } from "./principle-card";
 
 export function Principles() {
   return (
@@ -37,8 +37,14 @@ export function Principles() {
           </Reveal>
 
           {/* Image with the four principles overlapping its lower edge */}
-          <Reveal delay={120} className="lg:col-span-6 lg:col-start-7">
-            <div className="group/image relative aspect-16/10 overflow-hidden rounded-panel sm:aspect-2/1 lg:aspect-16/10">
+          <div className="lg:col-span-6 lg:col-start-7">
+            {/* The image and each card reveal on their own. Nesting them
+                inside one Reveal stacked two transforms and made the cards
+                jolt as the parent was still settling. */}
+            <Reveal
+              delay={120}
+              className="group/image relative aspect-16/10 overflow-hidden rounded-panel sm:aspect-2/1 lg:aspect-16/10"
+            >
               <Image
                 src="/images/objective-principle.png?v=2"
                 alt="Advisor Technologies engineer coordinating industrial operations"
@@ -50,33 +56,28 @@ export function Principles() {
                 aria-hidden
                 className="absolute inset-0 bg-linear-to-t from-navy-950/80 via-navy-950/20 to-transparent transition-opacity duration-500 group-hover/image:opacity-70"
               />
-            </div>
+            </Reveal>
 
             {/* Pulled up so the grid overlaps the photograph. `relative` keeps
-                it above the positioned image container. */}
-            <ul className="relative -mt-10 grid gap-2.5 px-3 sm:-mt-14 sm:grid-cols-2 sm:px-5">
+                it above the positioned image container. The Reveal only
+                fades and lifts; hover motion lives on the card inside it. */}
+            <ul className="relative -mt-10 grid gap-3 px-3 sm:-mt-14 sm:grid-cols-2 sm:px-5">
               {principles.map((principle, index) => (
                 <Reveal
                   as="li"
                   key={principle.title}
-                  delay={200 + index * 80}
-                  className="group/principle flex gap-3.5 rounded-2xl bg-white/95 p-4 shadow-lift ring-1 ring-white/50 backdrop-blur-xl transition-transform duration-300 ease-out-soft hover:-translate-y-1 hover:shadow-float"
+                  delay={260 + index * 90}
                 >
-                  <span className="flex h-12 w-9 shrink-0 items-center justify-center rounded-full bg-navy-600/10 text-navy-700 transition-transform duration-300 ease-out-soft group-hover/principle:rotate-3 group-hover/principle:bg-navy-600/15">
-                    <Icon name={principle.icon} className="size-4.5" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block font-display text-[0.9375rem] font-semibold text-navy-900">
-                      {principle.title}
-                    </span>
-                    <span className="mt-1 block text-[0.8125rem] leading-relaxed text-graphite-600">
-                      {principle.short}
-                    </span>
-                  </span>
+                  <PrincipleCard
+                    index={index}
+                    title={principle.title}
+                    body={principle.short}
+                    icon={principle.icon}
+                  />
                 </Reveal>
               ))}
             </ul>
-          </Reveal>
+          </div>
         </div>
       </Container>
     </Section>

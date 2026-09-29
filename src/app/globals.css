@@ -162,13 +162,16 @@
   -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
-/* Reveal-on-scroll, toggled by <Reveal /> */
+/* Reveal-on-scroll, toggled by <Reveal />. Only opacity and transform move,
+   so the whole reveal stays on the compositor. Keep hover transitions on a
+   child element: a transition class here would replace this one, and the
+   stagger delay would lag every hover. */
 @utility reveal {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translate3d(0, 28px, 0) scale(0.985);
   transition:
-    opacity 0.7s var(--ease-out-soft),
-    transform 0.7s var(--ease-out-soft);
+    opacity 0.9s var(--ease-out-soft),
+    transform 0.9s var(--ease-out-soft);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
@@ -177,9 +180,110 @@
   transform: none;
 }
 
+/* Hero entrance. Runs on first paint (the hero is always above the fold), so
+   it needs no observer. Each step sets its own --rise-delay. */
+.hero-rise {
+  animation: hero-rise 1.1s var(--ease-out-soft) var(--rise-delay, 0ms) both;
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Backdrop settles from a slight zoom */
+.hero-zoom {
+  animation: hero-zoom 2.6s var(--ease-out-soft) both;
+}
+
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.14);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* One light sweep across the wordmark once it has landed */
+.hero-wordmark {
+  background: linear-gradient(105deg, #fff 0%, #fff 40%, #a5dcff 50%, #fff 60%, #fff 100%);
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: hero-sheen 2.4s var(--ease-out-soft) 1s both;
+}
+
+@keyframes hero-sheen {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+/* Rule before "Technologies" draws in from the left */
+.hero-line {
+  animation: hero-line 1s var(--ease-out-soft) 0.7s both;
+}
+
+@keyframes hero-line {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Timer bar in the hero division panel; duration is set inline */
+.hero-progress {
+  animation-name: hero-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* WebGL card backgrounds fade in once their canvas mounts, rather than
+   snapping over the CSS surface gradient beneath them. */
+.fx-layer canvas {
+  animation: fx-in 1.4s var(--ease-out-soft) both;
+}
+
+@keyframes fx-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Horizontal auto-scrolling strip */
 @utility animate-marquee {
   animation: marquee 44s linear infinite;
+}
+
+@utility animate-marquee-reverse {
+  animation: marquee 52s linear infinite reverse;
 }
 
 @keyframes marquee {

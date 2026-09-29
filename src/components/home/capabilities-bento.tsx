@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Icon } from "@/components/ui/icons";
+import { serviceEffects } from "@/components/backgrounds/service-effects";
 import { services } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
@@ -47,23 +48,21 @@ export function CapabilitiesBento() {
             const isFeature = index === 0;
             const isTall = index === 1;
             const withImage = isFeature || isTall;
+            const effect = serviceEffects[service.id];
 
             return (
               <Reveal
                 key={service.id}
-                delay={index * 60}
+                delay={index * 70}
                 className={cn(layout[index], "min-w-0")}
               >
                 <Link
                   href={`/services#${service.id}`}
                   className={cn(
-                    "group relative flex h-full min-h-60 flex-col overflow-hidden rounded-card p-6 transition-all duration-500 ease-out-soft hover:-translate-y-1 sm:p-7",
+                    "group relative isolate flex h-full min-h-60 flex-col overflow-hidden rounded-card bg-navy-950 p-6 text-white shadow-soft transition-[translate,box-shadow] duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift sm:p-7",
                     withImage
                       ? "justify-end"
                       : "justify-start gap-5 md:justify-between md:gap-0",
-                    withImage
-                      ? "bg-navy-950 text-white shadow-soft hover:shadow-lift"
-                      : "bg-canvas ring-1 ring-navy-900/8 hover:bg-navy-50 hover:ring-navy-900/15",
                   )}
                 >
                   {withImage && (
@@ -82,23 +81,33 @@ export function CapabilitiesBento() {
                     </>
                   )}
 
-                  <span
-                    className={cn(
-                      "relative inline-flex h-16 w-11 items-center justify-center rounded-full transition-colors duration-300",
-                      withImage
-                        ? "bg-white/12 text-white ring-1 ring-white/20 backdrop-blur-sm"
-                        : "bg-navy-600/10 text-navy-600 group-hover:bg-navy-600 group-hover:text-white",
-                    )}
-                  >
+                  {effect && (
+                    <>
+                      <div
+                        aria-hidden
+                        className={cn("absolute inset-0 -z-10", effect.surface)}
+                      />
+                      <div aria-hidden className="absolute inset-0 -z-10">
+                        {effect.background}
+                      </div>
+                      {/* Scrim: keeps the copy legible over the brightest
+                          frames without flattening the effect. */}
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 -z-10 bg-linear-to-t from-navy-950/85 via-navy-950/25 to-navy-950/10"
+                      />
+                    </>
+                  )}
+
+                  <span className="relative inline-flex h-16 w-11 items-center justify-center rounded-full bg-white/12 text-white ring-1 ring-white/20 backdrop-blur-sm transition-colors duration-300 group-hover:bg-white group-hover:text-navy-900">
                     <Icon name={service.icon} className="size-5" />
                   </span>
 
                   <div className={cn("relative", withImage && "mt-5")}>
                     <h3
                       className={cn(
-                        "font-display font-semibold tracking-tight",
+                        "font-display font-semibold tracking-tight text-white",
                         isFeature ? "text-2xl sm:text-3xl" : "text-xl",
-                        withImage ? "text-white" : "text-ink",
                       )}
                     >
                       {service.title}
@@ -106,20 +115,14 @@ export function CapabilitiesBento() {
 
                     <p
                       className={cn(
-                        "mt-2.5 text-sm leading-relaxed",
+                        "mt-2.5 text-sm leading-relaxed text-white/70",
                         isFeature ? "max-w-md" : "max-w-xs",
-                        withImage ? "text-white/70" : "text-graphite-600",
                       )}
                     >
                       {isFeature || isTall ? service.body : service.short}
                     </p>
 
-                    <span
-                      className={cn(
-                        "mt-5 inline-flex items-center gap-1.5 text-sm font-medium",
-                        withImage ? "text-white" : "text-navy-600",
-                      )}
-                    >
+                    <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-white">
                       Explore
                       <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </span>
