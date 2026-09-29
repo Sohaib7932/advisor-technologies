@@ -35,7 +35,7 @@ export function Intro() {
 
           <Reveal delay={80} className="lg:col-span-8">
             <ScrollHighlight
-              className="text-title font-display font-medium sm:text-[2.125rem] sm:leading-[1.2]"
+              className="font-display text-[clamp(1.375rem,0.9rem+1.3vw,2.125rem)] leading-[1.2] font-medium"
               segments={[
                 {
                   text: "From federal ministries to private enterprise, we deliver branded machinery, IT infrastructure and general order supplies,",
@@ -102,7 +102,7 @@ export function Intro() {
                   <CountUp
                     value={stat.value}
                     className={cn(
-                      "mt-10 block font-display text-[clamp(3rem,5vw,4.25rem)] leading-none font-bold tracking-tight tabular-nums",
+                      "mt-8 block font-display text-[clamp(2.5rem,1rem+3vw,4rem)] leading-none font-bold tracking-tight tabular-nums",
                       featured ? "text-white" : "text-navy-800",
                     )}
                   />

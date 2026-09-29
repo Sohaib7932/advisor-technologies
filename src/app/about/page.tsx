@@ -99,10 +99,10 @@ export default function AboutPage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="rounded-2xl bg-navy-950 p-5 text-white shadow-soft"
+                    className="min-w-0 rounded-2xl bg-navy-950 p-4 text-white shadow-soft sm:p-5"
                   >
                     <dt className="eyebrow text-navy-300">{item.label}</dt>
-                    <dd className="mt-2 font-display text-lg font-semibold tabular-nums">
+                    <dd className="mt-2 font-display text-[0.9375rem] font-semibold break-all tabular-nums sm:text-lg">
                       {item.value}
                     </dd>
                   </div>

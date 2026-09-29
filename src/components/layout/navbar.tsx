@@ -37,7 +37,7 @@ export function Navbar() {
       <nav
         aria-label="Main"
         className={cn(
-          "pointer-events-auto mx-auto flex h-16 max-w-[76rem] items-center justify-between rounded-full pl-5 pr-2.5 transition-all duration-500 ease-out-soft sm:h-[4.5rem] sm:pl-7 sm:pr-3",
+          "pointer-events-auto mx-auto flex h-16 max-w-[76rem] items-center justify-between rounded-full pr-2.5 pl-5 transition-all duration-500 ease-out-soft xl:h-[4.5rem] xl:pr-3 xl:pl-7",
           open
             ? "bg-surface shadow-float ring-1 ring-navy-900/8"
             : scrolled
@@ -53,7 +53,7 @@ export function Navbar() {
         >
           <span
             className={cn(
-              "flex size-10 shrink-0 items-center justify-center rounded-full transition-colors duration-500 sm:size-11",
+              "flex size-10 shrink-0 items-center justify-center rounded-full transition-colors duration-500 xl:size-11",
               scrolled || open ? "bg-transparent" : "bg-white shadow-soft",
             )}
           >
@@ -62,14 +62,14 @@ export function Navbar() {
               alt=""
               width={44}
               height={44}
-              priority
-              className="size-8 object-contain sm:size-9"
+              loading="eager"
+              className="size-8 object-contain xl:size-9"
             />
           </span>
           <span className="flex flex-col leading-none">
             <span
               className={cn(
-                "font-display text-[0.9375rem] font-bold tracking-tight transition-colors duration-500 sm:text-base",
+                "font-display text-[0.9375rem] font-bold tracking-tight transition-colors duration-500 xl:text-base",
                 scrolled || open ? "text-navy-900" : "text-white",
               )}
             >
@@ -77,7 +77,7 @@ export function Navbar() {
             </span>
             <span
               className={cn(
-                "mt-0.5 text-[0.5625rem] font-semibold tracking-[0.2em] uppercase transition-colors duration-500 sm:text-[0.625rem]",
+                "mt-0.5 text-[0.5625rem] font-semibold tracking-[0.2em] uppercase transition-colors duration-500 xl:text-[0.625rem]",
                 scrolled || open ? "text-graphite-500" : "text-white/70",
               )}
             >
@@ -87,14 +87,14 @@ export function Navbar() {
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-0.5 lg:flex xl:gap-1">
           {mainNav.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
                 className={cn(
-                  "relative inline-flex h-10 items-center rounded-full px-4 text-[0.9375rem] font-medium transition-colors duration-300",
+                  "relative inline-flex h-9 items-center rounded-full px-3 text-sm font-medium transition-colors duration-300 xl:h-10 xl:px-4 xl:text-[0.9375rem]",
                   scrolled
                     ? isActive(item.href)
                       ? "bg-navy-600 text-white"
@@ -115,7 +115,7 @@ export function Navbar() {
           <Link
             href="/contact#enquiry"
             className={cn(
-              "group hidden h-11 items-center gap-2 rounded-full px-5 text-[0.9375rem] font-medium transition-all duration-300 sm:inline-flex",
+              "group hidden h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition-all duration-300 sm:inline-flex xl:h-11 xl:px-5 xl:text-[0.9375rem]",
               scrolled || open
                 ? "bg-navy-600 text-white hover:bg-navy-700"
                 : "bg-white text-navy-900 hover:bg-navy-50",
@@ -132,7 +132,7 @@ export function Navbar() {
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
             className={cn(
-              "inline-flex size-11 items-center justify-center rounded-full transition-colors duration-300 lg:hidden",
+              "inline-flex size-11 items-center justify-center rounded-full transition-colors duration-300 sm:size-10 lg:hidden",
               scrolled || open
                 ? "bg-navy-900/6 text-navy-900 hover:bg-navy-900/10"
                 : "bg-white/15 text-white hover:bg-white/25",

@@ -33,7 +33,7 @@ export function HeroDivisions() {
     <div
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      className="w-full rounded-[1.75rem] bg-navy-950/45 p-2 shadow-float ring-1 ring-white/15 backdrop-blur-xl lg:w-[25rem]"
+      className="w-full rounded-[1.75rem] bg-navy-950/45 p-2 shadow-float ring-1 ring-white/15 backdrop-blur-xl lg:w-[22rem] xl:w-[25rem]"
     >
       <div className="flex items-center justify-between px-4 pt-3 pb-2.5">
         <span className="eyebrow text-[0.6875rem] text-navy-200">

@@ -139,7 +139,7 @@ export default function ProductsPage() {
                         </span>
                         <h2
                           id={`${group.id}-title`}
-                          className="mt-4 font-display text-3xl leading-[1.05] font-semibold sm:text-4xl"
+                          className="mt-4 font-display text-2xl leading-[1.05] font-semibold sm:text-3xl xl:text-4xl"
                         >
                           {group.category}
                         </h2>

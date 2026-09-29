@@ -79,7 +79,7 @@ export function Footer() {
           </div>
 
           {/* Link columns */}
-          <div className="grid gap-10 sm:grid-cols-3 lg:col-span-6 lg:col-start-7">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:col-span-6 lg:col-start-7">
             {footerNav.map((group) => (
               <nav key={group.title} aria-labelledby={`footer-${group.title}`}>
                 <h2
@@ -88,12 +88,12 @@ export function Footer() {
                 >
                   {group.title}
                 </h2>
-                <ul className="mt-5 space-y-3">
+                <ul className="mt-4 space-y-1">
                   {group.items.map((item) => (
                     <li key={item.label}>
                       <Link
                         href={item.href}
-                        className="group inline-flex items-center gap-1.5 text-sm text-navy-200 transition-colors hover:text-white"
+                        className="group inline-flex items-center gap-1.5 py-1.5 text-sm text-navy-200 transition-colors hover:text-white"
                       >
                         {item.label}
                         <ArrowUpRight className="size-3 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-70" />

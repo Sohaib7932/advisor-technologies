@@ -14,12 +14,12 @@ import { cn } from "@/lib/utils";
  * tile and four supporting tiles on a 6-column desktop grid.
  */
 const layout = [
-  "md:col-span-4 md:row-span-2", // Plant & machinery, feature tile
-  "md:col-span-2 md:row-span-2", // IT & networks, tall tile
-  "md:col-span-2", // ─┐ each pair fills the 6-column row
-  "md:col-span-4", // ─┘
-  "md:col-span-4", // ─┐
-  "md:col-span-2", // ─┘
+  "md:col-span-2 md:row-span-2 lg:col-span-4", // Plant & machinery, feature tile
+  "md:row-span-2 lg:col-span-2", // IT & networks, tall tile
+  "lg:col-span-2", // ─┐ each pair fills the 6-column row
+  "lg:col-span-4", // ─┘
+  "lg:col-span-4", // ─┐
+  "lg:col-span-2", // ─┘
 ];
 
 export function CapabilitiesBento() {
@@ -43,7 +43,7 @@ export function CapabilitiesBento() {
           }
         />
 
-        <div className="mt-14 grid gap-3 md:auto-rows-60 md:grid-cols-6 md:gap-4">
+        <div className="mt-12 grid gap-3 md:auto-rows-60 md:grid-cols-2 md:gap-4 lg:mt-14 lg:grid-cols-6">
           {services.map((service, index) => {
             const isFeature = index === 0;
             const isTall = index === 1;
@@ -99,7 +99,7 @@ export function CapabilitiesBento() {
                     </>
                   )}
 
-                  <span className="relative inline-flex h-16 w-11 items-center justify-center rounded-full bg-white/12 text-white ring-1 ring-white/20 backdrop-blur-sm transition-colors duration-300 group-hover:bg-white group-hover:text-navy-900">
+                  <span className="relative inline-flex h-16 w-11 shrink-0 items-center justify-center rounded-full bg-white/12 text-white ring-1 ring-white/20 backdrop-blur-sm transition-colors duration-300 group-hover:bg-white group-hover:text-navy-900">
                     <Icon name={service.icon} className="size-5" />
                   </span>
 

@@ -121,10 +121,10 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
 
       {/* Controls */}
       <div className="mt-8 flex items-center justify-between gap-4 pr-[16%]">
-        <span className="font-display text-sm text-white/60 tabular-nums sm:hidden">
+        <span className="font-display text-sm text-white/60 tabular-nums sm:hidden lg:inline xl:hidden">
           <span className="text-white">{cards[front].category}</span>
         </span>
-        <div className="hidden flex-wrap gap-1.5 sm:flex" role="tablist" aria-label="Product categories">
+        <div className="hidden flex-wrap gap-1.5 sm:flex lg:hidden xl:flex" role="tablist" aria-label="Product categories">
           {cards.map((card, index) => (
             <button
               key={card.category}
@@ -168,7 +168,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
 
 function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; total: number }) {
   return (
-    <div className="relative flex h-full flex-col p-5 text-white sm:p-8">
+    <div className="relative flex h-full flex-col p-4 text-white sm:p-6 xl:p-8">
       <Image
         src={card.image}
         alt=""
@@ -196,10 +196,10 @@ function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; t
         </span>
       </div>
 
-      <h3 className="relative mt-auto max-w-[14ch] font-display text-2xl leading-[1.05] font-semibold sm:text-4xl">
+      <h3 className="relative mt-auto max-w-[14ch] font-display text-xl leading-[1.05] font-semibold sm:text-3xl lg:text-2xl xl:text-4xl">
         {card.category}
       </h3>
-      <ul className="relative mt-4 hidden max-w-[80%] flex-wrap gap-1.5 sm:flex">
+      <ul className="relative mt-4 hidden max-w-[80%] flex-wrap gap-1.5 sm:flex lg:hidden xl:flex">
         {card.items.map((item) => (
           <li
             key={item.id}
@@ -210,13 +210,13 @@ function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; t
         ))}
       </ul>
       {card.items.length === 1 && (
-        <p className="relative mt-3 hidden max-w-[60%] text-sm leading-relaxed text-white/75 sm:block">
+        <p className="relative mt-3 hidden max-w-[60%] text-sm leading-relaxed text-white/75 sm:block lg:hidden xl:block">
           {card.items[0].body}
         </p>
       )}
       <Link
         href="/products"
-        className="group relative mt-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy-900 transition-transform duration-300 hover:-translate-y-0.5 sm:mt-5"
+        className="group relative mt-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-navy-900 transition-transform duration-300 hover:-translate-y-0.5 sm:mt-5 sm:px-4 sm:py-2 sm:text-sm"
       >
         View in catalogue
         <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

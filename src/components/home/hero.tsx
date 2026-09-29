@@ -30,7 +30,7 @@ export function Hero() {
             src="/images/hero-image.png"
             alt="Advisor Technologies head office in Islamabad"
             fill
-            priority
+            preload
             sizes="100vw"
             className="object-cover"
           />
@@ -76,14 +76,14 @@ export function Hero() {
               <span
                 aria-hidden
                 style={rise(200)}
-                className="hero-rise block text-[clamp(3.5rem,12vw,10rem)] leading-[0.86] tracking-[-0.05em]"
+                className="hero-rise block text-[clamp(3.25rem,0.5rem+8vw,9rem)] leading-[0.86] tracking-[-0.05em]"
               >
                 <span className="hero-wordmark">Advisor</span>
               </span>
               <span
                 aria-hidden
                 style={rise(340)}
-                className="hero-rise mt-3 flex items-center gap-4 text-[clamp(1rem,3.1vw,2.6rem)] leading-none font-semibold tracking-[0.16em] text-white/75 uppercase"
+                className="hero-rise mt-3 flex items-center gap-4 text-[clamp(0.875rem,0.25rem+2.2vw,2.25rem)] leading-none font-semibold tracking-[0.16em] text-white/75 uppercase"
               >
                 <span className="hero-line h-0.5 shrink-0 w-[clamp(1.5rem,4vw,3.5rem)] origin-left rounded-full bg-linear-to-r from-sky-300 to-white/60" />
                 Technologies
@@ -93,11 +93,11 @@ export function Hero() {
 
           {/* Lower band: statement, CTAs and trust on the left; the division
               panel on the right. */}
-          <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
+          <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-8 xl:gap-12">
             <div>
               <p
                 style={rise(480)}
-                className="hero-rise max-w-lg text-2xl leading-[1.2] font-medium text-white sm:text-[1.75rem]"
+                className="hero-rise max-w-lg text-xl leading-[1.2] font-medium text-white sm:text-2xl xl:text-[1.75rem]"
               >
                 Supply, installation and maintenance
                 <span className="text-white/55">
