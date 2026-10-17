@@ -93,7 +93,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
                 onClick={isFront ? undefined : () => setFront(index)}
                 style={{ zIndex: count - depth }}
                 className={cn(
-                  "absolute inset-0 origin-top-right overflow-hidden rounded-[1.25rem] bg-navy-900 shadow-[0_30px_60px_-20px_rgb(0_0_0/0.6)] ring-1 ring-white/20 transition-[translate,scale,opacity,filter] duration-700 ease-out-soft sm:rounded-[1.75rem]",
+                  "absolute inset-0 origin-top-right overflow-hidden rounded-[1.25rem] bg-brand-deep shadow-[0_30px_60px_-20px_rgb(0_0_0/0.6)] ring-1 ring-white/20 transition-[translate,scale,opacity,filter] duration-700 ease-out-soft sm:rounded-[1.75rem]",
                   DEPTHS[Math.min(depth, DEPTHS.length - 1)],
                   depth === 1 && "brightness-[0.9]",
                   depth >= 2 && "brightness-[0.78]",
@@ -106,7 +106,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
                     key={front}
                     aria-hidden
                     onAnimationEnd={() => go(1)}
-                    className="hero-progress absolute inset-x-0 bottom-0 h-1 origin-left bg-linear-to-r from-navy-400 to-sky-400"
+                    className="hero-progress absolute inset-x-0 bottom-0 h-1 origin-left bg-linear-to-r from-steel to-glow shadow-[0_0_12px_rgb(91_163_208/0.8)]"
                     style={{
                       animationDuration: `${CYCLE_MS}ms`,
                       animationPlayState: running ? "running" : "paused",
@@ -135,7 +135,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
               className={cn(
                 "rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors duration-300",
                 index === front
-                  ? "bg-white text-navy-900"
+                  ? "bg-glow text-bg"
                   : "text-white/55 ring-1 ring-white/15 hover:text-white hover:ring-white/35",
               )}
             >
@@ -148,7 +148,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
             type="button"
             onClick={() => go(-1)}
             aria-label="Previous category"
-            className="grid size-10 place-items-center rounded-full text-white ring-1 ring-white/20 transition-colors hover:bg-white hover:text-navy-900"
+            className="grid size-10 place-items-center rounded-full text-white ring-1 ring-white/20 transition-colors hover:bg-glow hover:text-bg hover:ring-glow"
           >
             <ArrowRight className="size-4 rotate-180" />
           </button>
@@ -156,7 +156,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
             type="button"
             onClick={() => go(1)}
             aria-label="Next category"
-            className="grid size-10 place-items-center rounded-full text-white ring-1 ring-white/20 transition-colors hover:bg-white hover:text-navy-900"
+            className="grid size-10 place-items-center rounded-full text-white ring-1 ring-white/20 transition-colors hover:bg-glow hover:text-bg hover:ring-glow"
           >
             <ArrowRight className="size-4" />
           </button>
@@ -179,7 +179,7 @@ function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; t
       {/* Dark from the bottom so the copy reads over any photograph */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-linear-to-t from-navy-950/95 via-navy-950/45 to-navy-950/10"
+        className="absolute inset-0 bg-linear-to-t from-brand-deep/95 via-brand-deep/45 to-brand-deep/10"
       />
 
       <div className="relative flex items-start justify-between gap-4">
@@ -216,7 +216,7 @@ function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; t
       )}
       <Link
         href="/products"
-        className="group relative mt-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-navy-900 transition-transform duration-300 hover:-translate-y-0.5 sm:mt-5 sm:px-4 sm:py-2 sm:text-sm"
+        className="group relative mt-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-fg px-3.5 py-1.5 text-xs font-semibold text-bg transition-transform duration-300 hover:-translate-y-0.5 sm:mt-5 sm:px-4 sm:py-2 sm:text-sm"
       >
         View in catalogue
         <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

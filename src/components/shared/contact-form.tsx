@@ -8,9 +8,9 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const fieldClass =
-  "w-full rounded-2xl border-0 bg-canvas px-5 py-3.5 text-[0.9375rem] text-ink ring-1 ring-inset ring-navy-900/10 transition-shadow placeholder:text-graphite-400 focus:ring-2 focus:ring-navy-600 focus:outline-none";
+  "w-full rounded-2xl border-0 bg-surface-2 px-5 py-3.5 text-[0.9375rem] text-fg ring-1 ring-inset ring-white/10 transition-shadow placeholder:text-fg-subtle focus:ring-2 focus:ring-glow focus:outline-none";
 
-const labelClass = "block text-sm font-medium text-navy-900";
+const labelClass = "block text-sm font-medium text-fg";
 
 /**
  * Enquiry form. There is no backend yet, so submitting opens the visitor's
@@ -159,12 +159,12 @@ export function ContactForm() {
       </div>
 
       <div className="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs leading-relaxed text-graphite-500">
+        <p className="text-xs leading-relaxed text-fg-subtle">
           Your details are used only to respond to this enquiry.
         </p>
         <button
           type="submit"
-          className="group inline-flex h-13 shrink-0 items-center justify-center gap-2 rounded-full bg-navy-600 px-8 font-medium text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-navy-700 hover:shadow-lift"
+          className="group inline-flex h-13 shrink-0 items-center justify-center gap-2 rounded-full bg-glow px-8 font-semibold text-bg shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-white"
         >
           {sent ? "Opening your mail app" : "Send enquiry"}
           {sent ? (
@@ -178,7 +178,7 @@ export function ContactForm() {
       {sent && (
         <p
           role="status"
-          className="sm:col-span-2 rounded-2xl bg-navy-50 px-5 py-4 text-sm text-navy-800 ring-1 ring-navy-600/15"
+          className="sm:col-span-2 rounded-2xl bg-glow/10 px-5 py-4 text-sm text-fg ring-1 ring-glow/30"
         >
           We have opened your email client with the enquiry composed. If nothing
           happened, write to{" "}
@@ -197,7 +197,7 @@ export function ContactForm() {
 
 function Required() {
   return (
-    <span className="text-navy-500" aria-hidden>
+    <span className="text-glow" aria-hidden>
       *
     </span>
   );

@@ -29,7 +29,7 @@ export function ClientLogo({
           ? { role: "img", "aria-label": client.name, title: client.name }
           : { "aria-hidden": true })}
         className={cn(
-          "grid shrink-0 place-items-center bg-linear-to-br from-navy-600 to-navy-950 px-1 font-display font-semibold tracking-wider text-white",
+          "grid shrink-0 place-items-center bg-linear-to-br from-brand to-brand-deep px-1 font-display font-semibold tracking-wider text-white",
           badge.length > 3 ? "text-[0.625rem]" : "text-xs",
           className,
         )}
@@ -42,7 +42,7 @@ export function ClientLogo({
   return (
     <span
       className={cn(
-        "relative block shrink-0 overflow-hidden bg-white ring-1 ring-navy-900/8",
+        "relative block shrink-0 overflow-hidden bg-white ring-1 ring-white/20",
         className,
       )}
     >

@@ -33,7 +33,7 @@ export default function NotFound() {
         </span>
 
         <Container className="pt-32 pb-24">
-          <p style={rise(80)} className="hero-rise eyebrow text-navy-400">
+          <p style={rise(80)} className="hero-rise eyebrow text-glow">
             Error 404
           </p>
           <h1
@@ -41,11 +41,11 @@ export default function NotFound() {
             className="hero-rise mt-6 max-w-3xl text-display text-white"
           >
             This page isn&rsquo;t
-            <span className="text-navy-400"> in our catalogue</span>
+            <span className="text-glow"> in our catalogue</span>
           </h1>
           <p
             style={rise(300)}
-            className="hero-rise mt-7 max-w-md text-base leading-relaxed text-navy-200"
+            className="hero-rise mt-7 max-w-md text-base leading-relaxed text-fg-muted"
           >
             The page you were looking for has moved or never existed. Try one of
             the sections below.
@@ -56,7 +56,7 @@ export default function NotFound() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-white hover:text-navy-900"
+                className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-glow hover:text-bg"
               >
                 {item.label}
               </Link>

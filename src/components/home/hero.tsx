@@ -1,164 +1,234 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ClientLogo } from "@/components/ui/client-logo";
-import { clients } from "@/lib/content";
+import { gsap, MOTION, useGSAP } from "@/lib/gsap";
 import { site } from "@/lib/site";
+import type { HeroScene } from "./hero-scene";
 
-import { HeroDivisions } from "./hero-divisions";
+const WORDS = ["Advisor", "Technologies"];
 
-/** A handful of recognisable names for the trust row under the CTAs. */
-const trustClients = [
-  "NADRA Islamabad / Karachi",
-  "Capital Development Authority",
-  "National Police Academy Islamabad",
-  "IESCO, Islamabad",
-].flatMap((name) => clients.filter((client) => client.name === name));
-
-/** Staggered entrance: pairs with the `hero-rise` class, which rises the
- *  element in `delay` ms after first paint. */
-function rise(delay: number) {
-  return { "--rise-delay": `${delay}ms` } as React.CSSProperties;
-}
-
+/**
+ * Pinned, full-screen hero. Scroll assembles the six business pillars in 3D
+ * and flies the wordmark's letters together until it locks in with a glow.
+ * All text is real HTML (the canvas is decoration only). With reduced motion
+ * the scene renders assembled and nothing pins.
+ */
 export function Hero() {
+  const root = useRef<HTMLElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const scene = useRef<HeroScene | null>(null);
+  const progress = useRef(0);
+
+  // Load three.js after first paint; the text never waits for it.
+  useEffect(() => {
+    let disposed = false;
+    const node = canvas.current;
+    if (!node) return;
+    const mobile = window.matchMedia(MOTION.mobile).matches;
+    const reduced = window.matchMedia(MOTION.reduced).matches;
+
+    import("./hero-scene")
+      .then(({ createHeroScene }) => {
+        if (disposed) return;
+        scene.current = createHeroScene(node, { mobile, reduced });
+        scene.current.setProgress(reduced ? 1 : progress.current);
+        node.dataset.ready = "true";
+      })
+      .catch(() => {
+        // No WebGL: the gradient backdrop and the text carry the hero alone.
+      });
+
+    return () => {
+      disposed = true;
+      scene.current?.dispose();
+      scene.current = null;
+    };
+  }, []);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add(
+        { mobile: MOTION.mobile, motion: MOTION.ok },
+        ({ conditions }) => {
+          if (!conditions?.motion) return;
+          const mobile = Boolean(conditions.mobile);
+          const letters = gsap.utils.toArray<HTMLElement>("[data-letter]");
+          const proxy = { p: 0 };
+
+          const tl = gsap.timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: {
+              trigger: root.current,
+              start: "top top",
+              end: mobile ? "+=130%" : "+=220%",
+              pin: true,
+              scrub: 1,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          tl.to(
+            proxy,
+            {
+              p: 1,
+              duration: 0.8,
+              onUpdate: () => {
+                progress.current = proxy.p;
+                scene.current?.setProgress(proxy.p);
+              },
+            },
+            0,
+          )
+            .to("[data-intro]", { autoAlpha: 0, y: -40, duration: 0.14 }, 0.04)
+            .fromTo(
+              letters,
+              {
+                x: () => gsap.utils.random(-0.45, 0.45) * window.innerWidth,
+                y: () => gsap.utils.random(-0.35, 0.35) * window.innerHeight,
+                rotation: () => gsap.utils.random(-70, 70),
+                autoAlpha: 0,
+                filter: mobile ? "none" : "blur(10px)",
+              },
+              {
+                x: 0,
+                y: 0,
+                rotation: 0,
+                autoAlpha: 1,
+                filter: "blur(0px)",
+                ease: "power3.out",
+                duration: 0.32,
+                stagger: { each: 0.012, from: "random" },
+              },
+              0.36,
+            )
+            .fromTo(
+              "[data-glowline]",
+              { scaleX: 0 },
+              { scaleX: 1, duration: 0.12, ease: "expo.out" },
+              0.8,
+            )
+            .to(
+              "[data-title]",
+              { textShadow: "0 0 42px rgba(91,163,208,0.55)", duration: 0.1 },
+              0.82,
+            )
+            .fromTo(
+              "[data-tail]",
+              { autoAlpha: 0, y: 28 },
+              { autoAlpha: 1, y: 0, duration: 0.12, stagger: 0.04, ease: "power3.out" },
+              0.86,
+            );
+        },
+      );
+    },
+    { scope: root },
+  );
+
   return (
-    <section className="px-2 pt-2 sm:px-3 sm:pt-3">
-      <div className="relative isolate flex min-h-[46rem] flex-col overflow-hidden rounded-[1.75rem] bg-navy-950 sm:rounded-hero lg:min-h-[min(92vh,56rem)]">
-        {/* Backdrop: settles from a slight zoom as the page opens */}
-        <div className="hero-zoom absolute inset-0 -z-10">
-          <Image
-            src="/images/hero-image.png"
-            alt="Advisor Technologies head office in Islamabad"
-            fill
-            preload
-            sizes="100vw"
-            className="object-cover"
-          />
-        </div>
-        {/* Legibility: dark where the copy sits (left and bottom), open on
-            the right so the photograph still reads. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-linear-to-b from-navy-950/70 via-navy-950/15 to-navy-950/90"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-linear-to-r from-navy-950/80 via-navy-950/35 to-transparent"
-        />
-        {/* Brand light: a cool blue glow lifting the machinery floor */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(60%_55%_at_78%_62%,rgb(31_107_255/0.28),transparent_70%)] mix-blend-screen"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(40%_40%_at_8%_0%,rgb(56_189_248/0.16),transparent_70%)]"
-        />
+    <section
+      ref={root}
+      aria-label="Introduction"
+      className="relative isolate h-svh min-h-[38rem] overflow-hidden bg-bg"
+    >
+      {/* Backdrop: deep navy into charcoal with a steel-blue glow */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-20 bg-[radial-gradient(70%_60%_at_50%_35%,#22375a_0%,#14213a_45%,#1b1f26_100%)]"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-20 bg-[radial-gradient(40%_35%_at_50%_42%,rgb(91_163_208/0.18),transparent_70%)]"
+      />
+      <canvas
+        ref={canvas}
+        aria-hidden
+        className="absolute inset-0 -z-10 size-full opacity-0 transition-opacity duration-1000 data-ready:opacity-100"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-linear-to-t from-bg via-bg/60 to-transparent"
+      />
 
-        {/* Content */}
-        <div className="flex flex-1 flex-col px-5 pt-28 pb-6 sm:px-10 sm:pt-32 sm:pb-10 lg:px-14 lg:pb-12">
-          <div className="flex flex-1 flex-col justify-center">
+      {/* Opening line, shown while the pieces are still scattered */}
+      <div
+        data-intro
+        className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 flex-col items-center px-6 text-center"
+      >
+        <span className="eyebrow inline-flex items-center gap-2.5 rounded-full bg-white/6 px-4 py-2 text-fg-muted ring-1 ring-white/12 backdrop-blur-md">
+          <span className="relative flex size-1.5">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-glow opacity-70" />
+            <span className="relative inline-flex size-1.5 rounded-full bg-glow" />
+          </span>
+          Islamabad · Pakistan
+        </span>
+        <p className="mt-6 max-w-2xl font-display text-[clamp(1.75rem,1rem+3vw,3.5rem)] leading-[1.05] font-semibold tracking-tight text-fg">
+          Six divisions.{" "}
+          <span className="text-glow">One accountable partner.</span>
+        </p>
+      </div>
+
+      {/* Assembled wordmark, tagline and actions */}
+      <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-5 pb-28 text-center sm:pb-32">
+        <h1 data-title className="font-display font-extrabold text-fg uppercase">
+          <span className="sr-only">
+            {site.name}. Complete technology and supply solutions, built for
+            Pakistan.
+          </span>
+          {WORDS.map((word, w) => (
             <span
-              style={rise(100)}
-              className="hero-rise inline-flex w-fit items-center gap-2.5 rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white/85 ring-1 ring-white/20 backdrop-blur-sm"
+              key={word}
+              aria-hidden
+              className={
+                w === 0
+                  ? "block text-hero"
+                  : "mt-2 block text-[clamp(1.05rem,0.4rem+2.6vw,2.9rem)] leading-none font-semibold tracking-[0.32em] text-fg-muted"
+              }
             >
-              <span className="relative flex size-1.5">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-sky-300 opacity-70" />
-                <span className="relative inline-flex size-1.5 rounded-full bg-sky-200" />
-              </span>
-              Islamabad · Serving public &amp; private sector across Pakistan
+              {word.split("").map((letter, i) => (
+                <span key={i} data-letter className="motion-hide inline-block">
+                  {letter}
+                </span>
+              ))}
             </span>
+          ))}
+        </h1>
+        <span
+          data-glowline
+          aria-hidden
+          className="glow-line mt-6 block w-[min(32rem,70vw)] origin-center"
+        />
+        <p
+          data-tail
+          className="motion-hide mt-6 max-w-xl text-base text-fg-muted sm:text-lg"
+        >
+          Complete technology and supply solutions, built for Pakistan.
+        </p>
+        <div
+          data-tail
+          className="motion-hide mt-7 flex flex-wrap justify-center gap-3"
+        >
+          <Button href="/contact#enquiry" size="lg" withArrow>
+            Get a Quote
+          </Button>
+          <Button href="/services" variant="ghost" size="lg">
+            Explore services
+          </Button>
+        </div>
+      </div>
 
-            <h1 className="mt-7 max-w-[18ch] font-display font-extrabold text-white">
-              <span className="sr-only">
-                {site.name}. {site.tagline}
-              </span>
-              <span
-                aria-hidden
-                style={rise(200)}
-                className="hero-rise block text-[clamp(3.25rem,0.5rem+8vw,9rem)] leading-[0.86] tracking-[-0.05em]"
-              >
-                <span className="hero-wordmark">Advisor</span>
-              </span>
-              <span
-                aria-hidden
-                style={rise(340)}
-                className="hero-rise mt-3 flex items-center gap-4 text-[clamp(0.875rem,0.25rem+2.2vw,2.25rem)] leading-none font-semibold tracking-[0.16em] text-white/75 uppercase"
-              >
-                <span className="hero-line h-0.5 shrink-0 w-[clamp(1.5rem,4vw,3.5rem)] origin-left rounded-full bg-linear-to-r from-sky-300 to-white/60" />
-                Technologies
-              </span>
-            </h1>
-          </div>
-
-          {/* Lower band: statement, CTAs and trust on the left; the division
-              panel on the right. */}
-          <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-8 xl:gap-12">
-            <div>
-              <p
-                style={rise(480)}
-                className="hero-rise max-w-lg text-xl leading-[1.2] font-medium text-white sm:text-2xl xl:text-[1.75rem]"
-              >
-                Supply, installation and maintenance
-                <span className="text-white/55">
-                  {" "}
-                  for Pakistan&rsquo;s institutions.
-                </span>
-              </p>
-              <p
-                style={rise(560)}
-                className="hero-rise mt-4 max-w-md text-sm leading-relaxed text-white/65"
-              >
-                Branded plant &amp; machinery, IT infrastructure, security
-                systems and repair works, backed by international standards of
-                after-sales service.
-              </p>
-
-              <div
-                style={rise(660)}
-                className="hero-rise mt-8 flex flex-wrap items-center gap-3"
-              >
-                <Button href="/services" variant="light" size="lg" withArrow>
-                  Explore our services
-                </Button>
-                <Button
-                  href="/contact"
-                  size="lg"
-                  className="bg-white/10 ring-1 ring-white/25 backdrop-blur-md hover:bg-white/20"
-                >
-                  Talk to our team
-                </Button>
-              </div>
-
-              <div
-                style={rise(760)}
-                className="hero-rise mt-8 flex items-center gap-4"
-              >
-                <span className="flex -space-x-1.5">
-                  {trustClients.map((client) => (
-                    <ClientLogo
-                      key={client.name}
-                      client={client}
-                      labelled
-                      sizes="44px"
-                      className="size-11 rounded-full ring-2! ring-navy-950!"
-                    />
-                  ))}
-                  <span className="grid size-11 place-items-center rounded-full bg-white font-display text-[0.6875rem] font-bold text-navy-900 ring-2 ring-navy-950">
-                    {clients.length}+
-                  </span>
-                </span>
-                <span className="text-sm leading-snug text-white/70">
-                  Trusted by federal ministries,
-                  <br className="hidden sm:block" /> authorities and enterprises
-                </span>
-              </div>
-            </div>
-
-            <div style={rise(600)} className="hero-rise">
-              <HeroDivisions />
-            </div>
-          </div>
+      {/* "Scroll for more" notch cut into the bottom edge */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
+        <div className="flex items-center gap-3 rounded-t-3xl bg-bg px-6 pt-3 pb-4 text-xs font-medium tracking-wide text-fg-subtle">
+          <span
+            aria-hidden
+            className="relative h-6 w-4 rounded-full ring-1 ring-fg-subtle/60"
+          >
+            <span className="scroll-cue-dot absolute top-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-glow" />
+          </span>
+          Scroll for more
         </div>
       </div>
     </section>

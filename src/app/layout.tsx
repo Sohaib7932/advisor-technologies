@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Sora } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#2a4468",
+  themeColor: "#1b1f26",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -59,7 +60,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${jakarta.variable} ${sora.variable} h-full antialiased`}
+      // The motion script below adds a class before hydration.
+      suppressHydrationWarning
     >
+      <head>
+        {/* Before first paint: mark that scroll animations will run, so
+            elements they animate in can start hidden instead of flashing. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion')",
+          }}
+        />
+      </head>
       <body
         className="flex min-h-full flex-col"
         // Browser extensions inject attributes onto <body> before React
@@ -72,10 +85,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </noscript>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-60 focus:rounded-full focus:bg-navy-900 focus:px-5 focus:py-3 focus:text-sm focus:font-medium focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-60 focus:rounded-full focus:bg-glow focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-bg"
         >
           Skip to content
         </a>
+        <SmoothScroll />
         <Navbar />
         <main id="main" className="flex-1">
           {children}

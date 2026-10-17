@@ -2,19 +2,16 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { HeroFacts, PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
-import { PrincipleCard } from "@/components/home/principle-card";
+import { Values } from "@/components/home/values";
+import { Principles } from "@/components/home/principles";
 import { Container, Section } from "@/components/ui/container";
-import { SectionHeading, Eyebrow } from "@/components/ui/section-heading";
+import { Eyebrow } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
-import { FloodCard } from "@/components/ui/flood-card";
 import { Icon } from "@/components/ui/icons";
 import {
   aboutParagraphs,
-  objectiveParagraphs,
-  principles,
   sectors,
   stats,
-  values,
 } from "@/lib/content";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -33,7 +30,7 @@ export default function AboutPage() {
         title={
           <>
             A recognised name for{" "}
-            <span className="text-navy-400">quality and reliability</span> in
+            <span className="text-glow">quality and reliability</span> in
             Pakistan
           </>
         }
@@ -78,13 +75,13 @@ export default function AboutPage() {
                     />
                   </div>
                 </div>
-                <div className="absolute top-6 -left-2 flex items-center gap-3 rounded-2xl bg-white/90 py-3 pr-5 pl-3 shadow-lift ring-1 ring-navy-900/8 backdrop-blur-md sm:-left-5">
-                  <span className="grid size-10 place-items-center rounded-xl bg-navy-950 text-white">
+                <div className="absolute top-6 -left-2 flex items-center gap-3 glass rounded-2xl py-3 pr-5 pl-3 shadow-float ring-1 ring-glow/30 sm:-left-5">
+                  <span className="grid size-10 place-items-center rounded-xl bg-glow text-bg">
                     <Icon name="shield" className="size-5" />
                   </span>
-                  <span className="text-sm leading-tight font-semibold text-navy-900">
+                  <span className="text-sm leading-tight font-semibold text-fg">
                     Exclusive territory
-                    <span className="block text-xs font-medium text-graphite-500">
+                    <span className="block text-xs font-medium text-fg-subtle">
                       agents in Pakistan
                     </span>
                   </span>
@@ -101,7 +98,7 @@ export default function AboutPage() {
                     key={item.label}
                     className="min-w-0 rounded-2xl bg-navy-950 p-4 text-white shadow-soft sm:p-5"
                   >
-                    <dt className="eyebrow text-navy-300">{item.label}</dt>
+                    <dt className="eyebrow text-fg-subtle">{item.label}</dt>
                     <dd className="mt-2 font-display text-[0.9375rem] font-semibold break-all tabular-nums sm:text-lg">
                       {item.value}
                     </dd>
@@ -113,9 +110,9 @@ export default function AboutPage() {
             <div className="lg:col-span-6 lg:col-start-7">
               <Reveal>
                 <Eyebrow>Our story</Eyebrow>
-                <h2 className="mt-5 text-headline text-ink">
+                <h2 className="mt-5 text-headline font-bold text-fg uppercase">
                   Built to serve industry
-                  <span className="block text-navy-500">
+                  <span className="block text-glow">
                     across the Pakistan market
                   </span>
                 </h2>
@@ -128,8 +125,8 @@ export default function AboutPage() {
                       className={cn(
                         "leading-relaxed",
                         index === 0
-                          ? "text-lg font-medium text-navy-900"
-                          : "text-base text-graphite-600",
+                          ? "text-lg font-medium text-fg"
+                          : "text-base text-fg-muted",
                       )}
                     >
                       {paragraph}
@@ -144,7 +141,7 @@ export default function AboutPage() {
                   {sectors.map((sector) => (
                     <li
                       key={sector}
-                      className="rounded-full bg-surface px-4 py-2 text-sm font-medium text-navy-800 shadow-soft ring-1 ring-navy-900/8 transition-colors duration-300 hover:bg-navy-950 hover:text-white"
+                      className="rounded-full bg-surface px-4 py-2 text-sm font-medium text-fg shadow-soft ring-1 ring-white/10 transition-colors duration-300 hover:bg-navy-950 hover:text-white"
                     >
                       {sector}
                     </li>
@@ -156,89 +153,8 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Objective & principles */}
-      <Section
-        id="principles"
-        tone="dark"
-        className="relative isolate overflow-hidden"
-      >
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(50%_60%_at_85%_30%,rgb(42_68_104/0.55),transparent_70%)]"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(35%_45%_at_0%_100%,rgb(31_107_255/0.16),transparent_70%)]"
-        />
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-            <Reveal className="lg:col-span-5">
-              <Eyebrow tone="light">Objective</Eyebrow>
-              <h2 className="mt-5 text-headline text-white">
-                Complete solutions,
-                <span className="block text-navy-400">end to end</span>
-              </h2>
-              <div className="mt-8 space-y-5">
-                {objectiveParagraphs.map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className={cn(
-                      "leading-relaxed",
-                      index === 0
-                        ? "text-lg text-navy-100"
-                        : "text-base text-navy-300",
-                    )}
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </Reveal>
-
-            <ul className="grid gap-3 sm:grid-cols-2 lg:col-span-7">
-              {principles.map((principle, index) => (
-                <Reveal as="li" key={principle.title} delay={index * 90}>
-                  <PrincipleCard
-                    index={index}
-                    title={principle.title}
-                    body={principle.body}
-                    icon={principle.icon}
-                  />
-                </Reveal>
-              ))}
-            </ul>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Values */}
-      <Section id="values" tone="surface">
-        <Container>
-          <SectionHeading
-            eyebrow="Our values"
-            lead="Four commitments that shape how every order, installation and service call is handled."
-            title={
-              <>
-                The standards we hold
-                <span className="text-navy-500"> ourselves to</span>
-              </>
-            }
-          />
-
-          <ul className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map((value, index) => (
-              <Reveal as="li" key={value.title} delay={index * 80}>
-                <FloodCard
-                  index={index}
-                  icon={value.icon}
-                  title={value.title}
-                  body={value.blurb}
-                />
-              </Reveal>
-            ))}
-          </ul>
-        </Container>
-      </Section>
+      <Values />
+      <Principles />
 
       <Cta
         title="Let's talk about your requirement"

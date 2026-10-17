@@ -47,8 +47,8 @@ export type NavItem = {
 export const mainNav: NavItem[] = [
   { label: "Home", href: "/", description: "Who we are at a glance" },
   { label: "About", href: "/about", description: "Our story, values and principles" },
-  { label: "Services", href: "/services", description: "What we deliver end to end" },
   { label: "Products", href: "/products", description: "Our supply catalogue" },
+  { label: "Services", href: "/services", description: "What we deliver end to end" },
   { label: "Clients", href: "/clients", description: "Institutions we serve" },
   { label: "Contact", href: "/contact", description: "Start a conversation" },
 ];

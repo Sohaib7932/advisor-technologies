@@ -14,98 +14,100 @@ export function Cta({
   body?: string;
 }) {
   return (
-    <section className="px-2 pb-2 sm:px-3 sm:pb-3">
-      <Reveal className="relative isolate overflow-hidden rounded-[1.75rem] bg-navy-900 sm:rounded-hero">
-        {/* Surface gradient first: it is what shows until the WebGL layer
+    // Sits in the same content column as the sections above, so its edges
+    // line up with their cards rather than running to the screen edge.
+    <section className="pb-16 md:pb-24">
+      <Container>
+        <Reveal className="relative isolate overflow-hidden rounded-panel bg-brand-deep ring-1 ring-white/8">
+          {/* Surface gradient first: it is what shows until the WebGL layer
             loads, and the fallback if it never does. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(160deg,#061426_0%,#0f3a66_52%,#050b14_100%)]"
-        />
-        <div aria-hidden className="absolute inset-0">
-          <GhostFibersBackground
-            lineColor={palette.deepNavy}
-            glowColor={palette.cyan}
-            layers={6}
-            scale={1.4}
-            speed={0.14}
-            twist={0.12}
-            lineSharpness={14}
-            glowIntensity={1.2}
-            brightness={1.5}
-            vignette={0.7}
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[linear-gradient(160deg,#14213a_0%,#2a4161_52%,#1b1f26_100%)]"
           />
-        </div>
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-linear-to-r from-navy-950/90 via-navy-950/55 to-navy-950/20"
-        />
+          <div aria-hidden className="absolute inset-0">
+            <GhostFibersBackground
+              lineColor={palette.deepNavy}
+              glowColor={palette.glow}
+              layers={6}
+              scale={1.4}
+              speed={0.14}
+              twist={0.12}
+              lineSharpness={14}
+              glowIntensity={1.2}
+              brightness={1.5}
+              vignette={0.7}
+            />
+          </div>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-linear-to-r from-brand-deep/95 via-brand-deep/60 to-brand-deep/20"
+          />
 
-        <Container className="relative py-20 md:py-24 lg:py-28">
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
-            <div className="lg:col-span-7">
-              <h2 className="text-headline text-white">{title}</h2>
-              <p className="mt-6 max-w-lg text-base leading-relaxed text-navy-200">
-                {body}
-              </p>
+          <div className="relative px-6 py-10 sm:px-10 sm:py-12 lg:px-12 lg:py-14">
+            <div className="grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-10">
+              <div className="lg:col-span-7">
+                <h2 className="font-display text-[clamp(1.5rem,1.1rem+1.4vw,2.25rem)] leading-[1.08] font-bold text-fg uppercase">
+                  {title}
+                </h2>
+                <p className="mt-4 max-w-lg text-[0.9375rem] leading-relaxed text-fg-muted">
+                  {body}
+                </p>
 
-              <div className="mt-9 flex flex-wrap gap-3">
-                <Button href="/contact#enquiry" variant="light" size="lg" withArrow>
-                  Request a quote
-                </Button>
-                <Button
-                  href="/services"
-                  size="lg"
-                  className="bg-white/10 text-white ring-1 ring-white/25 hover:bg-white/18"
-                >
-                  Explore our services
-                </Button>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <Button href="/contact#enquiry" withArrow>
+                    Get a Quote
+                  </Button>
+                  <Button href="/services" variant="ghost">
+                    Explore our services
+                  </Button>
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 lg:col-start-8">
+                <ul className="space-y-3">
+                  <li>
+                    <a
+                      href={`tel:${site.contact.phoneHref}`}
+                      className="group flex items-center gap-4 rounded-2xl bg-white/6 p-4 ring-1 ring-white/12 backdrop-blur-sm transition-[background-color,box-shadow] hover:bg-white/10 hover:shadow-glow"
+                    >
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-glow text-bg">
+                        <Phone className="size-4.5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-xs text-fg-subtle">
+                          Call us
+                        </span>
+                        <span className="mt-0.5 block font-semibold text-fg">
+                          {site.contact.phone}
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href={`mailto:${site.contact.email}`}
+                      className="group flex items-center gap-4 rounded-2xl bg-white/6 p-4 ring-1 ring-white/12 backdrop-blur-sm transition-[background-color,box-shadow] hover:bg-white/10 hover:shadow-glow"
+                    >
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-glow text-bg">
+                        <Mail className="size-4.5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-xs text-fg-subtle">
+                          Email us
+                        </span>
+                        <span className="mt-0.5 block truncate font-semibold text-fg">
+                          {site.contact.email}
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
-
-            <div className="lg:col-span-4 lg:col-start-9">
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href={`tel:${site.contact.phoneHref}`}
-                    className="group flex items-center gap-4 rounded-2xl bg-white/8 p-4 ring-1 ring-white/15 backdrop-blur-sm transition-colors hover:bg-white/14"
-                  >
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/12 text-white">
-                      <Phone className="size-4.5" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-xs text-navy-300">
-                        Call us
-                      </span>
-                      <span className="mt-0.5 block font-medium text-white">
-                        {site.contact.phone}
-                      </span>
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={`mailto:${site.contact.email}`}
-                    className="group flex items-center gap-4 rounded-2xl bg-white/8 p-4 ring-1 ring-white/15 backdrop-blur-sm transition-colors hover:bg-white/14"
-                  >
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/12 text-white">
-                      <Mail className="size-4.5" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-xs text-navy-300">
-                        Email us
-                      </span>
-                      <span className="mt-0.5 block truncate font-medium text-white">
-                        {site.contact.email}
-                      </span>
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
-        </Container>
-      </Reveal>
+        </Reveal>
+      </Container>
     </section>
   );
 }

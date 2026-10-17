@@ -26,7 +26,7 @@ export default function ServicesPage() {
         title={
           <>
             Six divisions,
-            <span className="text-navy-400"> one accountable partner</span>
+            <span className="text-glow"> one accountable partner</span>
           </>
         }
         image="/images/repair-maintenance.png"
@@ -93,10 +93,10 @@ export default function ServicesPage() {
                     )}
                   >
                     <Eyebrow>Division {String(index + 1).padStart(2, "0")}</Eyebrow>
-                    <h2 className="mt-5 text-headline text-ink">
+                    <h2 className="mt-5 text-headline font-bold text-fg uppercase">
                       {service.title}
                     </h2>
-                    <p className="mt-6 text-base leading-relaxed text-graphite-600">
+                    <p className="mt-6 text-base leading-relaxed text-fg-muted">
                       {service.body}
                     </p>
 
@@ -104,7 +104,7 @@ export default function ServicesPage() {
                       {service.highlights.map((highlight) => (
                         <li
                           key={highlight}
-                          className="flex items-start gap-3 rounded-2xl bg-surface p-3.5 text-sm font-medium text-navy-900 shadow-soft ring-1 ring-navy-900/6"
+                          className="flex items-start gap-3 rounded-2xl bg-surface p-3.5 text-sm font-medium text-fg shadow-soft ring-1 ring-white/10"
                         >
                           <span className="grid size-5 shrink-0 place-items-center rounded-full bg-navy-950 text-white">
                             <Check className="size-3" />

@@ -36,7 +36,7 @@ export function HeroDivisions() {
       className="w-full rounded-[1.75rem] bg-navy-950/45 p-2 shadow-float ring-1 ring-white/15 backdrop-blur-xl lg:w-[22rem] xl:w-[25rem]"
     >
       <div className="flex items-center justify-between px-4 pt-3 pb-2.5">
-        <span className="eyebrow text-[0.6875rem] text-navy-200">
+        <span className="eyebrow text-[0.6875rem] text-fg-muted">
           What we deliver
         </span>
         <span className="font-display text-xs font-medium text-white/60 tabular-nums">
@@ -66,7 +66,7 @@ export function HeroDivisions() {
                     className={cn(
                       "grid size-8 shrink-0 place-items-center rounded-full ring-1 transition-colors duration-500",
                       isActive
-                        ? "bg-white text-navy-900 ring-white"
+                        ? "bg-glow text-bg ring-glow"
                         : "bg-white/5 text-white/70 ring-white/15",
                     )}
                   >
@@ -110,7 +110,7 @@ export function HeroDivisions() {
                     key={active}
                     aria-hidden
                     onAnimationEnd={() => setActive((active + 1) % services.length)}
-                    className="hero-progress absolute inset-x-4 bottom-0 h-px origin-left bg-linear-to-r from-sky-300/0 via-sky-300 to-white"
+                    className="hero-progress absolute inset-x-4 bottom-0 h-px origin-left bg-linear-to-r from-transparent via-glow to-white"
                     style={{
                       animationDuration: `${CYCLE_MS}ms`,
                       animationPlayState: paused ? "paused" : "running",

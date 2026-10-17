@@ -53,7 +53,7 @@ export default function ClientsPage() {
         title={
           <>
             Serving Pakistan&rsquo;s
-            <span className="text-navy-400"> public institutions</span>
+            <span className="text-glow"> public institutions</span>
           </>
         }
         image="/images/security-accesscontrol.png"
@@ -83,7 +83,7 @@ export default function ClientsPage() {
             title={
               <>
                 Institutions we have{" "}
-                <span className="text-navy-500">supplied and served</span>
+                <span className="text-glow">supplied and served</span>
               </>
             }
             lead="A cross-section of federal ministries, civic authorities, law enforcement academies, utilities, welfare bodies and private enterprises."
@@ -93,10 +93,10 @@ export default function ClientsPage() {
             {sectorOrder.map((sector, sectorIndex) => (
               <div key={sector}>
                 <Reveal className="flex items-center gap-4">
-                  <h3 className="font-display text-lg font-semibold text-navy-900">
+                  <h3 className="font-display text-lg font-semibold text-fg">
                     {sector}
                   </h3>
-                  <span className="h-px flex-1 bg-linear-to-r from-navy-900/15 to-transparent" />
+                  <span className="h-px flex-1 bg-linear-to-r from-white/15 to-transparent" />
                   <span className="grid min-w-8 place-items-center rounded-full bg-navy-950 px-2 py-1 font-display text-xs font-semibold text-white tabular-nums">
                     {String(grouped[sector].length).padStart(2, "0")}
                   </span>
@@ -110,17 +110,17 @@ export default function ClientsPage() {
                         key={client.name}
                         delay={Math.min(index * 50 + sectorIndex * 20, 300)}
                       >
-                        <div className="group flex h-full items-center gap-4 rounded-2xl bg-surface p-4 shadow-soft ring-1 ring-navy-900/6 transition-[translate,box-shadow] duration-300 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift">
+                        <div className="group flex h-full items-center gap-4 rounded-2xl bg-surface p-4 shadow-soft ring-1 ring-white/10 transition-[translate,box-shadow] duration-300 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift">
                           <ClientLogo
                             client={client}
                             sizes="64px"
                             className="size-16 rounded-2xl shadow-soft transition-transform duration-500 ease-out-soft group-hover:scale-105"
                           />
                           <span className="min-w-0">
-                            <span className="block text-[0.9375rem] leading-snug font-medium text-navy-900">
+                            <span className="block text-[0.9375rem] leading-snug font-medium text-fg">
                               {client.name}
                             </span>
-                            <span className="mt-1 block text-xs text-graphite-500">
+                            <span className="mt-1 block text-xs text-fg-subtle">
                               {client.sector}
                             </span>
                           </span>
@@ -136,7 +136,7 @@ export default function ClientsPage() {
       </Section>
 
       {/* Why institutions choose us */}
-      <Section tone="surface">
+      <Section tone="navy">
         <Container>
           <SectionHeading
             eyebrow="Why institutions choose us"
@@ -144,7 +144,7 @@ export default function ClientsPage() {
             title={
               <>
                 Built for how{" "}
-                <span className="text-navy-500">institutions buy</span>
+                <span className="text-glow">institutions buy</span>
               </>
             }
           />

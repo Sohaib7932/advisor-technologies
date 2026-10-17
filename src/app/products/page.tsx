@@ -69,7 +69,7 @@ export default function ProductsPage() {
         title={
           <>
             A catalogue built for
-            <span className="text-navy-400"> procurement</span>
+            <span className="text-glow"> procurement</span>
           </>
         }
         image="/images/computing-office.png"
@@ -175,7 +175,7 @@ export default function ProductsPage() {
       </Section>
 
       {/* Assurances */}
-      <Section tone="surface">
+      <Section tone="navy">
         <Container>
           <SectionHeading
             eyebrow="With every order"
@@ -183,7 +183,7 @@ export default function ProductsPage() {
             title={
               <>
                 What comes with{" "}
-                <span className="text-navy-500">every order</span>
+                <span className="text-glow">every order</span>
               </>
             }
           />
@@ -225,11 +225,11 @@ function ProductCard({
     : "/contact#enquiry";
 
   return (
-    <div className="group relative isolate flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 shadow-soft ring-1 ring-navy-900/6 transition-[translate,box-shadow] duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift sm:p-7">
+    <div className="group relative isolate flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 shadow-soft ring-1 ring-white/10 transition-[translate,box-shadow] duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift sm:p-7">
       {/* Soft navy wash rising on hover */}
       <span
         aria-hidden
-        className="absolute inset-0 -z-10 bg-linear-to-t from-navy-50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        className="absolute inset-0 -z-10 bg-linear-to-t from-white/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
       />
 
       <div className="flex items-center justify-between">
@@ -238,22 +238,22 @@ function ProductCard({
         </span>
         <span
           aria-hidden
-          className="font-display text-4xl leading-none font-bold text-navy-900/6 transition-colors duration-500 group-hover:text-navy-600/15"
+          className="font-display text-4xl leading-none font-bold text-white/6 transition-colors duration-500 group-hover:text-glow/25"
         >
           {String(index + 1).padStart(2, "0")}
         </span>
       </div>
 
-      <h3 className="mt-7 font-display text-lg font-semibold text-ink">
+      <h3 className="mt-7 font-display text-lg font-semibold text-fg">
         {product.title}
       </h3>
-      <p className="mt-2.5 text-sm leading-relaxed text-graphite-600">
+      <p className="mt-2.5 text-sm leading-relaxed text-fg-muted">
         {product.body}
       </p>
 
       <Link
         href={href}
-        className="mt-auto inline-flex items-center gap-1.5 self-start pt-6 text-sm font-semibold text-navy-600 transition-colors hover:text-navy-900"
+        className="mt-auto inline-flex items-center gap-1.5 self-start pt-6 text-sm font-semibold text-glow transition-colors hover:text-fg"
       >
         Enquire about this
         <span className="sr-only">: {product.title}</span>
@@ -262,7 +262,7 @@ function ProductCard({
 
       <span
         aria-hidden
-        className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-linear-to-r from-navy-400 to-navy-700 transition-transform duration-700 ease-out-soft group-hover:scale-x-100"
+        className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-linear-to-r from-steel to-glow transition-transform duration-700 ease-out-soft group-hover:scale-x-100"
       />
     </div>
   );

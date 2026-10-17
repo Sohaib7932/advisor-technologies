@@ -1,11 +1,9 @@
 /**
- * Colours for the animated card backgrounds. The bases sit on the brand navy
- * so the tiles read as part of the same family as the photo tiles; the blue
- * and cyan are the light the effects glow with.
+ * Colours for the animated WebGL backgrounds, taken from the design tokens:
+ * the deep navy base and the steel / glow accents.
  */
 export const palette = {
-  deepNavy: "#0e1d38",
-  electricBlue: "#1f6bff",
-  cyan: "#38bdf8",
-  offWhite: "#e8eef7",
+  deepNavy: "#14213a",
+  steel: "#3f6d85",
+  glow: "#5ba3d0",
 } as const;

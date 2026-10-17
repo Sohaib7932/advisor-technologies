@@ -4,25 +4,17 @@ import { Reveal } from "./reveal";
 export function Eyebrow({
   children,
   className,
-  tone = "dark",
 }: {
   children: React.ReactNode;
   className?: string;
-  tone?: "dark" | "light";
 }) {
   return (
     <span
-      className={cn(
-        "eyebrow inline-flex items-center gap-2.5",
-        tone === "dark" ? "text-navy-600" : "text-navy-200",
-        className,
-      )}
+      className={cn("eyebrow inline-flex items-center gap-3 text-glow", className)}
     >
       <span
-        className={cn(
-          "h-px w-6",
-          tone === "dark" ? "bg-navy-600/50" : "bg-navy-200/50",
-        )}
+        aria-hidden
+        className="h-px w-8 bg-linear-to-r from-transparent to-glow shadow-[0_0_8px_rgb(91_163_208/0.7)]"
       />
       {children}
     </span>
@@ -30,15 +22,15 @@ export function Eyebrow({
 }
 
 /**
- * The paired label + statement layout used at the top of most sections:
- * a small eyebrow on the left, a large statement on the right.
+ * The label + statement pair at the top of most sections. Titles are bold
+ * uppercase display type; wrap a phrase in <span className="text-glow"> to
+ * pick it out.
  */
 export function SectionHeading({
   eyebrow,
   title,
   lead,
   align = "split",
-  tone = "dark",
   className,
   action,
 }: {
@@ -46,12 +38,12 @@ export function SectionHeading({
   title: React.ReactNode;
   lead?: React.ReactNode;
   align?: "split" | "center" | "left";
-  tone?: "dark" | "light";
   className?: string;
   action?: React.ReactNode;
 }) {
-  const muted = tone === "dark" ? "text-graphite-600" : "text-navy-200";
-  const strong = tone === "dark" ? "text-ink" : "text-white";
+  const heading = (
+    <h2 className="text-headline font-bold text-fg uppercase">{title}</h2>
+  );
 
   if (align === "split") {
     return (
@@ -61,19 +53,18 @@ export function SectionHeading({
           className,
         )}
       >
-        <Reveal className="lg:col-span-4">
-          {eyebrow && <Eyebrow tone={tone}>{eyebrow}</Eyebrow>}
+        <Reveal className="lg:col-span-7">
+          {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+          <div className="mt-5">{heading}</div>
+        </Reveal>
+        <Reveal delay={90} className="lg:col-span-5">
           {lead && (
-            <p className={cn("mt-5 max-w-xs text-sm leading-relaxed", muted)}>
+            <p className="max-w-md text-base leading-relaxed text-fg-muted">
               {lead}
             </p>
           )}
-          {action && <div className="mt-7 hidden lg:block">{action}</div>}
+          {action && <div className="mt-7">{action}</div>}
         </Reveal>
-        <Reveal delay={80} className="lg:col-span-8">
-          <h2 className={cn("text-headline", strong)}>{title}</h2>
-        </Reveal>
-        {action && <div className="lg:hidden">{action}</div>}
       </div>
     );
   }
@@ -88,17 +79,16 @@ export function SectionHeading({
     >
       <Reveal>
         {eyebrow && (
-          <Eyebrow tone={tone} className={align === "center" ? "justify-center" : ""}>
+          <Eyebrow className={align === "center" ? "justify-center" : ""}>
             {eyebrow}
           </Eyebrow>
         )}
-        <h2 className={cn("mt-5 text-headline", strong)}>{title}</h2>
+        <div className="mt-5">{heading}</div>
         {lead && (
           <p
             className={cn(
-              "mt-6 text-base leading-relaxed sm:text-lg",
+              "mt-6 text-base leading-relaxed text-fg-muted sm:text-lg",
               align === "center" && "mx-auto max-w-2xl",
-              muted,
             )}
           >
             {lead}

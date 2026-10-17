@@ -33,15 +33,3 @@ function whenNearViewport<P extends object>(Effect: ComponentType<P>) {
 export const GhostFibersBackground = whenNearViewport(
   dynamic(() => import("./GhostFibers"), { ssr: false }),
 );
-
-export const MoltenMetalBackground = whenNearViewport(
-  dynamic(() => import("./MoltenMetal"), { ssr: false }),
-);
-
-export const OrbParticlesBackground = whenNearViewport(
-  dynamic(() => import("./OrbParticles"), { ssr: false }),
-);
-
-export const GradientBlindsBackground = whenNearViewport(
-  dynamic(() => import("./GradientBlinds"), { ssr: false }),
-);

@@ -8,12 +8,15 @@ import { mainNav, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, Close, Menu } from "@/components/ui/icons";
 
+/** Top-level links; the logo itself is the way home. */
+const links = mainNav.filter((item) => item.href !== "/");
+
 export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Swap the pill from transparent to solid once the hero starts scrolling away.
+  // Transparent over the hero, frosted once the page starts moving.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
@@ -33,16 +36,14 @@ export function Navbar() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-5">
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
       <nav
         aria-label="Main"
         className={cn(
-          "pointer-events-auto mx-auto flex h-16 max-w-[76rem] items-center justify-between rounded-full pr-2.5 pl-5 transition-all duration-500 ease-out-soft xl:h-[4.5rem] xl:pr-3 xl:pl-7",
-          open
-            ? "bg-surface shadow-float ring-1 ring-navy-900/8"
-            : scrolled
-              ? "glass shadow-float ring-1 ring-navy-900/8"
-              : "bg-white/12 ring-1 ring-white/20 backdrop-blur-md",
+          "pointer-events-auto mx-auto flex h-16 max-w-[76rem] items-center justify-between rounded-full pr-2.5 pl-4 transition-[background-color,box-shadow,backdrop-filter] duration-500 ease-out-soft sm:pl-5",
+          scrolled || open
+            ? "glass shadow-float ring-1 ring-white/10"
+            : "bg-transparent ring-1 ring-transparent",
         )}
       >
         {/* Brand */}
@@ -51,92 +52,71 @@ export function Navbar() {
           className="flex shrink-0 items-center gap-2.5"
           aria-label={`${site.name} home`}
         >
-          <span
-            className={cn(
-              "flex size-10 shrink-0 items-center justify-center rounded-full transition-colors duration-500 xl:size-11",
-              scrolled || open ? "bg-transparent" : "bg-white shadow-soft",
-            )}
-          >
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white shadow-soft">
             <Image
               src="/logos/logo-without-text-removebg.webp"
               alt=""
-              width={44}
-              height={44}
+              width={40}
+              height={40}
               loading="eager"
-              className="size-8 object-contain xl:size-9"
+              className="size-8 object-contain"
             />
           </span>
           <span className="flex flex-col leading-none">
-            <span
-              className={cn(
-                "font-display text-[0.9375rem] font-bold tracking-tight transition-colors duration-500 xl:text-base",
-                scrolled || open ? "text-navy-900" : "text-white",
-              )}
-            >
+            <span className="font-display text-[0.9375rem] font-bold tracking-tight text-fg">
               Advisor
             </span>
-            <span
-              className={cn(
-                "mt-0.5 text-[0.5625rem] font-semibold tracking-[0.2em] uppercase transition-colors duration-500 xl:text-[0.625rem]",
-                scrolled || open ? "text-graphite-500" : "text-white/70",
-              )}
-            >
+            <span className="mt-0.5 text-[0.5625rem] font-semibold tracking-[0.22em] text-fg-subtle uppercase">
               Technologies
             </span>
           </span>
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden items-center gap-0.5 lg:flex xl:gap-1">
-          {mainNav.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                className={cn(
-                  "relative inline-flex h-9 items-center rounded-full px-3 text-sm font-medium transition-colors duration-300 xl:h-10 xl:px-4 xl:text-[0.9375rem]",
-                  scrolled
-                    ? isActive(item.href)
-                      ? "bg-navy-600 text-white"
-                      : "text-graphite-600 hover:bg-navy-900/6 hover:text-navy-900"
-                    : isActive(item.href)
-                      ? "bg-white text-navy-900"
-                      : "text-white/80 hover:bg-white/15 hover:text-white",
-                )}
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
+        <ul className="hidden items-center gap-1 lg:flex">
+          {links.map((item) => {
+            const active = isActive(item.href);
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "relative inline-flex h-10 items-center rounded-full px-4 text-sm font-medium transition-colors duration-300",
+                    active ? "text-fg" : "text-fg-muted hover:text-fg",
+                  )}
+                >
+                  {item.label}
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "absolute inset-x-4 bottom-1.5 h-px origin-left bg-glow shadow-[0_0_10px_rgb(91_163_208/0.8)] transition-transform duration-500 ease-out-soft",
+                      active ? "scale-x-100" : "scale-x-0",
+                    )}
+                  />
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
         {/* Actions */}
         <div className="flex items-center gap-2">
           <Link
             href="/contact#enquiry"
-            className={cn(
-              "group hidden h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition-all duration-300 sm:inline-flex xl:h-11 xl:px-5 xl:text-[0.9375rem]",
-              scrolled || open
-                ? "bg-navy-600 text-white hover:bg-navy-700"
-                : "bg-white text-navy-900 hover:bg-navy-50",
-            )}
+            className="group hidden h-11 items-center gap-2 rounded-full bg-glow px-5 text-sm font-semibold text-bg shadow-glow transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-white sm:inline-flex"
           >
-            Request a quote
+            Get a Quote
             <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
 
           <button
             type="button"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className={cn(
-              "inline-flex size-11 items-center justify-center rounded-full transition-colors duration-300 sm:size-10 lg:hidden",
-              scrolled || open
-                ? "bg-navy-900/6 text-navy-900 hover:bg-navy-900/10"
-                : "bg-white/15 text-white hover:bg-white/25",
-            )}
+            className="inline-flex size-11 items-center justify-center rounded-full bg-white/8 text-fg ring-1 ring-white/12 transition-colors duration-300 hover:bg-white/14 lg:hidden"
           >
             {open ? <Close className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -147,7 +127,7 @@ export function Navbar() {
       <div
         id="mobile-menu"
         hidden={!open}
-        className="pointer-events-auto mx-auto mt-3 max-w-[76rem] overflow-hidden rounded-panel bg-surface p-3 shadow-float ring-1 ring-navy-900/8 lg:hidden"
+        className="glass pointer-events-auto mx-auto mt-3 max-w-[76rem] overflow-hidden rounded-panel p-3 shadow-float ring-1 ring-white/10 lg:hidden"
       >
         <ul className="flex flex-col gap-1">
           {mainNav.map((item) => (
@@ -155,11 +135,12 @@ export function Navbar() {
               <Link
                 href={item.href}
                 onClick={() => setOpen(false)}
+                aria-current={isActive(item.href) ? "page" : undefined}
                 className={cn(
                   "flex items-center justify-between rounded-2xl px-4 py-3.5 transition-colors",
                   isActive(item.href)
-                    ? "bg-navy-600 text-white"
-                    : "hover:bg-navy-50",
+                    ? "bg-glow/15 text-fg ring-1 ring-glow/30"
+                    : "text-fg-muted hover:bg-white/6 hover:text-fg",
                 )}
               >
                 <span className="flex flex-col">
@@ -167,12 +148,7 @@ export function Navbar() {
                     {item.label}
                   </span>
                   {item.description && (
-                    <span
-                      className={cn(
-                        "mt-0.5 text-[0.8125rem]",
-                        isActive(item.href) ? "text-navy-100" : "text-graphite-500",
-                      )}
-                    >
+                    <span className="mt-0.5 text-[0.8125rem] text-fg-subtle">
                       {item.description}
                     </span>
                   )}
@@ -186,22 +162,22 @@ export function Navbar() {
         <Link
           href="/contact#enquiry"
           onClick={() => setOpen(false)}
-          className="mt-3 flex h-13 w-full items-center justify-center gap-2 rounded-full bg-navy-900 py-4 font-medium text-white transition-colors hover:bg-navy-800"
+          className="mt-3 flex h-13 w-full items-center justify-center gap-2 rounded-full bg-glow font-semibold text-bg transition-colors hover:bg-white"
         >
-          Request a quote
+          Get a Quote
           <ArrowUpRight className="size-4" />
         </Link>
 
-        <div className="mt-3 flex flex-col gap-1 rounded-2xl bg-canvas px-4 py-3.5 text-sm">
+        <div className="mt-3 flex flex-col gap-1 rounded-2xl bg-white/5 px-4 py-3.5 text-sm">
           <a
             href={`tel:${site.contact.phoneHref}`}
-            className="font-medium text-navy-800 hover:underline"
+            className="font-medium text-fg hover:underline"
           >
             {site.contact.phone}
           </a>
           <a
             href={`mailto:${site.contact.email}`}
-            className="text-graphite-500 hover:underline"
+            className="text-fg-subtle hover:underline"
           >
             {site.contact.email}
           </a>

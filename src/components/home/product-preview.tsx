@@ -25,27 +25,27 @@ const cards: DeckCard[] = productCategories
  */
 export function ProductPreview() {
   return (
-    <section id="products" className="px-2 sm:px-3">
-      <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-[#070c16] sm:rounded-hero">
+    <section id="products" className="px-2 py-6 sm:px-3 md:py-10">
+      <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-[linear-gradient(160deg,#14213a_0%,#121a2b_55%,#1b1f26_100%)] ring-1 ring-white/8 sm:rounded-hero">
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(55%_60%_at_80%_40%,rgb(42_68_104/0.55),transparent_70%)]"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(55%_60%_at_80%_40%,rgb(42_65_97/0.7),transparent_70%)]"
         />
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(35%_45%_at_0%_100%,rgb(31_107_255/0.18),transparent_70%)]"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(35%_45%_at_0%_100%,rgb(91_163_208/0.16),transparent_70%)]"
         />
 
         <Container className="py-20 md:py-24 lg:py-28">
           <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-10">
             <Reveal className="lg:col-span-5">
-              <Eyebrow tone="light">Product line</Eyebrow>
+              <Eyebrow>Product line</Eyebrow>
               <h2 className="mt-6 text-headline text-white">
                 One supplier across{" "}
-                <span className="text-sky-200">{products.length} categories</span> of
-                equipment <span className="text-sky-200">and works</span>
+                <span className="text-glow">{products.length} categories</span> of
+                equipment <span className="text-glow">and works</span>
               </h2>
-              <p className="mt-6 max-w-md text-base leading-relaxed text-navy-200">
+              <p className="mt-6 max-w-md text-base leading-relaxed text-fg-muted">
                 A catalogue built for procurement, covering infrastructure, IT
                 hardware, connectivity and general order supply from a single
                 accountable vendor.

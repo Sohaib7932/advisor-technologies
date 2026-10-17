@@ -25,28 +25,35 @@ export function Container({
   );
 }
 
-/** Consistent vertical rhythm between sections. */
+/**
+ * Consistent vertical rhythm between sections. Two tones alternate down the
+ * page: charcoal (the page colour) and navy, a deep-navy wash whose top edge
+ * carries a glowing rule so the shift between sections reads as connected.
+ */
 export function Section({
   className,
   children,
   id,
-  tone = "canvas",
+  tone = "charcoal",
 }: {
   className?: string;
   children: React.ReactNode;
   id?: string;
-  tone?: "canvas" | "surface" | "dark";
+  tone?: "charcoal" | "navy";
 }) {
   return (
     <section
       id={id}
       className={cn(
-        "py-16 md:py-24 xl:py-32",
-        tone === "surface" && "bg-surface",
-        tone === "dark" && "bg-navy-950 text-white",
+        "relative isolate py-16 md:py-24 xl:py-32",
+        tone === "navy" &&
+          "bg-[linear-gradient(180deg,#14213a_0%,#172540_55%,#1b1f26_100%)]",
         className,
       )}
     >
+      {tone === "navy" && (
+        <span aria-hidden className="glow-line absolute inset-x-0 top-0" />
+      )}
       {children}
     </section>
   );

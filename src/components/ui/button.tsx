@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useRef } from "react";
+import { gsap, MOTION, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "./icons";
 
@@ -6,16 +10,16 @@ type Variant = "primary" | "secondary" | "ghost" | "light";
 type Size = "sm" | "md" | "lg";
 
 const base =
-  "group relative inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300 ease-out-soft disabled:pointer-events-none disabled:opacity-50";
+  "group relative inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-[background-color,color,box-shadow] duration-300 ease-out-soft disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
-  primary:
-    "bg-navy-600 text-white shadow-soft hover:bg-navy-700 hover:shadow-lift hover:-translate-y-0.5",
+  // Glow-blue CTA with dark text: 6.6:1 contrast.
+  primary: "bg-glow text-bg shadow-glow hover:bg-white",
   secondary:
-    "bg-navy-900/5 text-navy-900 ring-1 ring-inset ring-navy-900/10 hover:bg-navy-900/8 hover:ring-navy-900/20",
-  ghost: "text-navy-800 hover:bg-navy-900/5",
-  light:
-    "bg-white text-navy-900 shadow-soft hover:-translate-y-0.5 hover:shadow-lift",
+    "bg-white/6 text-fg ring-1 ring-inset ring-white/14 hover:bg-white/10 hover:ring-glow/50",
+  ghost:
+    "text-fg ring-1 ring-inset ring-white/18 backdrop-blur-md hover:bg-white/8 hover:ring-glow/60",
+  light: "bg-fg text-bg shadow-soft hover:bg-white hover:shadow-glow",
 };
 
 const sizes: Record<Size, string> = {
@@ -33,6 +37,10 @@ type ButtonProps = {
   withArrow?: boolean;
 } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className" | "children">;
 
+/**
+ * Pill button. Primary buttons are magnetic: they lean a few pixels toward
+ * the pointer (gsap.quickTo, transform only) and spring back on leave.
+ */
 export function Button({
   href,
   variant = "primary",
@@ -42,7 +50,35 @@ export function Button({
   withArrow = false,
   ...props
 }: ButtonProps) {
+  const ref = useRef<HTMLElement>(null);
   const classes = cn(base, variants[variant], sizes[size], className);
+
+  useGSAP(
+    (_, contextSafe) => {
+      const node = ref.current;
+      if (!node || variant !== "primary" || !contextSafe) return;
+      if (!window.matchMedia(`${MOTION.ok} and (hover: hover)`).matches) return;
+
+      const toX = gsap.quickTo(node, "x", { duration: 0.5, ease: "power3.out" });
+      const toY = gsap.quickTo(node, "y", { duration: 0.5, ease: "power3.out" });
+      const onMove = contextSafe((event: PointerEvent) => {
+        const rect = node.getBoundingClientRect();
+        toX((event.clientX - rect.left - rect.width / 2) * 0.25);
+        toY((event.clientY - rect.top - rect.height / 2) * 0.35);
+      });
+      const onLeave = contextSafe(() => {
+        toX(0);
+        toY(0);
+      });
+      node.addEventListener("pointermove", onMove);
+      node.addEventListener("pointerleave", onLeave);
+      return () => {
+        node.removeEventListener("pointermove", onMove);
+        node.removeEventListener("pointerleave", onLeave);
+      };
+    },
+    { dependencies: [variant] },
+  );
 
   const content = (
     <>
@@ -55,14 +91,22 @@ export function Button({
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <Link
+        ref={ref as React.Ref<HTMLAnchorElement>}
+        href={href}
+        className={classes}
+      >
         {content}
       </Link>
     );
   }
 
   return (
-    <button className={classes} {...props}>
+    <button
+      ref={ref as React.Ref<HTMLButtonElement>}
+      className={classes}
+      {...props}
+    >
       {content}
     </button>
   );

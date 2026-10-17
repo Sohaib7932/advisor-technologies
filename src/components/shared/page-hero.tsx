@@ -34,7 +34,7 @@ export function PageHero({
 }) {
   return (
     <section className="px-2 pt-2 sm:px-3 sm:pt-3">
-      <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-navy-950 sm:rounded-hero">
+      <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-brand-deep ring-1 ring-white/8 sm:rounded-hero">
         <div className="hero-zoom absolute inset-0 -z-10">
           <Image
             src={image}
@@ -47,19 +47,19 @@ export function PageHero({
         </div>
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-linear-to-r from-navy-950/95 via-navy-950/75 to-navy-950/35"
+          className="absolute inset-0 -z-10 bg-linear-to-r from-brand-deep/95 via-brand-deep/80 to-brand-deep/40"
         />
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-linear-to-t from-navy-950/90 via-transparent to-navy-950/60"
+          className="absolute inset-0 -z-10 bg-linear-to-t from-bg via-transparent to-brand-deep/60"
         />
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(55%_60%_at_85%_70%,rgb(31_107_255/0.28),transparent_70%)] mix-blend-screen"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(55%_60%_at_85%_70%,rgb(63_109_133/0.35),transparent_70%)] mix-blend-screen"
         />
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(40%_45%_at_5%_0%,rgb(56_189_248/0.16),transparent_70%)]"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(40%_45%_at_5%_0%,rgb(91_163_208/0.16),transparent_70%)]"
         />
 
         <Container className="pt-32 pb-14 sm:pt-40 sm:pb-18 lg:pt-44 lg:pb-20">
@@ -73,29 +73,29 @@ export function PageHero({
               <nav
                 aria-label="Breadcrumb"
                 style={rise(60)}
-                className="hero-rise flex items-center gap-2 text-xs font-medium text-white/55"
+                className="hero-rise flex items-center gap-2 text-xs font-medium text-fg-subtle"
               >
-                <Link href="/" className="transition-colors hover:text-white">
+                <Link href="/" className="transition-colors hover:text-glow">
                   Home
                 </Link>
                 <span aria-hidden className="text-white/30">
                   /
                 </span>
-                <span aria-current="page" className="text-white/85">
+                <span aria-current="page" className="text-glow">
                   {eyebrow}
                 </span>
               </nav>
 
               <h1
                 style={rise(240)}
-                className="hero-rise mt-8 max-w-4xl text-display text-white"
+                className="hero-rise mt-8 max-w-3xl text-display font-bold text-fg uppercase"
               >
                 {title}
               </h1>
               {lead && (
                 <p
                   style={rise(380)}
-                  className="hero-rise mt-7 max-w-2xl text-base leading-relaxed text-navy-200 sm:text-lg"
+                  className="hero-rise mt-7 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg"
                 >
                   {lead}
                 </p>
@@ -129,7 +129,7 @@ export function HeroFacts({
 }) {
   return (
     <div className="rounded-[1.75rem] bg-navy-950/45 p-2 shadow-float ring-1 ring-white/15 backdrop-blur-xl">
-      <p className="eyebrow px-4 pt-3 pb-3 text-[0.6875rem] text-navy-200">
+      <p className="eyebrow px-4 pt-3 pb-3 text-[0.6875rem] text-fg-muted">
         {label}
       </p>
       <dl className="grid grid-cols-2 gap-1">

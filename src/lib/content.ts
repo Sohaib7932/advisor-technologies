@@ -399,6 +399,13 @@ export const clients: Client[] = [
 /* Figures: all derived from the lists above, not invented                   */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * Headline counters. The first three are counted from the lists in this file,
+ * so they stay true as the lists change.
+ * TODO(client): confirm "Cities of operation". If you want "Years in business"
+ * or "Projects delivered" counters, add them here with confirmed figures;
+ * none are shown until then.
+ */
 export const stats = [
   {
     value: `${clients.length}+`,
@@ -419,7 +426,7 @@ export const stats = [
       "A supply catalogue spanning infrastructure, IT hardware, connectivity and general orders.",
   },
   {
-    value: "2",
+    value: "2", // TODO(client): confirm
     label: "Cities of operation",
     detail: "Headquartered in Islamabad with active supply contracts reaching Karachi.",
   },
@@ -429,26 +436,35 @@ export const stats = [
 /* Process                                                                    */
 /* -------------------------------------------------------------------------- */
 
-export const processSteps = [
+export const processSteps: {
+  step: string;
+  title: string;
+  body: string;
+  icon: IconName;
+}[] = [
   {
     step: "01",
-    title: "Consultation",
-    body: "We review your requirement, site conditions and tender documents, then advise on what genuinely fits the organisation.",
+    title: "Consult and plan",
+    body: "We review your requirement, site conditions and tender documents, then prepare a documented technical specification and a transparent commercial quotation.",
+    icon: "handshake",
   },
   {
     step: "02",
-    title: "Specification & quotation",
-    body: "A documented technical specification and transparent commercial quotation, prepared to procurement standards.",
+    title: "Supply and deliver",
+    body: "Branded equipment from the world-class manufacturers we represent, supplied against your order and delivered to site.",
+    icon: "package",
   },
   {
     step: "03",
-    title: "Supply & installation",
-    body: "Branded equipment delivered, installed, fixed and commissioned by qualified engineers on schedule.",
+    title: "Install and configure",
+    body: "Qualified engineers install, fix, configure and commission every system, then hand it over working.",
+    icon: "wrench",
   },
   {
     step: "04",
-    title: "Service & training",
+    title: "After-sales support",
     body: "Handover training plus international-standard after-sales service, maintenance and spares support.",
+    icon: "shield",
   },
 ];
 
