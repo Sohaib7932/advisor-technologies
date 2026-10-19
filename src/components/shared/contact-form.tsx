@@ -8,7 +8,7 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const fieldClass =
-  "w-full rounded-2xl border-0 bg-surface-2 px-5 py-3.5 text-[0.9375rem] text-fg ring-1 ring-inset ring-white/10 transition-shadow placeholder:text-fg-subtle focus:ring-2 focus:ring-glow focus:outline-none";
+  "w-full rounded-2xl border-0 bg-surface-2 px-5 py-3.5 text-[0.9375rem] text-fg ring-1 ring-inset ring-white/10 transition-shadow placeholder:text-fg-subtle focus:shadow-[0_0_0_4px_rgb(91_163_208/0.16),0_0_28px_rgb(91_163_208/0.3)] focus:ring-2 focus:ring-glow focus:outline-none";
 
 const labelClass = "block text-sm font-medium text-fg";
 

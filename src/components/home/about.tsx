@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { Container, Section } from "@/components/ui/container";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
+import { sectionImage } from "@/lib/section-images";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { RevealGroup } from "@/components/ui/reveal-group";
 import { GlowCard } from "@/components/ui/glow-card";
@@ -14,7 +16,11 @@ const statIcons: IconName[] = ["handshake", "machinery", "package", "office"];
  *  counters and the sectors it serves. */
 export function About() {
   return (
-    <Section id="about">
+    <Section
+      id="about"
+      tone="base"
+      backdrop={<SectionBackdrop src={sectionImage("about")} plateOpacity={0.3} details={["blueprint", "glow-tl", "floor"]} />}
+    >
       <Container>
         <SectionHeading
           eyebrow="About us"

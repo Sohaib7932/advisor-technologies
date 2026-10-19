@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 import { Container, Section } from "@/components/ui/container";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
+import { sectionImage } from "@/lib/section-images";
 import { Eyebrow } from "@/components/ui/section-heading";
 import { RevealGroup } from "@/components/ui/reveal-group";
 import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "@/components/ui/icons";
@@ -19,19 +21,15 @@ const mapEmbed = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
  */
 export function ContactSection({ showHeading = true }: { showHeading?: boolean }) {
   return (
-    // On the home page it is its own navy section; on /contact it follows
-    // the page banner directly, so it stays on the page colour.
+    // The room again, dimmed under a scrim so the form stays easy to read.
+    // On /contact it follows the page banner directly, so it starts tighter.
     <Section
       id="enquiry"
-      tone={showHeading ? "navy" : "charcoal"}
+      tone="deep"
+      divider={showHeading}
+      backdrop={<SectionBackdrop src={sectionImage("contact")} plateOpacity={0.55} details={["scrim", "glow-tl"]} />}
       className={showHeading ? "overflow-hidden" : "overflow-hidden pt-10 md:pt-14 xl:pt-16"}
     >
-      {showHeading && (
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(45%_50%_at_15%_20%,rgb(91_163_208/0.14),transparent_70%)]"
-        />
-      )}
       <Container>
         {showHeading && (
           <div className="max-w-4xl">

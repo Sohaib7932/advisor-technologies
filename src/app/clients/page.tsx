@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HeroFacts, PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
 import { Container, Section } from "@/components/ui/container";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { FloodCard } from "@/components/ui/flood-card";
@@ -136,7 +137,7 @@ export default function ClientsPage() {
       </Section>
 
       {/* Why institutions choose us */}
-      <Section tone="navy">
+      <Section tone="steel" divider backdrop={<SectionBackdrop details={["aurora", "glow-top"]} />}>
         <Container>
           <SectionHeading
             eyebrow="Why institutions choose us"

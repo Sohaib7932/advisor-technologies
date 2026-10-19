@@ -6,6 +6,7 @@ import { ArrowUpRight } from "@/components/ui/icons";
 import { clients, type Client } from "@/lib/content";
 import { ClientLogo } from "@/components/ui/client-logo";
 import { cn } from "@/lib/utils";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
 
 /** Figures derived from the client list itself, never typed in by hand. */
 const stats = [
@@ -61,7 +62,7 @@ function MarqueeRow({
         <li
           key={`${client.name}-${index}`}
           aria-hidden={index >= items.length || undefined}
-          className="group/client flex shrink-0 items-center gap-3.5 rounded-2xl bg-surface/80 py-3 pr-6 pl-3 ring-1 ring-white/8 transition-[background-color,box-shadow,translate] duration-300 ease-out-soft hover:-translate-y-0.5 hover:bg-surface-2 hover:shadow-glow hover:ring-glow/40"
+          className="group/client card-surface flex shrink-0 items-center gap-3.5 rounded-2xl py-3 pr-6 pl-3 transition-[box-shadow,translate] duration-300 ease-out-soft hover:-translate-y-0.5 hover:shadow-glow"
         >
           <ClientCard client={client} />
         </li>
@@ -74,13 +75,13 @@ export function ClientsStrip() {
   const half = Math.ceil(clients.length / 2);
 
   return (
-    <Section id="clients" className="overflow-hidden">
-      {/* Faint dot grid, fading out toward the edges */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-[radial-gradient(var(--color-glow)_1px,transparent_1px)] mask-[radial-gradient(ellipse_at_center,black_20%,transparent_70%)] bg-size-[22px_22px] opacity-[0.07]"
-      />
-
+    <Section
+      id="clients"
+      tone="steel"
+      divider
+      className="overflow-hidden"
+      backdrop={<SectionBackdrop plate="haze" plateOpacity={0.35} details={["spot", "glow-top"]} />}
+    >
       <Container>
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
           <Reveal className="lg:col-span-7">

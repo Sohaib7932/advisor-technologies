@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import type { Tone } from "@/lib/atmosphere";
 
 /** Page gutter + max width. Every section uses this so edges stay aligned. */
 export function Container({
@@ -26,33 +27,36 @@ export function Container({
 }
 
 /**
- * Consistent vertical rhythm between sections. Two tones alternate down the
- * page: charcoal (the page colour) and navy, a deep-navy wash whose top edge
- * carries a glowing rule so the shift between sections reads as connected.
+ * Consistent vertical rhythm between sections. A section never paints an
+ * opaque background of its own: it declares a `tone`, which the fixed global
+ * layer (Atmosphere) cross-fades to as the section scrolls in, and an optional
+ * `backdrop` (a SectionBackdrop) layered on top with soft, masked edges.
  */
 export function Section({
   className,
   children,
   id,
-  tone = "charcoal",
+  tone = "base",
+  backdrop,
+  divider = false,
 }: {
   className?: string;
   children: React.ReactNode;
   id?: string;
-  tone?: "charcoal" | "navy";
+  tone?: Tone;
+  backdrop?: React.ReactNode;
+  /** A thin glowing line along the top edge. */
+  divider?: boolean;
 }) {
   return (
     <section
       id={id}
-      className={cn(
-        "relative isolate py-16 md:py-24 xl:py-32",
-        tone === "navy" &&
-          "bg-[linear-gradient(180deg,#14213a_0%,#172540_55%,#1b1f26_100%)]",
-        className,
-      )}
+      data-tone={tone}
+      className={cn("relative isolate py-16 md:py-24 xl:py-32", className)}
     >
-      {tone === "navy" && (
-        <span aria-hidden className="glow-line absolute inset-x-0 top-0" />
+      {backdrop}
+      {divider && (
+        <span aria-hidden className="glow-line absolute inset-x-[8%] top-0 opacity-60" />
       )}
       {children}
     </section>

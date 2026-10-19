@@ -16,6 +16,19 @@
   --color-steel: #3f6d85; /* accent */
   --color-glow: #5ba3d0; /* highlights, active states, glow lines, CTAs */
 
+  /* Atmosphere: sampled from the hero plate (public/hero-section-bg.png).
+     ceiling #040e1a · wall #0d1926 · LED halo #113050 · floor #243444 ·
+     LED peak #7cc3e8 · floor reflection #3a6285. Kept in the brand family. */
+  --color-bg-deep: #060c16; /* ceiling shadow, darkest areas, footer */
+  --color-bg-base: #0d1926; /* the back wall: default section tone */
+  --color-bg-raised: #142538; /* navy-charcoal, lifted areas */
+  --color-line: rgb(243 246 250 / 0.1); /* hairlines and borders */
+  --color-glow-soft: rgb(91 163 208 / 0.18); /* halos behind cards */
+  --color-accent: #5ba3d0; /* highlights, active states, CTAs (rare) */
+  --color-text: #f3f6fa;
+  --color-text-muted: #b4bfcc;
+  --color-led: #7cc3e8; /* light sources: strips, lines, the glow orb */
+
   /* Surfaces, darkest to lightest */
   --color-bg: #1b1f26; /* page */
   --color-canvas: #1b1f26;
@@ -60,6 +73,20 @@
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* The spec's token names, for use in plain CSS. */
+:root {
+  --bg-deep: var(--color-bg-deep);
+  --bg-base: var(--color-bg-base);
+  --bg-raised: var(--color-bg-raised);
+  --surface: rgb(20 33 58 / 0.62); /* glass card fill */
+  --line: var(--color-line);
+  --glow: var(--color-led);
+  --glow-soft: var(--color-glow-soft);
+  --accent: var(--color-accent);
+  --text: var(--color-text);
+  --text-muted: var(--color-text-muted);
+}
+
 /* ==========================================================================
    Base
    ========================================================================== */
@@ -76,7 +103,7 @@
   }
 
   body {
-    background-color: var(--color-bg);
+    background-color: var(--color-bg-deep);
     color: var(--color-fg);
     font-family: var(--font-sans);
     font-feature-settings: "ss01" on, "cv11" on;
@@ -119,6 +146,20 @@
       transition-delay: 0ms !important;
     }
   }
+}
+
+/* Light "breathing" section: tokens re-pointed so every utility inside
+   reads navy-on-white. Contrast on #eef3f8: fg 14:1, muted 8.9:1,
+   subtle 5.6:1, accent #2b6a94 5.6:1 (the bright glow fails AA here). */
+.theme-light {
+  --color-fg: #14213a;
+  --color-ink: #14213a;
+  --color-fg-muted: #34465f;
+  --color-fg-subtle: #52627a;
+  --color-glow: #2b6a94;
+  --color-surface: #ffffff;
+  --color-surface-2: #f6f9fc;
+  color: var(--color-fg);
 }
 
 /* Lenis smooth scrolling (recommended base styles) */
@@ -181,18 +222,21 @@ html.lenis body {
   -webkit-backdrop-filter: blur(20px) saturate(160%);
 }
 
-/* Bento card: charcoal → navy, with a hairline edge */
+/* Glass card: translucent navy over the room, frosted, a hairline edge and a
+   faint inner glow along the top. */
 @utility card-surface {
-  background-color: var(--color-surface);
+  background-color: var(--surface);
   background-image: linear-gradient(
-    155deg,
-    rgb(74 74 74 / 0.28) 0%,
-    rgb(35 41 50 / 0.92) 38%,
-    rgb(20 33 58 / 0.92) 100%
+    160deg,
+    rgb(243 246 250 / 0.05) 0%,
+    rgb(243 246 250 / 0) 40%
   );
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
   box-shadow:
-    inset 0 1px 0 rgb(243 246 250 / 0.06),
-    0 0 0 1px rgb(243 246 250 / 0.07),
+    inset 0 1px 0 rgb(243 246 250 / 0.08),
+    inset 0 0 24px rgb(91 163 208 / 0.05),
+    0 0 0 1px rgb(243 246 250 / 0.08),
     var(--shadow-soft);
 }
 
@@ -230,10 +274,22 @@ html.lenis body {
   transform: none;
 }
 
-/* Elements a scroll timeline animates in. Hidden before paint only when the
-   pre-paint script confirmed motion is on; GSAP's inline styles take over. */
-html.motion .motion-hide {
-  opacity: 0;
+/* Elements a scroll timeline animates in start hidden when motion is on,
+   decided by CSS before first paint (no script); GSAP's inline styles then
+   take over. Without JavaScript a <noscript> rule in the layout shows them. */
+@media (prefers-reduced-motion: no-preference) {
+  .motion-hide {
+    opacity: 0;
+  }
+}
+
+/* Only meaningful while a scroll timeline plays (e.g. the hero's opening
+   line, which the timeline fades out). Without motion it would overlap the
+   composed state, so it is not shown at all. */
+@media (prefers-reduced-motion: reduce) {
+  .motion-only {
+    display: none;
+  }
 }
 
 /* Inner-page banner entrance. Runs on first paint, so it needs no observer.
@@ -317,6 +373,47 @@ html.motion .motion-hide {
   }
   to {
     opacity: 1;
+  }
+}
+
+/* Aurora: two soft colour fields drifting slowly (transform only). Static on
+   small screens and with reduced motion. */
+.aurora span {
+  position: absolute;
+  width: 70%;
+  height: 80%;
+  border-radius: 9999px;
+  will-change: transform;
+}
+.aurora-a {
+  top: -10%;
+  left: -10%;
+  background: radial-gradient(closest-side, rgb(42 65 97 / 0.55), transparent);
+  animation: aurora-a 26s ease-in-out infinite alternate;
+}
+.aurora-b {
+  right: -15%;
+  bottom: -15%;
+  background: radial-gradient(closest-side, rgb(63 109 133 / 0.32), transparent);
+  animation: aurora-b 32s ease-in-out infinite alternate;
+}
+@keyframes aurora-a {
+  to {
+    transform: translate3d(25%, 18%, 0) scale(1.15);
+  }
+}
+@keyframes aurora-b {
+  to {
+    transform: translate3d(-22%, -16%, 0) scale(1.1);
+  }
+}
+/* Drifts only while its section is on screen (Atmosphere toggles .is-live). */
+.aurora:not(.is-live) span {
+  animation-play-state: paused;
+}
+@media (max-width: 767px) {
+  .aurora span {
+    animation: none;
   }
 }
 

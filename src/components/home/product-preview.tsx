@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/container";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { Reveal } from "@/components/ui/reveal";
 import { Eyebrow } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,12 @@ const cards: DeckCard[] = productCategories
  */
 export function ProductPreview() {
   return (
-    <section id="products" className="px-2 py-6 sm:px-3 md:py-10">
+    <section
+      id="products"
+      data-tone="charcoal"
+      className="relative isolate px-2 py-10 sm:px-3 md:py-16"
+    >
+      <SectionBackdrop plate="floor" plateOpacity={0.35} details={["spot"]} />
       <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-[linear-gradient(160deg,#14213a_0%,#121a2b_55%,#1b1f26_100%)] ring-1 ring-white/8 sm:rounded-hero">
         <div
           aria-hidden

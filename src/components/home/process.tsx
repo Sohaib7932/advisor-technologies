@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { Container, Section } from "@/components/ui/container";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Icon } from "@/components/ui/icons";
 import { gsap, MOTION, useGSAP } from "@/lib/gsap";
@@ -62,7 +63,12 @@ export function Process() {
   );
 
   return (
-    <Section id="process" tone="navy">
+    <Section
+      id="process"
+      tone="charcoal"
+      divider
+      backdrop={<SectionBackdrop plate="floor" plateOpacity={0.5} details={["glow-top", "floor"]} />}
+    >
       <Container>
         <SectionHeading
           eyebrow="How we work"

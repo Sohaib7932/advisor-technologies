@@ -5,6 +5,7 @@ import { HeroFacts, PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
 import { CatalogueNav } from "@/components/shared/catalogue-nav";
 import { Container, Section } from "@/components/ui/container";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { FloodCard } from "@/components/ui/flood-card";
@@ -175,7 +176,7 @@ export default function ProductsPage() {
       </Section>
 
       {/* Assurances */}
-      <Section tone="navy">
+      <Section tone="steel" divider backdrop={<SectionBackdrop details={["aurora", "glow-top"]} />}>
         <Container>
           <SectionHeading
             eyebrow="With every order"

@@ -1,7 +1,7 @@
 /**
  * The hero's 3D scene: the company's six business pillars, modelled from
- * primitives, start scattered through dark space and assemble onto a glowing
- * ring as `setProgress(0 → 1)` is driven by scroll.
+ * primitives, drift scattered through a dark showroom and land on their
+ * display stands as `setProgress(0 → 1)` is driven by scroll.
  *
  * Plain Three.js (no React renderer) so the scroll timeline can drive it
  * directly and every resource is disposed on unmount. This module is
@@ -9,6 +9,8 @@
  */
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
+import { createRoom, LAYER, radialTexture, setLayers } from "./hero-room";
+import { HERO_TUNING } from "./hero-tuning";
 
 export type HeroScene = {
   setProgress: (progress: number) => void;
@@ -17,6 +19,7 @@ export type HeroScene = {
 };
 
 type Options = { mobile: boolean; reduced: boolean };
+type Canvases = { room: HTMLCanvasElement; front: HTMLCanvasElement };
 
 const COLORS = {
   deep: "#14213a",
@@ -202,13 +205,6 @@ function gear(m: Materials) {
 /* Choreography                                                              */
 /* ------------------------------------------------------------------------ */
 
-type Piece = {
-  object: THREE.Group;
-  from: { position: THREE.Vector3; rotation: THREE.Euler; scale: number };
-  to: { position: THREE.Vector3; rotation: THREE.Euler; scale: number };
-  phase: number;
-};
-
 const easeInOutCubic = (t: number) =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
@@ -218,129 +214,169 @@ const smoothstep = (a: number, b: number, t: number) => {
 };
 
 export function createHeroScene(
-  canvas: HTMLCanvasElement,
+  canvases: Canvases,
   { mobile, reduced }: Options,
 ): HeroScene {
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-    antialias: !mobile,
-    alpha: true,
-    powerPreference: "high-performance",
-  });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.75));
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  const T = HERO_TUNING;
+  const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
+
+  // Two renderers over one scene: the room is drawn behind the HTML title,
+  // the display pieces on a transparent canvas in front of it, so the pieces
+  // genuinely overlap the lower part of the letters.
+  const makeRenderer = (canvas: HTMLCanvasElement, transparent: boolean) => {
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: !mobile,
+      alpha: transparent,
+      powerPreference: "high-performance",
+    });
+    renderer.setPixelRatio(dpr);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = T.lights.exposure;
+    renderer.setClearColor("#10151d", transparent ? 0 : 1);
+    return renderer;
+  };
+  const roomRenderer = makeRenderer(canvases.room, T.plate);
+  const frontRenderer = makeRenderer(canvases.front, true);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(mobile ? 52 : 34, 1, 0.1, 100);
-  const cameraZ = mobile ? 13 : 13;
-  // Aim below the pieces so the assembled ring sits in the upper half of the
-  // frame, clear of the wordmark below it.
-  const lookAt = new THREE.Vector3(0, mobile ? -0.9 : -0.25, 0);
+  scene.fog = new THREE.Fog("#11182a", T.room.fog.near, T.room.fog.far);
+  const view = mobile ? "mobile" : "desktop";
+  const camera = new THREE.PerspectiveCamera(T.camera.fov[view], 1, 0.1, 80);
+  const basePosition = new THREE.Vector3(...T.camera.position[view]);
+  // Extra distance on screens narrower than the composition (tablets).
+  let pullBack = 0;
+  const lookAt = new THREE.Vector3(...T.camera.lookAt[view]);
 
-  // Lighting: cool fill, a white key and two steel-blue rims.
-  scene.add(new THREE.AmbientLight("#b9c7d9", 0.35));
-  scene.add(new THREE.HemisphereLight(COLORS.glow, "#1b1f26", 0.7));
-  const key = new THREE.DirectionalLight("#ffffff", 1.8);
-  key.position.set(4, 6, 6);
-  scene.add(key);
-  const rim = new THREE.PointLight(COLORS.glow, 40, 24);
-  rim.position.set(-5, 3, 3);
-  scene.add(rim);
-  const back = new THREE.PointLight(COLORS.steel, 30, 24);
-  back.position.set(5, 0, -4);
-  scene.add(back);
+  const room = createRoom(mobile, T.plate);
+  scene.add(room.group);
+  const stageTop = T.plate ? 0 : 0.16;
+  const stageZ = (mobile ? T.stage.mobile : T.stage.desktop).centerZ;
+
+  /* Lighting: one key from the pendant, blue rims, a whisper of fill ------ */
+  const lights = new THREE.Group();
+  const ambient = new THREE.AmbientLight("#b9c7d9", T.lights.ambient);
+  const hemi = new THREE.HemisphereLight(COLORS.glow, "#1b1f26", T.lights.hemisphere);
+  const pendant = new THREE.SpotLight("#e6f2fb", T.lights.pendant, 22, 0.62, 0.85, 1.2);
+  pendant.position.set(0, mobile ? 7.4 : 6.2, stageZ);
+  pendant.target.position.set(0, 0, stageZ);
+  const rimL = new THREE.PointLight(COLORS.glow, T.lights.rim, 14, 1.4);
+  rimL.position.set(-5, 3.5, -2.5);
+  const rimR = new THREE.PointLight(COLORS.glow, T.lights.rim, 14, 1.4);
+  rimR.position.set(5, 3.5, -2.5);
+  const fill = new THREE.DirectionalLight("#ffffff", 0.35);
+  fill.position.set(0, 3, 10);
+  lights.add(ambient, hemi, pendant, pendant.target, rimL, rimR, fill);
+  scene.add(lights);
+  setLayers(lights, LAYER.MIRROR, LAYER.ROOM, LAYER.OBJECTS);
 
   const m = createMaterials();
-  const world = new THREE.Group();
-  world.position.y = mobile ? 1.15 : 1.05;
-  scene.add(world);
+  const shadowTex = radialTexture("rgba(0,0,0,0.85)", "rgba(0,0,0,0)");
+  const poolTex = radialTexture();
 
   // Mobile carries fewer pieces; the assembly reads the same.
   const builders = mobile
     ? [serverRack, cctvCamera, laptop, gear]
     : [serverRack, cctvCamera, laptop, printer, officeChair, gear];
-  const scales = mobile ? [0.6, 0.82, 0.66, 0.52] : [0.66, 0.9, 0.74, 0.7, 0.7, 0.58];
+  const layout = T.layout[view];
+  const pedestalMat = new THREE.MeshStandardMaterial({ color: "#3a414c", roughness: 0.32, metalness: 0.55 });
 
-  // Hand-placed scatter positions so the opening frame is balanced.
-  const scatter: [number, number, number][] = [
-    [-7.5, 3.2, -3],
-    [6.8, 4.1, -2],
-    [-6.2, -3.4, 1],
-    [7.4, -2.8, 0],
-    [-1.8, 5.6, -5],
-    [2.6, -5.2, -4],
-  ];
+  const pieces = builders.map((build, i) => {
+    const base = layout[i];
+    const place = { ...base, z: base.z - (T.plate ? T.plateDepth : 0) };
 
-  const radius = mobile ? 2 : 3.3;
-  const pieces: Piece[] = builders.map((build, i) => {
-    const object = build(m);
-    // Pieces land on the back arc of the ring (190° → 350°): a skyline that
-    // sits above the wordmark, rather than a full circle hidden behind it.
-    const angle = Math.PI * (190 + (160 * i) / (builders.length - 1)) / 180;
-    const [sx, sy, sz] = scatter[i];
-    const piece: Piece = {
+    // Re-seat each model so its base sits at y = 0 inside a wrapper.
+    const model = build(m);
+    const bounds = new THREE.Box3().setFromObject(model);
+    model.position.y -= bounds.min.y;
+    const footprint = Math.max(bounds.max.x - bounds.min.x, bounds.max.z - bounds.min.z);
+    const object = new THREE.Group();
+    object.add(model);
+    scene.add(object);
+    setLayers(object, LAYER.MIRROR, LAYER.OBJECTS);
+
+    // Display stand, empty and waiting in the intro.
+    const surface = stageTop + place.pedestal;
+    const onStand = place.pedestal > 0;
+    if (onStand) {
+      const width = footprint * place.scale + 0.35;
+      const stand = new THREE.Group();
+      stand.add(part(rbox(width, place.pedestal, width * 0.8, 0.05), pedestalMat, [0, place.pedestal / 2, 0]));
+      stand.add(part(new THREE.BoxGeometry(width * 0.86, 0.014, 0.014), m.glow, [0, place.pedestal - 0.02, width * 0.4 + 0.004]));
+      stand.position.set(place.x, stageTop, place.z);
+      stand.rotation.y = place.turn * 0.5;
+      scene.add(stand);
+      setLayers(stand, LAYER.MIRROR, LAYER.OBJECTS);
+      const standShadow = part(
+        new THREE.PlaneGeometry(width * 1.9, width * 1.6),
+        new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: 0.9 }),
+        [place.x, stageTop + 0.003, place.z],
+        [-Math.PI / 2, 0, 0],
+      );
+      scene.add(standShadow);
+      setLayers(standShadow, LAYER.ROOM);
+    }
+
+    // Contact shadow and a soft blue light pool where the piece lands.
+    const shadowSize = footprint * place.scale * 1.5;
+    const shadow = part(
+      new THREE.PlaneGeometry(shadowSize, shadowSize * 0.75),
+      new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: 0 }),
+      [place.x, surface + 0.004, place.z],
+      [-Math.PI / 2, 0, 0],
+    );
+    shadow.renderOrder = 2;
+    const pool = part(
+      new THREE.PlaneGeometry(shadowSize * 1.8, shadowSize * 1.3),
+      new THREE.MeshBasicMaterial({
+        map: poolTex,
+        color: COLORS.glow,
+        transparent: true,
+        depthWrite: false,
+        opacity: 0,
+        blending: THREE.AdditiveBlending,
+      }),
+      [place.x, stageTop + 0.006, place.z + 0.25],
+      [-Math.PI / 2, 0, 0],
+    );
+    scene.add(shadow, pool);
+    // A shadow on a stand top must draw with the stand, in front of the title.
+    setLayers(shadow, onStand ? LAYER.OBJECTS : LAYER.ROOM);
+    setLayers(pool, LAYER.ROOM);
+
+    const [sx, sy, sz] = place.scatter;
+    return {
       object,
+      shadow,
+      pool,
       from: {
-        position: new THREE.Vector3(mobile ? sx * 0.55 : sx, sy, sz),
-        rotation: new THREE.Euler(
-          ((i * 1.7) % 3) - 1.5,
-          ((i * 2.3) % 3) - 1.5,
-          ((i * 1.1) % 2) - 1,
-        ),
-        scale: scales[i] * 0.75,
+        position: new THREE.Vector3(sx, sy, sz),
+        rotation: new THREE.Euler(((i * 1.7) % 3) - 1.5, ((i * 2.3) % 3) - 1.5, ((i * 1.1) % 2) - 1),
+        scale: place.scale * 0.8,
       },
       to: {
-        position: new THREE.Vector3(Math.cos(angle) * radius, 0, Math.sin(angle) * radius * 0.45),
-        rotation: new THREE.Euler(0, -Math.cos(angle) * 0.45, 0),
-        scale: scales[i],
+        position: new THREE.Vector3(place.x, surface, place.z),
+        rotation: new THREE.Euler(0, place.turn, 0),
+        scale: place.scale,
       },
       phase: i * 1.37,
     };
-    world.add(object);
-    return piece;
   });
-
-  // The platform the pieces assemble onto.
-  const ring = part(
-    new THREE.TorusGeometry(radius + 0.6, 0.018, 8, 160),
-    new THREE.MeshBasicMaterial({ color: COLORS.glow, transparent: true, opacity: 0 }),
-    [0, -1.05, 0],
-    [Math.PI / 2, 0, 0],
-  );
-  ring.scale.set(1, 0.45, 1);
-  const disc = part(
-    new THREE.CircleGeometry(radius + 0.6, 64),
-    new THREE.MeshBasicMaterial({ color: COLORS.navy, transparent: true, opacity: 0, side: THREE.DoubleSide }),
-    [0, -1.07, 0],
-    [-Math.PI / 2, 0, 0],
-  );
-  disc.scale.set(1, 0.45, 1);
-  world.add(ring, disc);
-
-  // Dust field for depth.
-  const dustCount = mobile ? 220 : 520;
-  const dustPositions = new Float32Array(dustCount * 3);
-  for (let i = 0; i < dustCount; i++) {
-    const r = 6 + Math.random() * 10;
-    const t = Math.random() * Math.PI * 2;
-    const p = Math.acos(2 * Math.random() - 1);
-    dustPositions.set([r * Math.sin(p) * Math.cos(t), r * Math.cos(p) * 0.6, r * Math.sin(p) * Math.sin(t) - 4], i * 3);
-  }
-  const dustGeometry = new THREE.BufferGeometry();
-  dustGeometry.setAttribute("position", new THREE.BufferAttribute(dustPositions, 3));
-  const dust = new THREE.Points(
-    dustGeometry,
-    new THREE.PointsMaterial({ color: COLORS.glow, size: 0.035, transparent: true, opacity: 0.55, sizeAttenuation: true, depthWrite: false }),
-  );
-  scene.add(dust);
 
   /* ---------------------------------------------------------------------- */
 
   let progress = reduced ? 1 : 0;
-
   const seconds = () => performance.now() / 1000;
+
+  // Desktop mouse tilt, eased toward the pointer.
+  const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+  const tiltEnabled = !mobile && !reduced && window.matchMedia("(hover: hover)").matches;
+  const onPointer = (event: PointerEvent) => {
+    pointer.tx = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.ty = (event.clientY / window.innerHeight) * 2 - 1;
+  };
+  if (tiltEnabled) window.addEventListener("pointermove", onPointer, { passive: true });
 
   function apply(time: number) {
     const n = pieces.length;
@@ -352,33 +388,51 @@ export function createHeroScene(
       const drift = reduced ? 0 : 1 - e;
       const { from, to, object } = piece;
       object.position.lerpVectors(from.position, to.position, e);
-      object.position.y += Math.sin(time * 0.8 + piece.phase) * (0.35 * drift + 0.05);
+      object.position.y += Math.sin(time * 0.8 + piece.phase) * 0.35 * drift;
       object.rotation.set(
         THREE.MathUtils.lerp(from.rotation.x, to.rotation.x, e) + Math.sin(time * 0.5 + piece.phase) * 0.15 * drift,
         THREE.MathUtils.lerp(from.rotation.y, to.rotation.y, e) + time * 0.12 * drift,
         THREE.MathUtils.lerp(from.rotation.z, to.rotation.z, e),
       );
       object.scale.setScalar(THREE.MathUtils.lerp(from.scale, to.scale, e));
+
+      // Shadow sharpens and darkens as the piece comes down onto its spot.
+      const land = smoothstep(0.55, 1, e);
+      (piece.shadow.material as THREE.MeshBasicMaterial).opacity = land * 0.9;
+      piece.shadow.scale.setScalar(1.6 - 0.6 * land);
+      (piece.pool.material as THREE.MeshBasicMaterial).opacity = land * 0.16;
     });
 
     const lock = smoothstep(0.78, 1, progress);
-    (ring.material as THREE.MeshBasicMaterial).opacity = lock * 0.9;
-    (disc.material as THREE.MeshBasicMaterial).opacity = lock * 0.22;
+    room.update(lock, time);
+    const boost = 1 + lock * T.lights.lockBoost;
+    pendant.intensity = T.lights.pendant * boost;
+    rimL.intensity = rimR.intensity = T.lights.rim * boost;
 
-    // Once assembled, the whole composition sways gently.
-    world.rotation.y = (1 - lock) * 0.5 + Math.sin(time * 0.35) * 0.12 * lock;
-    dust.rotation.y = time * 0.015;
-    camera.position.set(0, 2.4 - progress * 0.5, cameraZ + (1 - progress) * 2);
+    pointer.x += (pointer.tx - pointer.x) * T.parallax.ease;
+    pointer.y += (pointer.ty - pointer.y) * T.parallax.ease;
+    camera.position.set(
+      basePosition.x + pointer.x * T.parallax.x,
+      basePosition.y - pointer.y * T.parallax.y,
+      basePosition.z + pullBack + (1 - progress) * T.camera.pushIn,
+    );
     camera.lookAt(lookAt);
-    renderer.render(scene, camera);
+
+    camera.layers.set(LAYER.ROOM);
+    roomRenderer.render(scene, camera);
+    camera.layers.set(LAYER.OBJECTS);
+    frontRenderer.render(scene, camera);
   }
 
   function resize() {
-    const parent = canvas.parentElement;
+    const parent = canvases.room.parentElement;
     if (!parent) return;
     const { clientWidth: w, clientHeight: h } = parent;
-    renderer.setSize(w, h, false);
+    roomRenderer.setSize(w, h, false);
+    frontRenderer.setSize(w, h, false);
+    room.resize(w, h, dpr);
     camera.aspect = w / h;
+    pullBack = mobile ? 0 : Math.max(0, T.camera.wideAspect - camera.aspect) * T.camera.narrowPullBack;
     camera.updateProjectionMatrix();
     apply(seconds());
   }
@@ -395,10 +449,10 @@ export function createHeroScene(
     cancelAnimationFrame(frame);
     if (visible && !reduced) frame = requestAnimationFrame(loop);
   });
-  observer.observe(canvas);
+  observer.observe(canvases.front);
 
   const resizeObserver = new ResizeObserver(resize);
-  if (canvas.parentElement) resizeObserver.observe(canvas.parentElement);
+  if (canvases.room.parentElement) resizeObserver.observe(canvases.room.parentElement);
   resize();
 
   return {
@@ -411,6 +465,7 @@ export function createHeroScene(
       cancelAnimationFrame(frame);
       observer.disconnect();
       resizeObserver.disconnect();
+      window.removeEventListener("pointermove", onPointer);
       scene.traverse((object) => {
         const mesh = object as THREE.Mesh;
         mesh.geometry?.dispose();
@@ -418,8 +473,12 @@ export function createHeroScene(
         if (Array.isArray(material)) material.forEach((mat) => mat.dispose());
         else material?.dispose();
       });
+      room.floor?.dispose();
+      [...room.textures, shadowTex, poolTex].forEach((texture) => texture.dispose());
       Object.values(m).forEach((mat) => mat.dispose());
-      renderer.dispose();
+      pedestalMat.dispose();
+      roomRenderer.dispose();
+      frontRenderer.dispose();
     },
   };
 }

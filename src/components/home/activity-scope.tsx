@@ -5,10 +5,56 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/section-heading";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { ArrowUpRight, Check, Icon } from "@/components/ui/icons";
 import { gsap, MOTION, useGSAP } from "@/lib/gsap";
 import { services } from "@/lib/content";
 import { cn } from "@/lib/utils";
+
+// Transparent steel-tinted grain: the noise drives alpha only, so it never
+// lays an opaque grey sheet over the section.
+const grain =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.49 0 0 0 0 0.76 0 0 0 0 0.91 0 0 0 0.18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+const fade = "radial-gradient(70% 70% at 70% 50%, black, transparent 80%)";
+
+/** A faint motif per division behind the stage: machinery = gear blueprint,
+ *  networks = grid, CCTV = scan lines, office and printing = soft grain. */
+const gearBlueprint: React.CSSProperties = {
+  backgroundImage:
+    "repeating-radial-gradient(circle at 72% 50%, transparent 0 46px, rgb(124 195 232 / 0.09) 46px 47px), linear-gradient(90deg, transparent calc(72% - 0.5px), rgb(124 195 232 / 0.1) calc(72% - 0.5px) calc(72% + 0.5px), transparent 0), linear-gradient(transparent calc(50% - 0.5px), rgb(124 195 232 / 0.1) calc(50% - 0.5px) calc(50% + 0.5px), transparent 0)",
+  maskImage: fade,
+  WebkitMaskImage: fade,
+};
+const DIVISION_TINT: Record<string, React.CSSProperties> = {
+  "plant-machinery": gearBlueprint,
+  "it-networks": {
+    backgroundImage:
+      "linear-gradient(rgb(91 163 208 / 0.13) 1px, transparent 1px), linear-gradient(90deg, rgb(91 163 208 / 0.13) 1px, transparent 1px), radial-gradient(40% 50% at 70% 50%, rgb(31 72 120 / 0.35), transparent)",
+    backgroundSize: "44px 44px, 44px 44px, auto",
+    maskImage: fade,
+    WebkitMaskImage: fade,
+  },
+  computing: {
+    backgroundImage: `${grain}, radial-gradient(45% 55% at 70% 50%, rgb(63 109 133 / 0.3), transparent)`,
+    opacity: 0.9,
+  },
+  "security-systems": {
+    backgroundImage:
+      "repeating-linear-gradient(180deg, rgb(124 195 232 / 0.07) 0 1px, transparent 1px 5px), radial-gradient(40% 50% at 70% 50%, rgb(42 65 97 / 0.4), transparent)",
+    maskImage: fade,
+    WebkitMaskImage: fade,
+  },
+  printing: {
+    backgroundImage: `radial-gradient(rgb(124 195 232 / 0.16) 1px, transparent 1.4px), ${grain}`,
+    backgroundSize: "9px 9px, auto",
+    maskImage: fade,
+    WebkitMaskImage: fade,
+  },
+  maintenance: {
+    ...gearBlueprint,
+    backgroundImage: `${gearBlueprint.backgroundImage}, repeating-linear-gradient(135deg, rgb(124 195 232 / 0.04) 0 1px, transparent 1px 14px)`,
+  },
+};
 
 /**
  * The six divisions as a pinned, scroll-driven sequence on desktop: a
@@ -17,7 +63,7 @@ import { cn } from "@/lib/utils";
  * the panels into a stage when it can animate them (desktop, motion on), so
  * mobile, reduced motion and no-JS all read as a simple list.
  */
-export function ActivityScope() {
+export function ActivityScope({ backdropSrc }: { backdropSrc: string }) {
   const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
 
@@ -67,13 +113,23 @@ export function ActivityScope() {
       ref={root}
       id="activity-scope"
       aria-labelledby="activity-scope-title"
-      className="relative isolate overflow-hidden bg-[linear-gradient(180deg,#1b1f26_0%,#14213a_100%)] py-16 md:py-24 lg:flex lg:min-h-svh lg:items-center lg:py-0"
+      data-tone="steel"
+      className="relative isolate overflow-hidden py-16 md:py-24 lg:flex lg:min-h-svh lg:items-center lg:py-0"
     >
-      <span aria-hidden className="glow-line absolute inset-x-0 top-0" />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-[radial-gradient(45%_55%_at_75%_50%,rgb(63_109_133/0.25),transparent_70%)]"
-      />
+      <SectionBackdrop src={backdropSrc} plateOpacity={0.14} details={["glow-top", "floor"]} />
+      {/* Per-division tint, cross-faded in step with the panels */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        {services.map((service, i) => (
+          <div
+            key={service.id}
+            className={cn(
+              "absolute inset-0 transition-opacity duration-700 ease-out-soft",
+              i === active ? "opacity-100" : "opacity-0",
+            )}
+            style={DIVISION_TINT[service.id]}
+          />
+        ))}
+      </div>
 
       <Container className="lg:pt-24 lg:pb-12">
         <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">

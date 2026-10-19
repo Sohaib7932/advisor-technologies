@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/section-heading";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { Icon } from "@/components/ui/icons";
 import { gsap, MOTION, useGSAP } from "@/lib/gsap";
 import { principles } from "@/lib/content";
@@ -48,8 +49,10 @@ export function Principles() {
       ref={root}
       id="principles"
       aria-labelledby="principles-title"
+      data-tone="base"
       className="relative isolate py-16 md:py-24 xl:py-32"
     >
+      <SectionBackdrop plate="haze" plateOpacity={0.3} details={["aurora", "glow-tl"]} />
       <Container>
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           {/* Statement, held in place while the cards stack */}

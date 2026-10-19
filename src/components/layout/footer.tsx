@@ -8,7 +8,15 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative isolate overflow-hidden bg-[#13171d] text-fg-muted">
+    <footer
+      data-tone="deep"
+      className="relative isolate overflow-hidden bg-bg-deep text-fg-muted"
+    >
+      {/* Faint grid, darkest navy */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(rgb(124_195_232/0.045)_1px,transparent_1px),linear-gradient(90deg,rgb(124_195_232/0.045)_1px,transparent_1px)] bg-size-[48px_48px] mask-[radial-gradient(80%_70%_at_50%_0%,black,transparent_85%)]"
+      />
       <span aria-hidden className="glow-line absolute inset-x-0 top-0" />
       <Container className="py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">

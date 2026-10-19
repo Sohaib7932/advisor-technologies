@@ -1,4 +1,5 @@
 import { Container, Section } from "@/components/ui/container";
+import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { RevealGroup } from "@/components/ui/reveal-group";
 import { GlowCard } from "@/components/ui/glow-card";
@@ -8,7 +9,12 @@ import { values } from "@/lib/content";
 /** Core values as glowing icon cards. */
 export function Values() {
   return (
-    <Section id="values" tone="navy">
+    <Section
+      id="values"
+      tone="deep"
+      divider
+      backdrop={<SectionBackdrop details={["aurora", "glow-top"]} />}
+    >
       <Container>
         <SectionHeading
           eyebrow="Core values"

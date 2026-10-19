@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Sora } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
+import { Atmosphere } from "@/components/layout/atmosphere";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -60,19 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${jakarta.variable} ${sora.variable} h-full antialiased`}
-      // The motion script below adds a class before hydration.
-      suppressHydrationWarning
     >
-      <head>
-        {/* Before first paint: mark that scroll animations will run, so
-            elements they animate in can start hidden instead of flashing. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion')",
-          }}
-        />
-      </head>
       <body
         className="flex min-h-full flex-col"
         // Browser extensions inject attributes onto <body> before React
@@ -81,7 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       >
         {/* Without JS the reveal observer never runs, so un-hide that content. */}
         <noscript>
-          <style>{`.reveal{opacity:1!important;transform:none!important}`}</style>
+          <style>{`.reveal,.motion-hide{opacity:1!important;transform:none!important}`}</style>
         </noscript>
         <a
           href="#main"
@@ -90,6 +79,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <SmoothScroll />
+        <Atmosphere />
         <Navbar />
         <main id="main" className="flex-1">
           {children}

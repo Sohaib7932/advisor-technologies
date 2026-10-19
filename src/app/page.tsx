@@ -7,6 +7,7 @@ import { Principles } from "@/components/home/principles";
 import { Process } from "@/components/home/process";
 import { ClientsStrip } from "@/components/home/clients-strip";
 import { ContactSection } from "@/components/shared/contact-section";
+import { sectionImage } from "@/lib/section-images";
 
 export default function HomePage() {
   return (
@@ -14,7 +15,7 @@ export default function HomePage() {
       <Hero />
       <About />
       <Values />
-      <ActivityScope />
+      <ActivityScope backdropSrc={sectionImage("services")} />
       <ProductPreview />
       <Principles />
       <Process />
