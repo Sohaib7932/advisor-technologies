@@ -26,10 +26,10 @@ export default function ServicesPage() {
         title={
           <>
             Six divisions,
-            <span className="text-glow"> one accountable partner</span>
+            <span className="text-accent"> one accountable partner</span>
           </>
         }
-        image="/images/repair-maintenance.png"
+        image="/images/photos/maintenance.webp"
         lead="From heavy plant and institutional furniture through to networks, surveillance, printing and civil works, delivered, installed and maintained by qualified engineers."
         aside={
           <div className="lg:flex lg:justify-end">
@@ -71,7 +71,7 @@ export default function ServicesPage() {
                       />
 
                       <div className="pointer-events-none absolute inset-x-6 top-6 flex items-center justify-between">
-                        <span className="inline-flex h-14 w-10 items-center justify-center rounded-full bg-white/12 text-white ring-1 ring-white/20 backdrop-blur-sm">
+                        <span className="inline-flex h-14 w-10 items-center justify-center rounded-full bg-navy-950/55 text-white ring-1 ring-white/20">
                           <Icon name={service.icon} className="size-5" />
                         </span>
                         <span className="font-display text-sm font-semibold tracking-widest text-white/70 tabular-nums">
@@ -79,7 +79,7 @@ export default function ServicesPage() {
                           {String(services.length).padStart(2, "0")}
                         </span>
                       </div>
-                      <span className="pointer-events-none absolute bottom-6 left-6 rounded-full bg-white/12 px-4 py-1.5 text-[0.6875rem] font-semibold tracking-[0.14em] text-white uppercase ring-1 ring-white/20 backdrop-blur-sm">
+                      <span className="pointer-events-none absolute bottom-6 left-6 rounded-full bg-navy-950/55 px-4 py-1.5 text-[0.6875rem] font-semibold tracking-[0.14em] text-white uppercase ring-1 ring-white/20">
                         {service.short}
                       </span>
                     </div>
@@ -104,7 +104,7 @@ export default function ServicesPage() {
                       {service.highlights.map((highlight) => (
                         <li
                           key={highlight}
-                          className="flex items-start gap-3 rounded-2xl bg-surface p-3.5 text-sm font-medium text-fg shadow-soft ring-1 ring-white/10"
+                          className="flex items-start gap-3 rounded-2xl bg-surface p-3.5 text-sm font-medium text-fg shadow-soft ring-1 ring-line"
                         >
                           <span className="grid size-5 shrink-0 place-items-center rounded-full bg-navy-950 text-white">
                             <Check className="size-3" />

@@ -29,22 +29,19 @@ export function Container({
 /**
  * Consistent vertical rhythm between sections. A section never paints an
  * opaque background of its own: it declares a `tone`, which the fixed global
- * layer (Atmosphere) cross-fades to as the section scrolls in, and an optional
- * `backdrop` (a SectionBackdrop) layered on top with soft, masked edges.
+ * layer (Atmosphere) cross-fades to as the section scrolls in.
  */
 export function Section({
   className,
   children,
   id,
   tone = "base",
-  backdrop,
   divider = false,
 }: {
   className?: string;
   children: React.ReactNode;
   id?: string;
   tone?: Tone;
-  backdrop?: React.ReactNode;
   /** A thin glowing line along the top edge. */
   divider?: boolean;
 }) {
@@ -54,7 +51,6 @@ export function Section({
       data-tone={tone}
       className={cn("relative isolate py-16 md:py-24 xl:py-32", className)}
     >
-      {backdrop}
       {divider && (
         <span aria-hidden className="glow-line absolute inset-x-[8%] top-0 opacity-60" />
       )}

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { HeroFacts, PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
 import { Container, Section } from "@/components/ui/container";
-import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { FloodCard } from "@/components/ui/flood-card";
@@ -54,10 +53,10 @@ export default function ClientsPage() {
         title={
           <>
             Serving Pakistan&rsquo;s
-            <span className="text-glow"> public institutions</span>
+            <span className="text-accent"> public institutions</span>
           </>
         }
-        image="/images/security-accesscontrol.png"
+        image="/images/photos/security.webp"
         lead={`${clients.length} ministries, authorities, utilities, academies and enterprises rely on Advisor Technologies for supply, installation and maintenance.`}
         aside={
           <HeroFacts
@@ -84,7 +83,7 @@ export default function ClientsPage() {
             title={
               <>
                 Institutions we have{" "}
-                <span className="text-glow">supplied and served</span>
+                <span className="text-accent">supplied and served</span>
               </>
             }
             lead="A cross-section of federal ministries, civic authorities, law enforcement academies, utilities, welfare bodies and private enterprises."
@@ -97,7 +96,7 @@ export default function ClientsPage() {
                   <h3 className="font-display text-lg font-semibold text-fg">
                     {sector}
                   </h3>
-                  <span className="h-px flex-1 bg-linear-to-r from-white/15 to-transparent" />
+                  <span className="h-px flex-1 bg-linear-to-r from-line to-transparent" />
                   <span className="grid min-w-8 place-items-center rounded-full bg-navy-950 px-2 py-1 font-display text-xs font-semibold text-white tabular-nums">
                     {String(grouped[sector].length).padStart(2, "0")}
                   </span>
@@ -111,7 +110,7 @@ export default function ClientsPage() {
                         key={client.name}
                         delay={Math.min(index * 50 + sectorIndex * 20, 300)}
                       >
-                        <div className="group flex h-full items-center gap-4 rounded-2xl bg-surface p-4 shadow-soft ring-1 ring-white/10 transition-[translate,box-shadow] duration-300 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift">
+                        <div className="group flex h-full items-center gap-4 rounded-2xl bg-surface p-4 shadow-soft ring-1 ring-line transition-[translate,box-shadow] duration-300 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift">
                           <ClientLogo
                             client={client}
                             sizes="64px"
@@ -137,7 +136,7 @@ export default function ClientsPage() {
       </Section>
 
       {/* Why institutions choose us */}
-      <Section tone="steel" divider backdrop={<SectionBackdrop details={["aurora", "glow-top"]} />}>
+      <Section tone="steel" divider>
         <Container>
           <SectionHeading
             eyebrow="Why institutions choose us"
@@ -145,7 +144,7 @@ export default function ClientsPage() {
             title={
               <>
                 Built for how{" "}
-                <span className="text-glow">institutions buy</span>
+                <span className="text-accent">institutions buy</span>
               </>
             }
           />

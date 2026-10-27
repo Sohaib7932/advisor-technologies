@@ -66,7 +66,7 @@ export const values: { title: string; blurb: string; icon: IconName }[] = [
   },
 ];
 
-/** `short` is the one-line version used on the home page's floating cards. */
+/** `short` is the one-line version used on the home page's cards. */
 export const principles: {
   title: string;
   short: string;
@@ -120,7 +120,7 @@ export const services: Service[] = [
     short: "Supply, installation and fixing",
     body: "Supply, installation and fixing of plant & machinery, furniture, office stationery, computer stationery and all kinds of general order supplies related to the various industries.",
     icon: "machinery",
-    image: "/images/plant-machinery-furniture.png",
+    image: "/images/photos/plant-machinery.webp",
     highlights: [
       "Industrial plant & machinery",
       "Office and institutional furniture",
@@ -134,7 +134,7 @@ export const services: Service[] = [
     short: "Design, deploy, maintain",
     body: "Consultancy and servicing of information systems, network solutions, services & installations, customised office automation software solutions, web design, development and maintenance.",
     icon: "network",
-    image: "/images/it-consultancy.png",
+    image: "/images/photos/it-networks.webp",
     highlights: [
       "LAN & WAN design and rollout",
       "Office automation software",
@@ -148,7 +148,7 @@ export const services: Service[] = [
     short: "Hardware and communications",
     body: "Supply of computers, laptops and accessories, installation and service of PABX exchange systems, off-the-shelf software, complete office equipment & supplies and general items.",
     icon: "computer",
-    image: "/images/computing-office.png",
+    image: "/images/photos/computing.webp",
     highlights: [
       "Desktops, laptops & workstations",
       "PABX exchange installation",
@@ -162,7 +162,7 @@ export const services: Service[] = [
     short: "Surveillance and screening",
     body: "Supply, service and maintenance of CCTV cameras, walkthrough gates and accessories, complete access control systems and queue management systems.",
     icon: "security",
-    image: "/images/security-accesscontrol.png",
+    image: "/images/photos/security.webp",
     highlights: [
       "CCTV supply & maintenance",
       "Walkthrough gates & screening",
@@ -176,7 +176,7 @@ export const services: Service[] = [
     short: "All types of printing work",
     body: "All types of printing work, from institutional forms, registers and secure stationery through to large-format and promotional printing.",
     icon: "print",
-    image: "/images/printing-service.png",
+    image: "/images/photos/printing.webp",
     highlights: [
       "Institutional forms & registers",
       "Computer stationery",
@@ -190,7 +190,7 @@ export const services: Service[] = [
     short: "Civil, electrical and mechanical",
     body: "Repairing of all types of machinery & equipment, light & heavy transport, buildings & structures, roads & water supplies, and all types of electrical & mechanical works.",
     icon: "wrench",
-    image: "/images/repair-maintenance.png",
+    image: "/images/photos/maintenance.webp",
     highlights: [
       "Machinery & equipment overhaul",
       "Light & heavy transport repair",
@@ -330,25 +330,25 @@ export const productCategoryDetails: Record<
 > = {
   Infrastructure: {
     icon: "machinery",
-    image: "/images/repair-maintenance.png",
+    image: "/images/photos/plant-machinery.webp",
     blurb: "Heavy plant and machinery, supplied, installed, fixed and maintained on site.",
     serviceId: "plant-machinery",
   },
   "IT Hardware": {
     icon: "computer",
-    image: "/images/computing-office.png",
+    image: "/images/photos/computing.webp",
     blurb: "Desktops, notebooks, servers, printers, imaging and displays from world-class brands.",
     serviceId: "computing",
   },
   Connectivity: {
     icon: "satellite",
-    image: "/images/it-consultancy.png",
+    image: "/images/photos/it-networks.webp",
     blurb: "Networks, satellite links and web services that keep every site connected.",
     serviceId: "it-networks",
   },
   "Works & Supply": {
     icon: "package",
-    image: "/images/printing-service.png",
+    image: "/images/photos/maintenance.webp",
     blurb: "Temporary offices, civil and mechanical works, and general order supply.",
     serviceId: "maintenance",
   },

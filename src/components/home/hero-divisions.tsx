@@ -33,7 +33,7 @@ export function HeroDivisions() {
     <div
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      className="w-full rounded-[1.75rem] bg-navy-950/45 p-2 shadow-float ring-1 ring-white/15 backdrop-blur-xl lg:w-[22rem] xl:w-[25rem]"
+      className="w-full rounded-[1.75rem] bg-navy-950/88 p-2 shadow-float ring-1 ring-white/15 lg:w-[22rem] xl:w-[25rem]"
     >
       <div className="flex items-center justify-between px-4 pt-3 pb-2.5">
         <span className="eyebrow text-[0.6875rem] text-fg-muted">
@@ -66,7 +66,7 @@ export function HeroDivisions() {
                     className={cn(
                       "grid size-8 shrink-0 place-items-center rounded-full ring-1 transition-colors duration-500",
                       isActive
-                        ? "bg-glow text-bg ring-glow"
+                        ? "bg-glow text-on-glow ring-glow"
                         : "bg-white/5 text-white/70 ring-white/15",
                     )}
                   >

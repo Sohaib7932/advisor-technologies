@@ -8,7 +8,7 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const fieldClass =
-  "w-full rounded-2xl border-0 bg-surface-2 px-5 py-3.5 text-[0.9375rem] text-fg ring-1 ring-inset ring-white/10 transition-shadow placeholder:text-fg-subtle focus:shadow-[0_0_0_4px_rgb(91_163_208/0.16),0_0_28px_rgb(91_163_208/0.3)] focus:ring-2 focus:ring-glow focus:outline-none";
+  "w-full rounded-2xl border-0 bg-surface-2 px-5 py-3.5 text-[0.9375rem] text-fg ring-1 ring-inset ring-line transition-shadow placeholder:text-fg-subtle focus:shadow-[0_0_0_4px_rgb(91_163_208/0.16),0_0_28px_rgb(91_163_208/0.3)] focus:ring-2 focus:ring-glow focus:outline-none";
 
 const labelClass = "block text-sm font-medium text-fg";
 
@@ -164,7 +164,7 @@ export function ContactForm() {
         </p>
         <button
           type="submit"
-          className="group inline-flex h-13 shrink-0 items-center justify-center gap-2 rounded-full bg-glow px-8 font-semibold text-bg shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-white"
+          className="group inline-flex h-13 shrink-0 items-center justify-center gap-2 rounded-full bg-glow px-8 font-semibold text-on-glow shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-white"
         >
           {sent ? "Opening your mail app" : "Send enquiry"}
           {sent ? (
@@ -197,7 +197,7 @@ export function ContactForm() {
 
 function Required() {
   return (
-    <span className="text-glow" aria-hidden>
+    <span className="text-accent" aria-hidden>
       *
     </span>
   );

@@ -19,7 +19,7 @@ export function PageHero({
   eyebrow,
   title,
   lead,
-  image = "/images/hero-image.png",
+  image = "/images/photos/corridor.webp",
   aside,
   children,
 }: {
@@ -34,7 +34,7 @@ export function PageHero({
 }) {
   return (
     <section className="px-2 pt-2 sm:px-3 sm:pt-3">
-      <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-brand-deep ring-1 ring-white/8 sm:rounded-hero">
+      <div data-theme="dark" className="relative isolate overflow-hidden rounded-[1.75rem] bg-brand-deep ring-1 ring-white/8 sm:rounded-hero">
         <div className="hero-zoom absolute inset-0 -z-10">
           <Image
             src={image}
@@ -76,13 +76,13 @@ export function PageHero({
                 style={rise(60)}
                 className="hero-rise flex items-center gap-2 text-xs font-medium text-fg-subtle"
               >
-                <Link href="/" className="transition-colors hover:text-glow">
+                <Link href="/" className="transition-colors hover:text-accent">
                   Home
                 </Link>
                 <span aria-hidden className="text-white/30">
                   /
                 </span>
-                <span aria-current="page" className="text-glow">
+                <span aria-current="page" className="text-accent">
                   {eyebrow}
                 </span>
               </nav>
@@ -129,7 +129,7 @@ export function HeroFacts({
   facts: { value: React.ReactNode; label: string }[];
 }) {
   return (
-    <div className="rounded-[1.75rem] bg-navy-950/45 p-2 shadow-float ring-1 ring-white/15 backdrop-blur-xl">
+    <div className="rounded-[1.75rem] bg-navy-950/88 p-2 shadow-float ring-1 ring-white/15">
       <p className="eyebrow px-4 pt-3 pb-3 text-[0.6875rem] text-fg-muted">
         {label}
       </p>

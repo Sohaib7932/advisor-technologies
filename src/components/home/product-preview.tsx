@@ -1,5 +1,4 @@
 import { Container } from "@/components/ui/container";
-import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { Reveal } from "@/components/ui/reveal";
 import { Eyebrow } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
@@ -31,8 +30,7 @@ export function ProductPreview() {
       data-tone="charcoal"
       className="relative isolate px-2 py-10 sm:px-3 md:py-16"
     >
-      <SectionBackdrop plate="floor" plateOpacity={0.35} details={["spot"]} />
-      <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-[linear-gradient(160deg,#14213a_0%,#121a2b_55%,#1b1f26_100%)] ring-1 ring-white/8 sm:rounded-hero">
+      <div data-theme="dark" className="relative isolate overflow-hidden rounded-[1.75rem] bg-[linear-gradient(160deg,#14213a_0%,#121a2b_55%,#1b1f26_100%)] ring-1 ring-white/8 sm:rounded-hero">
         <div
           aria-hidden
           className="absolute inset-0 -z-10 bg-[radial-gradient(55%_60%_at_80%_40%,rgb(42_65_97/0.7),transparent_70%)]"
@@ -48,8 +46,8 @@ export function ProductPreview() {
               <Eyebrow>Product line</Eyebrow>
               <h2 className="mt-6 text-headline text-white">
                 One supplier across{" "}
-                <span className="text-glow">{products.length} categories</span> of
-                equipment <span className="text-glow">and works</span>
+                <span className="text-accent">{products.length} categories</span> of
+                equipment <span className="text-accent">and works</span>
               </h2>
               <p className="mt-6 max-w-md text-base leading-relaxed text-fg-muted">
                 A catalogue built for procurement, covering infrastructure, IT

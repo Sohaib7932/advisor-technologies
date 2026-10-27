@@ -30,7 +30,7 @@ export default function AboutPage() {
         title={
           <>
             A recognised name for{" "}
-            <span className="text-glow">quality and reliability</span> in
+            <span className="text-accent">quality and reliability</span> in
             Pakistan
           </>
         }
@@ -53,7 +53,7 @@ export default function AboutPage() {
               <div className="relative pr-10 pb-14 sm:pr-16 sm:pb-20">
                 <div className="group/photo relative aspect-4/5 overflow-hidden rounded-panel shadow-lift">
                   <Image
-                    src="/images/plant-machinery-furniture.png"
+                    src="/images/photos/about.webp"
                     alt="Plant, machinery and office furniture supplied by Advisor Technologies"
                     fill
                     sizes="(max-width: 1024px) 100vw, 40vw"
@@ -67,7 +67,7 @@ export default function AboutPage() {
                 <div className="absolute right-0 bottom-0 w-[52%] overflow-hidden rounded-card shadow-float ring-6 ring-canvas">
                   <div className="relative aspect-4/3">
                     <Image
-                      src="/images/it-consultancy.png"
+                      src="/images/photos/it-networks.webp"
                       alt="Network and server installation"
                       fill
                       sizes="(max-width: 1024px) 50vw, 20vw"
@@ -75,8 +75,8 @@ export default function AboutPage() {
                     />
                   </div>
                 </div>
-                <div className="absolute top-6 -left-2 flex items-center gap-3 glass rounded-2xl py-3 pr-5 pl-3 shadow-float ring-1 ring-glow/30 sm:-left-5">
-                  <span className="grid size-10 place-items-center rounded-xl bg-glow text-bg">
+                <div className="absolute top-6 -left-2 flex items-center gap-3 bg-white rounded-2xl py-3 pr-5 pl-3 shadow-float ring-1 ring-glow/30 sm:-left-5">
+                  <span className="grid size-10 place-items-center rounded-xl bg-glow text-on-glow">
                     <Icon name="shield" className="size-5" />
                   </span>
                   <span className="text-sm leading-tight font-semibold text-fg">
@@ -112,7 +112,7 @@ export default function AboutPage() {
                 <Eyebrow>Our story</Eyebrow>
                 <h2 className="mt-5 text-headline font-bold text-fg uppercase">
                   Built to serve industry
-                  <span className="block text-glow">
+                  <span className="block text-accent">
                     across the Pakistan market
                   </span>
                 </h2>
@@ -141,7 +141,7 @@ export default function AboutPage() {
                   {sectors.map((sector) => (
                     <li
                       key={sector}
-                      className="rounded-full bg-surface px-4 py-2 text-sm font-medium text-fg shadow-soft ring-1 ring-white/10 transition-colors duration-300 hover:bg-navy-950 hover:text-white"
+                      className="rounded-full bg-surface px-4 py-2 text-sm font-medium text-fg shadow-soft ring-1 ring-line transition-colors duration-300 hover:bg-navy-950 hover:text-white"
                     >
                       {sector}
                     </li>

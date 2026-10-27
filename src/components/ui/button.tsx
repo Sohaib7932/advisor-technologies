@@ -13,13 +13,15 @@ const base =
   "group relative inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-[background-color,color,box-shadow] duration-300 ease-out-soft disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
-  // Glow-blue CTA with dark text: 6.6:1 contrast.
-  primary: "bg-glow text-bg shadow-glow hover:bg-white",
+  // Glow-blue CTA with navy text (6.0:1); deepens on hover (navy on #4a8fbd: 4.9:1).
+  primary: "bg-glow text-on-glow shadow-glow hover:bg-[#4a8fbd]",
+  // Tokens make these work in both themes: navy outline on light,
+  // light outline inside dark scopes.
   secondary:
-    "bg-white/6 text-fg ring-1 ring-inset ring-white/14 hover:bg-white/10 hover:ring-glow/50",
+    "bg-surface-2 text-fg ring-1 ring-inset ring-line hover:ring-accent/60 hover:shadow-glow",
   ghost:
-    "text-fg ring-1 ring-inset ring-white/18 backdrop-blur-md hover:bg-white/8 hover:ring-glow/60",
-  light: "bg-fg text-bg shadow-soft hover:bg-white hover:shadow-glow",
+    "text-fg ring-1 ring-inset ring-fg/35 hover:bg-fg/6 hover:ring-fg/70",
+  light: "bg-fg text-bg shadow-soft hover:shadow-glow",
 };
 
 const sizes: Record<Size, string> = {

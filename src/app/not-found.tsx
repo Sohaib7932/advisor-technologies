@@ -10,18 +10,10 @@ function rise(delay: number) {
 export default function NotFound() {
   return (
     <section className="px-2 pt-2 sm:px-3 sm:pt-3">
-      <div className="relative isolate flex min-h-[40rem] items-center overflow-hidden rounded-[1.75rem] bg-navy-950 sm:rounded-hero lg:min-h-[min(88vh,50rem)]">
+      <div data-theme="dark" className="relative isolate flex min-h-[40rem] items-center overflow-hidden rounded-[1.75rem] bg-navy-950 sm:rounded-hero lg:min-h-[min(88vh,50rem)]">
         <div
           aria-hidden
           className="absolute inset-0 -z-10 bg-[radial-gradient(55%_60%_at_85%_60%,rgb(31_107_255/0.3),transparent_70%)]"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(40%_45%_at_5%_0%,rgb(56_189_248/0.16),transparent_70%)]"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(rgb(255_255_255/0.5)_1px,transparent_1px)] mask-[radial-gradient(ellipse_at_center,black_10%,transparent_65%)] bg-size-[22px_22px] opacity-10"
         />
         {/* Ghost numerals behind the copy */}
         <span
@@ -33,7 +25,7 @@ export default function NotFound() {
         </span>
 
         <Container className="pt-32 pb-24">
-          <p style={rise(80)} className="hero-rise eyebrow text-glow">
+          <p style={rise(80)} className="hero-rise eyebrow text-accent">
             Error 404
           </p>
           <h1
@@ -41,7 +33,7 @@ export default function NotFound() {
             className="hero-rise mt-6 max-w-3xl text-display text-white"
           >
             This page isn&rsquo;t
-            <span className="text-glow"> in our catalogue</span>
+            <span className="text-accent"> in our catalogue</span>
           </h1>
           <p
             style={rise(300)}
@@ -56,7 +48,7 @@ export default function NotFound() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-glow hover:text-bg"
+                className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-white/20 transition-colors hover:bg-glow hover:text-on-glow"
               >
                 {item.label}
               </Link>

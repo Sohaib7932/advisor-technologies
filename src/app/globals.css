@@ -16,30 +16,34 @@
   --color-steel: #3f6d85; /* accent */
   --color-glow: #5ba3d0; /* highlights, active states, glow lines, CTAs */
 
-  /* Atmosphere: sampled from the hero plate (public/hero-section-bg.png).
-     ceiling #040e1a · wall #0d1926 · LED halo #113050 · floor #243444 ·
-     LED peak #7cc3e8 · floor reflection #3a6285. Kept in the brand family. */
-  --color-bg-deep: #060c16; /* ceiling shadow, darkest areas, footer */
-  --color-bg-base: #0d1926; /* the back wall: default section tone */
-  --color-bg-raised: #142538; /* navy-charcoal, lifted areas */
-  --color-line: rgb(243 246 250 / 0.1); /* hairlines and borders */
-  --color-glow-soft: rgb(91 163 208 / 0.18); /* halos behind cards */
-  --color-accent: #5ba3d0; /* highlights, active states, CTAs (rare) */
-  --color-text: #f3f6fa;
-  --color-text-muted: #b4bfcc;
-  --color-led: #7cc3e8; /* light sources: strips, lines, the glow orb */
+  /* Light theme (default). Contrast on white / on #EAF1F7:
+     fg #14213a 15.9 / 14.0 · fg-muted #4a5568 7.5 / 6.6 ·
+     fg-subtle #56657a 5.9 / 5.2 · accent #3f6d85 5.6 / 4.9 ·
+     navy on the glow-blue fill 6.0. Glow blue and LED blue fail AA as small
+     text on white: fills, lines, glows and large display text only. */
+  --color-bg-deep: #f5f8fb; /* mist */
+  --color-bg-base: #ffffff;
+  --color-bg-raised: #eaf1f7; /* pale steel */
+  --color-line: #d9e2ec;
+  --color-glow-soft: rgb(63 109 133 / 0.14);
+  --color-accent: #3f6d85; /* links, icons, small accent text */
+  --color-on-glow: #14213a; /* text on glow-blue fills */
+  --color-text: #14213a;
+  --color-text-muted: #4a5568;
+  --color-led: #7cc3e8; /* light sources: lines, glows (never small text) */
+  --color-amber: #f5b84b; /* one warm accent: tiny highlights only, never a wash */
 
-  /* Surfaces, darkest to lightest */
-  --color-bg: #1b1f26; /* page */
-  --color-canvas: #1b1f26;
-  --color-surface: #232932; /* cards */
-  --color-surface-2: #2c333e; /* raised cards, inputs */
+  /* Surfaces */
+  --color-bg: #ffffff; /* page */
+  --color-canvas: #f5f8fb;
+  --color-surface: #ffffff; /* cards */
+  --color-surface-2: #f8fafc; /* raised cards, inputs */
 
   /* Text */
-  --color-fg: #f3f6fa;
-  --color-ink: #f3f6fa;
-  --color-fg-muted: #b4bfcc;
-  --color-fg-subtle: #8c98a8;
+  --color-fg: #14213a;
+  --color-ink: #14213a;
+  --color-fg-muted: #4a5568;
+  --color-fg-subtle: #56657a;
 
   /* Navy ramp anchored on the brand navy (600) and deep navy (950) */
   --color-navy-50: #eef2f7;
@@ -64,28 +68,87 @@
   --radius-hero: 2.5rem;
 
   /* Elevation: shadows sink into the dark page; glow lifts accents */
-  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.2), 0 10px 28px -14px rgb(0 0 0 / 0.5);
-  --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.25), 0 28px 56px -22px rgb(0 0 0 / 0.65);
-  --shadow-float: 0 4px 12px rgb(0 0 0 / 0.3), 0 36px 72px -24px rgb(0 0 0 / 0.75);
-  --shadow-glow: 0 0 0 1px rgb(91 163 208 / 0.35), 0 12px 40px -8px rgb(91 163 208 / 0.45);
+  --shadow-soft: 0 1px 2px rgb(20 33 58 / 0.06), 0 12px 32px rgb(20 33 58 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(20 33 58 / 0.07), 0 20px 44px -12px rgb(20 33 58 / 0.18);
+  --shadow-float: 0 4px 10px rgb(20 33 58 / 0.08), 0 30px 64px -20px rgb(20 33 58 / 0.24);
+  --shadow-glow: 0 0 0 1px rgb(63 109 133 / 0.4), 0 14px 36px -10px rgb(91 163 208 / 0.55);
 
   /* Motion: one curve everywhere (≈ GSAP power3.out / expo.out) */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* The spec's token names, for use in plain CSS. */
+/* The spec's token names, for use in plain CSS, plus the values the card and
+   glass utilities read, so a [data-theme] scope can restyle them. */
 :root {
   --bg-deep: var(--color-bg-deep);
   --bg-base: var(--color-bg-base);
   --bg-raised: var(--color-bg-raised);
-  --surface: rgb(20 33 58 / 0.62); /* glass card fill */
+  --surface: #ffffff;
   --line: var(--color-line);
   --glow: var(--color-led);
   --glow-soft: var(--color-glow-soft);
   --accent: var(--color-accent);
   --text: var(--color-text);
   --text-muted: var(--color-text-muted);
+  --card-edge: var(--color-line);
+  --card-highlight: rgb(255 255 255 / 0);
+  --glass-bg: rgb(255 255 255 / 0.9);
+  --glass-edge: rgb(20 33 58 / 0.08);
 }
+
+/* Dark anchors: the footer, the call-to-action card, photo banners with white
+   text over them, and the hero until its light plate arrives. Not a toggle:
+   light is the only live theme. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg-deep: #060c16;
+  --color-bg-base: #0d1926;
+  --color-bg-raised: #142538;
+  --color-line: rgb(243 246 250 / 0.1);
+  --color-glow-soft: rgb(91 163 208 / 0.18);
+  --color-accent: #5ba3d0;
+  --color-on-glow: #1b1f26;
+  --color-text: #f3f6fa;
+  --color-text-muted: #b4bfcc;
+  --color-bg: #1b1f26;
+  --color-canvas: #1b1f26;
+  --color-surface: #232932;
+  --color-surface-2: #2c333e;
+  --color-fg: #f3f6fa;
+  --color-ink: #f3f6fa;
+  --color-fg-muted: #b4bfcc;
+  --color-fg-subtle: #8c98a8;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.2), 0 10px 28px -14px rgb(0 0 0 / 0.5);
+  --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.25), 0 28px 56px -22px rgb(0 0 0 / 0.65);
+  --shadow-float: 0 4px 12px rgb(0 0 0 / 0.3), 0 36px 72px -24px rgb(0 0 0 / 0.75);
+  --shadow-glow: 0 0 0 1px rgb(91 163 208 / 0.35), 0 12px 40px -8px rgb(91 163 208 / 0.45);
+  --surface: rgb(20 33 58 / 0.62);
+  --card-edge: rgb(243 246 250 / 0.08);
+  --card-highlight: rgb(243 246 250 / 0.08);
+  --glass-bg: rgb(27 31 38 / 0.72);
+  --glass-edge: rgb(243 246 250 / 0.1);
+  color: var(--color-fg);
+}
+
+/* A light island inside a dark scope (white cards on the navy band). */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-line: #d9e2ec;
+  --color-accent: #3f6d85;
+  --color-on-glow: #14213a;
+  --color-surface: #ffffff;
+  --color-surface-2: #f8fafc;
+  --color-fg: #14213a;
+  --color-ink: #14213a;
+  --color-fg-muted: #4a5568;
+  --color-fg-subtle: #56657a;
+  --shadow-soft: 0 1px 2px rgb(20 33 58 / 0.06), 0 12px 32px rgb(20 33 58 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(20 33 58 / 0.07), 0 20px 44px -12px rgb(20 33 58 / 0.18);
+  --shadow-float: 0 4px 10px rgb(20 33 58 / 0.08), 0 30px 64px -20px rgb(20 33 58 / 0.24);
+  --card-edge: #d9e2ec;
+  color: var(--color-fg);
+}
+
 
 /* ==========================================================================
    Base
@@ -93,17 +156,17 @@
 
 @layer base {
   * {
-    border-color: rgb(243 246 250 / 0.1);
+    border-color: var(--color-line);
   }
 
   html {
     scroll-padding-top: 7rem;
     -webkit-tap-highlight-color: transparent;
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   body {
-    background-color: var(--color-bg-deep);
+    background-color: var(--color-bg);
     color: var(--color-fg);
     font-family: var(--font-sans);
     font-feature-settings: "ss01" on, "cv11" on;
@@ -124,12 +187,12 @@
   }
 
   ::selection {
-    background-color: var(--color-glow);
-    color: var(--color-bg);
+    background-color: var(--color-led);
+    color: var(--color-ink);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-glow);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 6px;
   }
@@ -146,20 +209,6 @@
       transition-delay: 0ms !important;
     }
   }
-}
-
-/* Light "breathing" section: tokens re-pointed so every utility inside
-   reads navy-on-white. Contrast on #eef3f8: fg 14:1, muted 8.9:1,
-   subtle 5.6:1, accent #2b6a94 5.6:1 (the bright glow fails AA here). */
-.theme-light {
-  --color-fg: #14213a;
-  --color-ink: #14213a;
-  --color-fg-muted: #34465f;
-  --color-fg-subtle: #52627a;
-  --color-glow: #2b6a94;
-  --color-surface: #ffffff;
-  --color-surface-2: #f6f9fc;
-  color: var(--color-fg);
 }
 
 /* Lenis smooth scrolling (recommended base styles) */
@@ -215,41 +264,28 @@ html.lenis body {
    Surfaces
    ========================================================================== */
 
-/* Frosted bar / chip on the dark page */
+/* Frosted bar: near-opaque white glass in light, dark glass in dark scopes.
+   Used by the navbar only. */
 @utility glass {
-  background-color: rgb(27 31 38 / 0.72);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
 }
 
-/* Glass card: translucent navy over the room, frosted, a hairline edge and a
-   faint inner glow along the top. */
+/* Card: white with a hairline edge and soft layered shadows in light; the
+   translucent navy glass card inside dark scopes. */
 @utility card-surface {
   background-color: var(--surface);
-  background-image: linear-gradient(
-    160deg,
-    rgb(243 246 250 / 0.05) 0%,
-    rgb(243 246 250 / 0) 40%
-  );
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
   box-shadow:
-    inset 0 1px 0 rgb(243 246 250 / 0.08),
-    inset 0 0 24px rgb(91 163 208 / 0.05),
-    0 0 0 1px rgb(243 246 250 / 0.08),
+    inset 0 1px 0 var(--card-highlight),
+    0 0 0 1px var(--card-edge),
     var(--shadow-soft);
 }
 
-/* Glowing horizontal rule used between and inside sections */
+/* Hairline rule used between and inside sections */
 @utility glow-line {
   height: 1px;
-  background-image: linear-gradient(
-    90deg,
-    transparent,
-    rgb(91 163 208 / 0.7) 50%,
-    transparent
-  );
-  box-shadow: 0 0 18px 1px rgb(91 163 208 / 0.35);
+  background-image: linear-gradient(90deg, transparent, var(--color-line) 15%, var(--color-line) 85%, transparent);
 }
 
 /* ==========================================================================
@@ -325,6 +361,64 @@ html.lenis body {
   }
 }
 
+/* Hero loader: a logo mark and a ring that draws. Fades when the hero is
+   ready (data-loaded); the CSS fallback fades it regardless after 1.2s.
+   Never shown with reduced motion. */
+.hero-loader {
+  transition: opacity 0.35s var(--ease-out-soft);
+  animation: hero-loader-out 0.3s ease 1.2s forwards;
+}
+.hero-loader-ring {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hero-loader-ring 0.55s var(--ease-out-soft) forwards;
+}
+@keyframes hero-loader-ring {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes hero-loader-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-loader {
+    display: none;
+  }
+}
+
+/* Idle: a soft light sweeps across the title every few seconds. */
+[data-idle] .hero-sweep {
+  background: linear-gradient(105deg, #14213a 42%, #6b9cc4 50%, #14213a 58%);
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: hero-sweep 8s var(--ease-out-soft) 1s infinite;
+}
+@keyframes hero-sweep {
+  0%,
+  78% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* On the home page the navbar waits off screen from first paint until the
+   hero intro slides it in (data-nav-in). Not with reduced motion; a
+   <noscript> rule in the layout shows it without JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(section[aria-label="Introduction"]:not([data-nav-in])) header {
+    translate: 0 -130%;
+  }
+}
+
 /* Timer bar in cycling panels; duration is set inline */
 .hero-progress {
   animation-name: hero-progress;
@@ -376,47 +470,6 @@ html.lenis body {
   }
 }
 
-/* Aurora: two soft colour fields drifting slowly (transform only). Static on
-   small screens and with reduced motion. */
-.aurora span {
-  position: absolute;
-  width: 70%;
-  height: 80%;
-  border-radius: 9999px;
-  will-change: transform;
-}
-.aurora-a {
-  top: -10%;
-  left: -10%;
-  background: radial-gradient(closest-side, rgb(42 65 97 / 0.55), transparent);
-  animation: aurora-a 26s ease-in-out infinite alternate;
-}
-.aurora-b {
-  right: -15%;
-  bottom: -15%;
-  background: radial-gradient(closest-side, rgb(63 109 133 / 0.32), transparent);
-  animation: aurora-b 32s ease-in-out infinite alternate;
-}
-@keyframes aurora-a {
-  to {
-    transform: translate3d(25%, 18%, 0) scale(1.15);
-  }
-}
-@keyframes aurora-b {
-  to {
-    transform: translate3d(-22%, -16%, 0) scale(1.1);
-  }
-}
-/* Drifts only while its section is on screen (Atmosphere toggles .is-live). */
-.aurora:not(.is-live) span {
-  animation-play-state: paused;
-}
-@media (max-width: 767px) {
-  .aurora span {
-    animation: none;
-  }
-}
-
 /* Horizontal auto-scrolling strip */
 @utility animate-marquee {
   animation: marquee 48s linear infinite;
@@ -442,4 +495,111 @@ html.lenis body {
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* ==========================================================================
+   Deck cards (CardDeck / DeckCard). Open timing lives in
+   src/lib/card-motion.ts. The hover lift uses `translate`, not `transform`,
+   so it never fights the GSAP deal-out (which owns `transform`).
+   ========================================================================== */
+.deck-card {
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  background-color: #ffffff;
+  background-image: linear-gradient(165deg, #ffffff 0%, #f8fafc 45%, #eaf1f7 100%);
+  background-size: 100% 190%;
+  background-position: 50% 0%;
+  box-shadow: 0 0 0 1px var(--color-line), var(--shadow-soft);
+  transition:
+    translate 0.5s var(--ease-out-soft),
+    box-shadow 0.5s var(--ease-out-soft),
+    background-position 0.8s var(--ease-out-soft);
+}
+.deck-card[data-tone-card="navy"] {
+  --color-fg-muted: #d5dee8;
+  --color-fg-subtle: #c3cfdc;
+  background-color: #14213a;
+  background-image: linear-gradient(150deg, #14213a 0%, #1d3150 48%, #3f6d85 100%);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06), var(--shadow-lift);
+  color: #fff;
+}
+.deck-card-art {
+  transform: perspective(700px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition:
+    transform 0.6s var(--ease-out-soft),
+    translate 0.6s var(--spring),
+    scale 0.6s var(--spring);
+}
+img.deck-card-art {
+  filter: drop-shadow(0 14px 14px rgb(20 33 58 / 0.14));
+}
+
+/* Icon art: a tile, a fine ring and a dashed orbit. */
+.icon-tile,
+.icon-glyph,
+.icon-orbit {
+  transition:
+    translate 0.6s var(--spring),
+    rotate 0.6s var(--spring),
+    scale 0.6s var(--spring),
+    box-shadow 0.5s var(--ease-out-soft);
+}
+.deck-card[data-tone-card="navy"] .icon-tile {
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(124 195 232 / 0.35);
+  color: #7cc3e8;
+}
+.deck-card[data-tone-card="navy"] .icon-orbit {
+  border-color: rgb(124 195 232 / 0.35);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) {
+    .deck-card:hover {
+      translate: 0 -6px;
+      background-position: 50% 100%;
+      box-shadow: 0 0 0 1px rgb(63 109 133 / 0.28), var(--shadow-float);
+    }
+    .deck-card[data-tone-card="navy"]:hover {
+      box-shadow: 0 0 0 1px rgb(124 195 232 / 0.3), var(--shadow-float);
+    }
+    /* Product illustrations lift and grow a touch (tilt follows the pointer). */
+    .deck-card:hover img.deck-card-art {
+      translate: 0 -8px;
+      scale: 1.05;
+    }
+    /* Icon tiles spring up and tip, the glyph pops, the orbit turns and the
+       ring ripples out once. */
+    .deck-card:hover .icon-tile {
+      translate: 0 -5px;
+      rotate: -8deg;
+      scale: 1.08;
+      box-shadow: 0 14px 28px -10px rgb(20 33 58 / 0.45);
+    }
+    .deck-card:hover .icon-glyph {
+      animation: icon-pop 0.7s var(--spring) both;
+    }
+    .deck-card:hover .icon-orbit {
+      rotate: 90deg;
+      scale: 1.06;
+    }
+    .deck-card:hover .icon-ripple {
+      animation: icon-ripple 0.9s var(--ease-out-soft) both;
+    }
+  }
+  /* Touch: each icon plays the same move once, as its card opens. */
+  .deck-card[data-live] .icon-glyph {
+    animation: icon-pop 0.7s var(--spring) both;
+  }
+  .deck-card[data-live] .icon-ripple {
+    animation: icon-ripple 0.9s var(--ease-out-soft) both;
+  }
+}
+@keyframes icon-pop {
+  0% { scale: 1; rotate: 0deg; }
+  35% { scale: 1.28; rotate: 10deg; }
+  100% { scale: 1; rotate: 0deg; }
+}
+@keyframes icon-ripple {
+  0% { scale: 1; opacity: 1; }
+  100% { scale: 1.45; opacity: 0; }
 }

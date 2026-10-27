@@ -13,13 +13,19 @@ const links = mainNav.filter((item) => item.href !== "/");
 
 export function Navbar() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Transparent over the hero, frosted once the page starts moving.
+  // Solid from first paint. Slides away while scrolling down past the first
+  // screen, and comes back the moment the reader scrolls up.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - last) < 6) return;
+      setHidden(y > last && y > 160);
+      last = y;
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -36,14 +42,17 @@ export function Navbar() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+    // z-[100]: above every section, pinned layer and the hero canvases.
+    <header
+      className={cn(
+        "pointer-events-none fixed inset-x-0 top-0 z-[100] px-3 pt-3 transition-transform duration-500 ease-out-soft sm:px-5 sm:pt-4",
+        hidden && !open && "-translate-y-[130%]",
+      )}
+    >
       <nav
         aria-label="Main"
         className={cn(
-          "pointer-events-auto mx-auto flex h-16 max-w-[76rem] items-center justify-between rounded-full pr-2.5 pl-4 transition-[background-color,box-shadow,backdrop-filter] duration-500 ease-out-soft sm:pl-5",
-          scrolled || open
-            ? "glass shadow-float ring-1 ring-white/10"
-            : "bg-transparent ring-1 ring-transparent",
+          "glass pointer-events-auto mx-auto flex h-16 max-w-[76rem] items-center justify-between rounded-full pr-2.5 pl-4 shadow-soft ring-1 ring-[var(--glass-edge)] sm:pl-5",
         )}
       >
         {/* Brand */}
@@ -52,7 +61,7 @@ export function Navbar() {
           className="flex shrink-0 items-center gap-2.5"
           aria-label={`${site.name} home`}
         >
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white shadow-soft">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white shadow-soft ring-1 ring-line">
             <Image
               src="/logos/logo-without-text-removebg.webp"
               alt=""
@@ -90,7 +99,7 @@ export function Navbar() {
                   <span
                     aria-hidden
                     className={cn(
-                      "absolute inset-x-4 bottom-1.5 h-px origin-left bg-glow shadow-[0_0_10px_rgb(91_163_208/0.8)] transition-transform duration-500 ease-out-soft",
+                      "absolute inset-x-4 bottom-1.5 h-px origin-left bg-accent transition-transform duration-500 ease-out-soft",
                       active ? "scale-x-100" : "scale-x-0",
                     )}
                   />
@@ -104,7 +113,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <Link
             href="/contact#enquiry"
-            className="group hidden h-11 items-center gap-2 rounded-full bg-glow px-5 text-sm font-semibold text-bg shadow-glow transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-white sm:inline-flex"
+            className="group hidden h-11 items-center gap-2 rounded-full bg-glow px-5 text-sm font-semibold text-on-glow shadow-glow transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-[#4a8fbd] sm:inline-flex"
           >
             Get a Quote
             <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -116,7 +125,7 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="inline-flex size-11 items-center justify-center rounded-full bg-white/8 text-fg ring-1 ring-white/12 transition-colors duration-300 hover:bg-white/14 lg:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-full bg-surface-2 text-fg ring-1 ring-line transition-colors duration-300 hover:ring-accent/50 lg:hidden"
           >
             {open ? <Close className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -127,7 +136,7 @@ export function Navbar() {
       <div
         id="mobile-menu"
         hidden={!open}
-        className="glass pointer-events-auto mx-auto mt-3 max-w-[76rem] overflow-hidden rounded-panel p-3 shadow-float ring-1 ring-white/10 lg:hidden"
+        className="pointer-events-auto mx-auto mt-3 max-w-[76rem] overflow-hidden rounded-panel bg-white p-3 shadow-float ring-1 ring-line lg:hidden"
       >
         <ul className="flex flex-col gap-1">
           {mainNav.map((item) => (
@@ -139,8 +148,8 @@ export function Navbar() {
                 className={cn(
                   "flex items-center justify-between rounded-2xl px-4 py-3.5 transition-colors",
                   isActive(item.href)
-                    ? "bg-glow/15 text-fg ring-1 ring-glow/30"
-                    : "text-fg-muted hover:bg-white/6 hover:text-fg",
+                    ? "bg-bg-raised text-fg ring-1 ring-accent/30"
+                    : "text-fg-muted hover:bg-canvas hover:text-fg",
                 )}
               >
                 <span className="flex flex-col">
@@ -162,13 +171,13 @@ export function Navbar() {
         <Link
           href="/contact#enquiry"
           onClick={() => setOpen(false)}
-          className="mt-3 flex h-13 w-full items-center justify-center gap-2 rounded-full bg-glow font-semibold text-bg transition-colors hover:bg-white"
+          className="mt-3 flex h-13 w-full items-center justify-center gap-2 rounded-full bg-glow font-semibold text-on-glow transition-colors hover:bg-[#4a8fbd]"
         >
           Get a Quote
           <ArrowUpRight className="size-4" />
         </Link>
 
-        <div className="mt-3 flex flex-col gap-1 rounded-2xl bg-white/5 px-4 py-3.5 text-sm">
+        <div className="mt-3 flex flex-col gap-1 rounded-2xl bg-canvas px-4 py-3.5 text-sm">
           <a
             href={`tel:${site.contact.phoneHref}`}
             className="font-medium text-fg hover:underline"

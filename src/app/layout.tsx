@@ -70,11 +70,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       >
         {/* Without JS the reveal observer never runs, so un-hide that content. */}
         <noscript>
-          <style>{`.reveal,.motion-hide{opacity:1!important;transform:none!important}`}</style>
+          <style>{`.reveal,.motion-hide{opacity:1!important;transform:none!important}header{translate:none!important}`}</style>
         </noscript>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-60 focus:rounded-full focus:bg-glow focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-bg"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-60 focus:rounded-full focus:bg-glow focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-on-glow"
         >
           Skip to content
         </a>

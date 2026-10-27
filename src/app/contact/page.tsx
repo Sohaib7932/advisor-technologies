@@ -16,7 +16,7 @@ export default function ContactPage() {
         title={
           <>
             Let&rsquo;s discuss
-            <span className="text-glow"> your requirement</span>
+            <span className="text-accent"> your requirement</span>
           </>
         }
         lead="Send us a specification, a bill of quantities or a tender reference and our team will respond with a documented technical and commercial proposal."

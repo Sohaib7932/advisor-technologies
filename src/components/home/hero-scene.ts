@@ -1,62 +1,85 @@
 /**
- * The hero's 3D scene: the company's six business pillars, modelled from
- * primitives, drift scattered through a dark showroom and land on their
- * display stands as `setProgress(0 → 1)` is driven by scroll.
+ * The hero's 3D scene: a procedural light studio (a seamless white-to-pale-
+ * steel cyclorama, a matte light floor, soft contact shadows, a window light
+ * from the upper left) and the company's six business pillars, each built
+ * from named sub-meshes so it can start exploded and assemble.
  *
- * Plain Three.js (no React renderer) so the scroll timeline can drive it
- * directly and every resource is disposed on unmount. This module is
- * dynamically imported, keeping three.js out of the initial bundle.
+ * The scene owns no animation timing: it exposes plain numeric targets
+ * (`intro`) that the hero's GSAP timeline tweens, and renders on GSAP's
+ * ticker, so the page runs a single animation loop. Dynamically imported,
+ * keeping three.js out of the initial bundle.
  */
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
-import { createRoom, LAYER, radialTexture, setLayers } from "./hero-room";
-import { HERO_TUNING } from "./hero-tuning";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { gsap } from "@/lib/gsap";
+import { HERO_TUNING, type Slot } from "./hero-tuning";
+
+/** Per-product intro state, tweened by the hero timeline (0 → 1 unless noted). */
+export type ProductIntro = {
+  /** Parts scale in from nothing. */
+  appear: number;
+  /** 1 = parts flung apart and lifted, 0 = assembled on its spot. */
+  explode: number;
+  /** Plinth and contact shadow grow in as the product lands. */
+  land: number;
+  /** A quick specular glint when it snaps into place (0 → 1 → 0). */
+  glint: number;
+};
 
 export type HeroScene = {
-  setProgress: (progress: number) => void;
-  resize: () => void;
+  intro: { light: number; pull: number; idle: number; products: ProductIntro[] };
+  /** Jump every value to the composed final state (reduced motion). */
+  setFinal: () => void;
+  /** Projected screen rectangles of each product, for layout checks. */
+  bounds: () => { left: number; top: number; right: number; bottom: number }[];
   dispose: () => void;
 };
 
 type Options = { mobile: boolean; reduced: boolean };
-type Canvases = { room: HTMLCanvasElement; front: HTMLCanvasElement };
 
 const COLORS = {
   deep: "#14213a",
   navy: "#2a4161",
-  charcoal: "#4a4a4a",
   steel: "#3f6d85",
   glow: "#5ba3d0",
-  body: "#2c333e",
-  paper: "#dbe3ed",
+  white: "#f4f6f9",
+  silver: "#c3ccd6",
+  paper: "#ffffff",
+  plinth: "#e2e8ef",
 };
 
 /* ------------------------------------------------------------------------ */
-/* Materials, shared by every object                                         */
+/* Materials: white/silver bodies, navy and steel accents, small LEDs       */
 /* ------------------------------------------------------------------------ */
 
 function createMaterials() {
   return {
-    body: new THREE.MeshStandardMaterial({ color: COLORS.body, metalness: 0.55, roughness: 0.38 }),
-    navy: new THREE.MeshStandardMaterial({ color: COLORS.navy, metalness: 0.45, roughness: 0.35 }),
-    charcoal: new THREE.MeshStandardMaterial({ color: COLORS.charcoal, metalness: 0.4, roughness: 0.5 }),
-    steel: new THREE.MeshStandardMaterial({ color: COLORS.steel, metalness: 0.85, roughness: 0.28 }),
-    paper: new THREE.MeshStandardMaterial({ color: COLORS.paper, metalness: 0.05, roughness: 0.7 }),
+    body: new THREE.MeshStandardMaterial({ color: COLORS.white, metalness: 0.15, roughness: 0.32 }),
+    navy: new THREE.MeshStandardMaterial({ color: COLORS.deep, metalness: 0.35, roughness: 0.38 }),
+    charcoal: new THREE.MeshStandardMaterial({ color: COLORS.silver, metalness: 0.85, roughness: 0.28 }),
+    steel: new THREE.MeshStandardMaterial({ color: COLORS.steel, metalness: 0.7, roughness: 0.3 }),
+    paper: new THREE.MeshStandardMaterial({ color: COLORS.paper, metalness: 0, roughness: 0.75 }),
     screen: new THREE.MeshStandardMaterial({
-      color: COLORS.deep,
+      color: COLORS.navy,
       emissive: COLORS.steel,
-      emissiveIntensity: 0.9,
-      metalness: 0.2,
-      roughness: 0.2,
+      emissiveIntensity: 0.55,
+      metalness: 0.1,
+      roughness: 0.15,
     }),
-    glow: new THREE.MeshBasicMaterial({ color: COLORS.glow }),
+    glow: new THREE.MeshStandardMaterial({
+      color: COLORS.glow,
+      emissive: COLORS.glow,
+      emissiveIntensity: 1.1,
+      roughness: 0.4,
+    }),
   };
 }
 
 type Materials = ReturnType<typeof createMaterials>;
 
 /* ------------------------------------------------------------------------ */
-/* Builders                                                                  */
+/* Products                                                                  */
 /* ------------------------------------------------------------------------ */
 
 function part(
@@ -201,268 +224,416 @@ function gear(m: Materials) {
   return g;
 }
 
+
 /* ------------------------------------------------------------------------ */
-/* Choreography                                                              */
+/* Studio                                                                    */
 /* ------------------------------------------------------------------------ */
 
-const easeInOutCubic = (t: number) =>
-  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
-const smoothstep = (a: number, b: number, t: number) => {
-  const x = clamp01((t - a) / (b - a));
-  return x * x * (3 - 2 * x);
+function canvasTexture(width: number, height: number, draw: (ctx: CanvasRenderingContext2D) => void) {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  draw(canvas.getContext("2d")!);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+/** Soft round falloff, used for contact shadows. */
+function shadowTexture() {
+  return canvasTexture(128, 128, (ctx) => {
+    const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, "rgba(20,33,58,0.9)");
+    g.addColorStop(0.45, "rgba(20,33,58,0.35)");
+    g.addColorStop(1, "rgba(20,33,58,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+  });
+}
+
+/** Four-point specular star for the snap glint. */
+function glintTexture() {
+  return canvasTexture(128, 128, (ctx) => {
+    const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 20);
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+    ctx.beginPath();
+    ctx.moveTo(64, 4);
+    ctx.quadraticCurveTo(68, 60, 124, 64);
+    ctx.quadraticCurveTo(68, 68, 64, 124);
+    ctx.quadraticCurveTo(60, 68, 4, 64);
+    ctx.quadraticCurveTo(60, 60, 64, 4);
+    ctx.fill();
+  });
+}
+
+/**
+ * A seamless cyclorama: floor running into a quarter-circle cove and up the
+ * back wall, as one mesh, with its gradient mapped along the profile so the
+ * seam disappears. Dithered, so the soft gradient never bands.
+ */
+function cyclorama() {
+  const coveRadius = 5;
+  const wallZ = -9;
+  const profile: [number, number][] = []; // [y, z] from the front of the floor up the wall
+  profile.push([0, 30]);
+  profile.push([0, wallZ + coveRadius]);
+  for (let i = 1; i <= 16; i++) {
+    const a = (i / 16) * (Math.PI / 2);
+    profile.push([coveRadius - Math.cos(a) * coveRadius, wallZ + coveRadius - Math.sin(a) * coveRadius]);
+  }
+  profile.push([34, wallZ]);
+
+  const lengths = [0];
+  for (let i = 1; i < profile.length; i++) {
+    const [y0, z0] = profile[i - 1];
+    const [y1, z1] = profile[i];
+    lengths.push(lengths[i - 1] + Math.hypot(y1 - y0, z1 - z0));
+  }
+  const total = lengths[lengths.length - 1];
+  const width = 90;
+  const cols = 2;
+  const positions: number[] = [];
+  const uvs: number[] = [];
+  const index: number[] = [];
+  profile.forEach(([y, z], i) => {
+    for (let c = 0; c <= cols; c++) {
+      positions.push(-width / 2 + (c / cols) * width, y, z);
+      uvs.push(c / cols, lengths[i] / total);
+    }
+  });
+  for (let i = 0; i < profile.length - 1; i++) {
+    for (let c = 0; c < cols; c++) {
+      const a = i * (cols + 1) + c;
+      const b = a + cols + 1;
+      index.push(a, a + 1, b, b, a + 1, b + 1);
+    }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  geometry.setIndex(index);
+  geometry.computeVertexNormals();
+
+  // v runs from the front of the floor (0) to the top of the wall (1).
+  const floorEnd = lengths[1] / total;
+  const coveEnd = lengths[profile.length - 2] / total;
+  const map = canvasTexture(64, 1024, (ctx) => {
+    const g = ctx.createLinearGradient(0, 1024, 0, 0); // canvas y is flipped vs v
+    g.addColorStop(0, HERO_TUNING.studio.floor);
+    g.addColorStop(floorEnd, HERO_TUNING.studio.floor);
+    g.addColorStop((floorEnd + coveEnd) / 2, HERO_TUNING.studio.wall.bottom);
+    g.addColorStop(Math.min(1, coveEnd + 0.12), "#f4f8fb");
+    g.addColorStop(1, HERO_TUNING.studio.wall.top);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 64, 1024);
+  });
+  map.wrapS = THREE.ClampToEdgeWrapping;
+
+  const material = new THREE.MeshStandardMaterial({ map, roughness: 0.9, metalness: 0, dithering: true });
+  const mesh = new THREE.Mesh(geometry, material);
+
+  return { mesh, textures: [map] };
+}
+
+/* ------------------------------------------------------------------------ */
+
+type Product = {
+  root: THREE.Group;
+  model: THREE.Group;
+  parts: { mesh: THREE.Object3D; rest: THREE.Vector3; restRot: THREE.Euler; out: THREE.Vector3; spin: THREE.Euler }[];
+  plinth: THREE.Mesh | null;
+  floorShadow: THREE.Mesh;
+  topShadow: THREE.Mesh | null;
+  glint: THREE.Sprite;
+  slot: Slot;
+  height: number;
+  phase: number;
+  /** Model height that seats it on its plinth (or the floor). */
+  baseY: number;
 };
 
-export function createHeroScene(
-  canvases: Canvases,
-  { mobile, reduced }: Options,
-): HeroScene {
-  const T = HERO_TUNING;
-  const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
+const damp = THREE.MathUtils.damp;
 
-  // Two renderers over one scene: the room is drawn behind the HTML title,
-  // the display pieces on a transparent canvas in front of it, so the pieces
-  // genuinely overlap the lower part of the letters.
-  const makeRenderer = (canvas: HTMLCanvasElement, transparent: boolean) => {
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      antialias: !mobile,
-      alpha: transparent,
-      powerPreference: "high-performance",
-    });
-    renderer.setPixelRatio(dpr);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = T.lights.exposure;
-    renderer.setClearColor("#10151d", transparent ? 0 : 1);
-    return renderer;
-  };
-  const roomRenderer = makeRenderer(canvases.room, T.plate);
-  const frontRenderer = makeRenderer(canvases.front, true);
+export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced }: Options): HeroScene {
+  const T = HERO_TUNING;
+  const view = mobile ? "mobile" : "desktop";
+  let dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !mobile, powerPreference: "high-performance" });
+  renderer.setPixelRatio(dpr);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.toneMappingExposure = T.lights.exposure;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog("#11182a", T.room.fog.near, T.room.fog.far);
-  const view = mobile ? "mobile" : "desktop";
-  const camera = new THREE.PerspectiveCamera(T.camera.fov[view], 1, 0.1, 80);
-  const basePosition = new THREE.Vector3(...T.camera.position[view]);
-  // Extra distance on screens narrower than the composition (tablets).
-  let pullBack = 0;
+  scene.background = new THREE.Color(T.studio.wall.top);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envTexture = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environment = envTexture;
+
+  const camera = new THREE.PerspectiveCamera(T.camera.fov[view], 1, 0.1, 120);
+  const basePos = new THREE.Vector3(...T.camera.position[view]);
   const lookAt = new THREE.Vector3(...T.camera.lookAt[view]);
 
-  const room = createRoom(mobile, T.plate);
-  scene.add(room.group);
-  const stageTop = T.plate ? 0 : 0.16;
-  const stageZ = (mobile ? T.stage.mobile : T.stage.desktop).centerZ;
+  // Key light from the upper left, matching the window light on the wall.
+  const key = new THREE.DirectionalLight("#ffffff", T.lights.key);
+  key.position.set(-7, 10, 7);
+  scene.add(key, new THREE.HemisphereLight("#ffffff", "#dfe7ef", 0.35));
 
-  /* Lighting: one key from the pendant, blue rims, a whisper of fill ------ */
-  const lights = new THREE.Group();
-  const ambient = new THREE.AmbientLight("#b9c7d9", T.lights.ambient);
-  const hemi = new THREE.HemisphereLight(COLORS.glow, "#1b1f26", T.lights.hemisphere);
-  const pendant = new THREE.SpotLight("#e6f2fb", T.lights.pendant, 22, 0.62, 0.85, 1.2);
-  pendant.position.set(0, mobile ? 7.4 : 6.2, stageZ);
-  pendant.target.position.set(0, 0, stageZ);
-  const rimL = new THREE.PointLight(COLORS.glow, T.lights.rim, 14, 1.4);
-  rimL.position.set(-5, 3.5, -2.5);
-  const rimR = new THREE.PointLight(COLORS.glow, T.lights.rim, 14, 1.4);
-  rimR.position.set(5, 3.5, -2.5);
-  const fill = new THREE.DirectionalLight("#ffffff", 0.35);
-  fill.position.set(0, 3, 10);
-  lights.add(ambient, hemi, pendant, pendant.target, rimL, rimR, fill);
-  scene.add(lights);
-  setLayers(lights, LAYER.MIRROR, LAYER.ROOM, LAYER.OBJECTS);
+  /* Studio ---------------------------------------------------------------- */
+  const studio = cyclorama();
+  scene.add(studio.mesh);
 
+  // Matte floor only: no mirror, so products read as standing on a
+  // studio floor (contact shadows ground them), never floating on water.
+
+  /* Products --------------------------------------------------------------- */
   const m = createMaterials();
-  const shadowTex = radialTexture("rgba(0,0,0,0.85)", "rgba(0,0,0,0)");
-  const poolTex = radialTexture();
-
-  // Mobile carries fewer pieces; the assembly reads the same.
+  const shadowTex = shadowTexture();
+  const glintTex = glintTexture();
+  const plinthMat = new THREE.MeshStandardMaterial({ color: COLORS.plinth, roughness: 0.45, metalness: 0.05 });
   const builders = mobile
     ? [serverRack, cctvCamera, laptop, gear]
     : [serverRack, cctvCamera, laptop, printer, officeChair, gear];
-  const layout = T.layout[view];
-  const pedestalMat = new THREE.MeshStandardMaterial({ color: "#3a414c", roughness: 0.32, metalness: 0.55 });
+  const names = mobile ? ["rack", "cctv", "laptop", "gear"] : ["rack", "cctv", "laptop", "printer", "chair", "gear"];
+  const random = (seed: number) => {
+    const x = Math.sin(seed * 12.9898) * 43758.5453;
+    return x - Math.floor(x);
+  };
 
-  const pieces = builders.map((build, i) => {
-    const base = layout[i];
-    const place = { ...base, z: base.z - (T.plate ? T.plateDepth : 0) };
-
-    // Re-seat each model so its base sits at y = 0 inside a wrapper.
+  const products: Product[] = builders.map((build, i) => {
+    const slot = T.layout[view][i];
     const model = build(m);
-    const bounds = new THREE.Box3().setFromObject(model);
-    model.position.y -= bounds.min.y;
-    const footprint = Math.max(bounds.max.x - bounds.min.x, bounds.max.z - bounds.min.z);
-    const object = new THREE.Group();
-    object.add(model);
-    scene.add(object);
-    setLayers(object, LAYER.MIRROR, LAYER.OBJECTS);
+    // Seat the model on y = 0.
+    const box = new THREE.Box3().setFromObject(model);
+    model.position.y -= box.min.y;
+    const size = box.getSize(new THREE.Vector3());
 
-    // Display stand, empty and waiting in the intro.
-    const surface = stageTop + place.pedestal;
-    const onStand = place.pedestal > 0;
-    if (onStand) {
-      const width = footprint * place.scale + 0.35;
-      const stand = new THREE.Group();
-      stand.add(part(rbox(width, place.pedestal, width * 0.8, 0.05), pedestalMat, [0, place.pedestal / 2, 0]));
-      stand.add(part(new THREE.BoxGeometry(width * 0.86, 0.014, 0.014), m.glow, [0, place.pedestal - 0.02, width * 0.4 + 0.004]));
-      stand.position.set(place.x, stageTop, place.z);
-      stand.rotation.y = place.turn * 0.5;
-      scene.add(stand);
-      setLayers(stand, LAYER.MIRROR, LAYER.OBJECTS);
-      const standShadow = part(
-        new THREE.PlaneGeometry(width * 1.9, width * 1.6),
-        new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: 0.9 }),
-        [place.x, stageTop + 0.003, place.z],
-        [-Math.PI / 2, 0, 0],
+    // Parts: the model's direct children (or its single wrapper's children).
+    const holder = model.children.length === 1 && model.children[0].type === "Group" ? (model.children[0] as THREE.Group) : model;
+    const parts = holder.children.map((mesh, j) => {
+      mesh.name = `${names[i]}-part-${j}`;
+      const dir = new THREE.Vector3(random(i * 31 + j) - 0.5, random(i * 17 + j * 3) * 0.8 + 0.2, random(i * 7 + j * 5) - 0.5)
+        .normalize()
+        .multiplyScalar(T.intro.explode * (0.55 + random(i + j * 11) * 0.45));
+      return {
+        mesh,
+        rest: mesh.position.clone(),
+        restRot: mesh.rotation.clone(),
+        out: mesh.position.clone().add(dir),
+        spin: new THREE.Euler((random(j + 1) - 0.5) * 0.5, (random(j + 2) - 0.5) * 0.5, (random(j + 3) - 0.5) * 0.5),
+      };
+    });
+
+    const root = new THREE.Group();
+    root.name = names[i];
+    root.add(model);
+    model.scale.setScalar(slot.scale);
+    model.position.multiplyScalar(slot.scale);
+    model.position.y += slot.plinth;
+    root.rotation.y = slot.turn;
+    scene.add(root);
+
+    const footprint = Math.max(size.x, size.z) * slot.scale;
+    let plinth: THREE.Mesh | null = null;
+    let topShadow: THREE.Mesh | null = null;
+    if (slot.plinth > 0) {
+      const w = footprint + 0.3;
+      plinth = new THREE.Mesh(new RoundedBoxGeometry(w, slot.plinth, w * 0.85, 2, 0.05), plinthMat);
+      plinth.position.y = slot.plinth / 2;
+      root.add(plinth);
+      topShadow = new THREE.Mesh(
+        new THREE.PlaneGeometry(footprint * 1.25, footprint * 1.05),
+        new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: 0 }),
       );
-      scene.add(standShadow);
-      setLayers(standShadow, LAYER.ROOM);
+      topShadow.rotation.x = -Math.PI / 2;
+      topShadow.position.y = slot.plinth + 0.004;
+      root.add(topShadow);
     }
-
-    // Contact shadow and a soft blue light pool where the piece lands.
-    const shadowSize = footprint * place.scale * 1.5;
-    const shadow = part(
-      new THREE.PlaneGeometry(shadowSize, shadowSize * 0.75),
+    const floorShadow = new THREE.Mesh(
+      new THREE.PlaneGeometry(footprint * 1.8, footprint * 1.5),
       new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: 0 }),
-      [place.x, surface + 0.004, place.z],
-      [-Math.PI / 2, 0, 0],
     );
-    shadow.renderOrder = 2;
-    const pool = part(
-      new THREE.PlaneGeometry(shadowSize * 1.8, shadowSize * 1.3),
-      new THREE.MeshBasicMaterial({
-        map: poolTex,
-        color: COLORS.glow,
-        transparent: true,
-        depthWrite: false,
-        opacity: 0,
-        blending: THREE.AdditiveBlending,
-      }),
-      [place.x, stageTop + 0.006, place.z + 0.25],
-      [-Math.PI / 2, 0, 0],
-    );
-    scene.add(shadow, pool);
-    // A shadow on a stand top must draw with the stand, in front of the title.
-    setLayers(shadow, onStand ? LAYER.OBJECTS : LAYER.ROOM);
-    setLayers(pool, LAYER.ROOM);
+    floorShadow.rotation.x = -Math.PI / 2;
+    floorShadow.position.y = 0.006;
+    root.add(floorShadow);
 
-    const [sx, sy, sz] = place.scatter;
+    const glint = new THREE.Sprite(
+      new THREE.SpriteMaterial({ map: glintTex, transparent: true, depthWrite: false, opacity: 0, toneMapped: false }),
+    );
+    glint.position.set(size.x * slot.scale * 0.3, slot.plinth + size.y * slot.scale * 0.95, footprint * 0.3);
+    root.add(glint);
+
     return {
-      object,
-      shadow,
-      pool,
-      from: {
-        position: new THREE.Vector3(sx, sy, sz),
-        rotation: new THREE.Euler(((i * 1.7) % 3) - 1.5, ((i * 2.3) % 3) - 1.5, ((i * 1.1) % 2) - 1),
-        scale: place.scale * 0.8,
-      },
-      to: {
-        position: new THREE.Vector3(place.x, surface, place.z),
-        rotation: new THREE.Euler(0, place.turn, 0),
-        scale: place.scale,
-      },
+      root,
+      model,
+      parts,
+      plinth,
+      floorShadow,
+      topShadow,
+      glint,
+      slot,
+      height: slot.plinth + size.y * slot.scale,
       phase: i * 1.37,
+      baseY: model.position.y,
     };
   });
 
-  /* ---------------------------------------------------------------------- */
+  /* Intro state (tweened by the hero timeline) ----------------------------- */
+  const intro: HeroScene["intro"] = {
+    light: reduced ? 1 : 0,
+    pull: reduced ? 0 : 1,
+    idle: reduced ? 0 : 0,
+    products: products.map(() =>
+      reduced ? { appear: 1, explode: 0, land: 1, glint: 0 } : { appear: 0, explode: 1, land: 0, glint: 0 },
+    ),
+  };
 
-  let progress = reduced ? 1 : 0;
-  const seconds = () => performance.now() / 1000;
+  /* Layout: place each product by screen position, so it scales with aspect */
+  function layout() {
+    const halfTan = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    // Portrait screens (tablets) pull the outer products in so none is cut off.
+    const inset = camera.aspect < 1 ? 0.82 : 1;
+    for (const p of products) {
+      const distance = basePos.z - p.slot.z;
+      const halfWidth = halfTan * distance * camera.aspect;
+      p.root.position.set(p.slot.nx * inset * halfWidth, 0, p.slot.z);
+    }
+  }
 
-  // Desktop mouse tilt, eased toward the pointer.
+  /* Pointer and frame loop -------------------------------------------------- */
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-  const tiltEnabled = !mobile && !reduced && window.matchMedia("(hover: hover)").matches;
+  const tilt = !mobile && !reduced && window.matchMedia("(hover: hover)").matches;
   const onPointer = (event: PointerEvent) => {
     pointer.tx = (event.clientX / window.innerWidth) * 2 - 1;
     pointer.ty = (event.clientY / window.innerHeight) * 2 - 1;
   };
-  if (tiltEnabled) window.addEventListener("pointermove", onPointer, { passive: true });
+  if (tilt) window.addEventListener("pointermove", onPointer, { passive: true });
 
-  function apply(time: number) {
-    const n = pieces.length;
-    const spread = 0.06;
-    pieces.forEach((piece, i) => {
-      // Each piece starts a beat after the last, so they arrive in sequence.
-      const local = clamp01((progress - i * spread) / (1 - (n - 1) * spread));
-      const e = easeInOutCubic(local);
-      const drift = reduced ? 0 : 1 - e;
-      const { from, to, object } = piece;
-      object.position.lerpVectors(from.position, to.position, e);
-      object.position.y += Math.sin(time * 0.8 + piece.phase) * 0.35 * drift;
-      object.rotation.set(
-        THREE.MathUtils.lerp(from.rotation.x, to.rotation.x, e) + Math.sin(time * 0.5 + piece.phase) * 0.15 * drift,
-        THREE.MathUtils.lerp(from.rotation.y, to.rotation.y, e) + time * 0.12 * drift,
-        THREE.MathUtils.lerp(from.rotation.z, to.rotation.z, e),
-      );
-      object.scale.setScalar(THREE.MathUtils.lerp(from.scale, to.scale, e));
+  // Adaptive quality: if frames run slow for a while, drop DPR.
+  let slowTime = 0;
+  let degraded = false;
+  function adapt(dt: number) {
+    if (degraded) return;
+    slowTime = dt > 1 / 40 ? slowTime + dt : Math.max(0, slowTime - dt);
+    if (slowTime > 1.5) {
+      degraded = true;
+      dpr = 1;
+      renderer.setPixelRatio(1);
+      resize();
+    }
+  }
 
-      // Shadow sharpens and darkens as the piece comes down onto its spot.
-      const land = smoothstep(0.55, 1, e);
-      (piece.shadow.material as THREE.MeshBasicMaterial).opacity = land * 0.9;
-      piece.shadow.scale.setScalar(1.6 - 0.6 * land);
-      (piece.pool.material as THREE.MeshBasicMaterial).opacity = land * 0.16;
+  const tmp = new THREE.Euler();
+  let time = 0;
+  function frame(dt: number) {
+    time += dt;
+    // Studio light comes up.
+    scene.environmentIntensity = T.lights.environment * (0.25 + 0.75 * intro.light);
+    key.intensity = T.lights.key * intro.light;
+    renderer.toneMappingExposure = T.lights.exposure * (0.6 + 0.4 * intro.light);
+
+    products.forEach((p, i) => {
+      const s = intro.products[i];
+      const e = s.explode;
+      for (const part of p.parts) {
+        part.mesh.position.lerpVectors(part.rest, part.out, e);
+        tmp.set(part.restRot.x + part.spin.x * e, part.restRot.y + part.spin.y * e, part.restRot.z + part.spin.z * e);
+        part.mesh.rotation.copy(tmp);
+        part.mesh.scale.setScalar(Math.max(0.0001, s.appear));
+      }
+      // Lifted while exploded, slow float afterwards.
+      const float = intro.idle * Math.sin(time * 0.9 + p.phase) * 0.035;
+      p.model.position.y = p.baseY + e * 0.45 + float;
+      p.model.rotation.y = e * 0.25 + intro.idle * Math.sin(time * 0.4 + p.phase) * 0.03;
+
+      if (p.plinth) {
+        p.plinth.scale.set(1, Math.max(0.0001, s.land), 1);
+        p.plinth.position.y = (p.slot.plinth * s.land) / 2;
+        (p.plinth.material as THREE.Material).visible = s.land > 0.001;
+      }
+      (p.floorShadow.material as THREE.MeshBasicMaterial).opacity = T.studio.shadowOpacity * 1.6 * s.land;
+      p.floorShadow.scale.setScalar(0.5 + 0.5 * s.land);
+      if (p.topShadow) (p.topShadow.material as THREE.MeshBasicMaterial).opacity = T.studio.shadowOpacity * 1.4 * s.land;
+      (p.glint.material as THREE.SpriteMaterial).opacity = s.glint;
+      p.glint.scale.setScalar(0.2 + s.glint * 0.9);
+      p.glint.material.rotation = s.glint * 0.8;
     });
 
-    const lock = smoothstep(0.78, 1, progress);
-    room.update(lock, time);
-    const boost = 1 + lock * T.lights.lockBoost;
-    pendant.intensity = T.lights.pendant * boost;
-    rimL.intensity = rimR.intensity = T.lights.rim * boost;
-
-    pointer.x += (pointer.tx - pointer.x) * T.parallax.ease;
-    pointer.y += (pointer.ty - pointer.y) * T.parallax.ease;
+    pointer.x = damp(pointer.x, pointer.tx, T.parallax.damping, dt);
+    pointer.y = damp(pointer.y, pointer.ty, T.parallax.damping, dt);
     camera.position.set(
-      basePosition.x + pointer.x * T.parallax.x,
-      basePosition.y - pointer.y * T.parallax.y,
-      basePosition.z + pullBack + (1 - progress) * T.camera.pushIn,
+      basePos.x + pointer.x * T.parallax.x,
+      basePos.y - pointer.y * T.parallax.y,
+      basePos.z + intro.pull * T.camera.introPullBack,
     );
     camera.lookAt(lookAt);
-
-    camera.layers.set(LAYER.ROOM);
-    roomRenderer.render(scene, camera);
-    camera.layers.set(LAYER.OBJECTS);
-    frontRenderer.render(scene, camera);
+    renderer.render(scene, camera);
   }
 
   function resize() {
-    const parent = canvases.room.parentElement;
+    const parent = canvas.parentElement;
     if (!parent) return;
     const { clientWidth: w, clientHeight: h } = parent;
-    roomRenderer.setSize(w, h, false);
-    frontRenderer.setSize(w, h, false);
-    room.resize(w, h, dpr);
+    renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    pullBack = mobile ? 0 : Math.max(0, T.camera.wideAspect - camera.aspect) * T.camera.narrowPullBack;
     camera.updateProjectionMatrix();
-    apply(seconds());
+    layout();
+    frame(0);
   }
 
-  // Render only while the hero is on screen.
-  let frame = 0;
+  // One loop for the whole page: render on GSAP's ticker, only while visible.
   let visible = false;
-  const loop = () => {
-    apply(seconds());
-    frame = requestAnimationFrame(loop);
+  const tick = (_t: number, deltaMs: number) => {
+    const dt = Math.min(deltaMs / 1000, 0.1);
+    adapt(dt);
+    frame(dt);
   };
   const observer = new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting;
-    cancelAnimationFrame(frame);
-    if (visible && !reduced) frame = requestAnimationFrame(loop);
+    const next = entry.isIntersecting && !reduced;
+    if (next && !visible) gsap.ticker.add(tick);
+    if (!next && visible) gsap.ticker.remove(tick);
+    visible = next;
   });
-  observer.observe(canvases.front);
-
+  observer.observe(canvas);
   const resizeObserver = new ResizeObserver(resize);
-  if (canvases.room.parentElement) resizeObserver.observe(canvases.room.parentElement);
+  if (canvas.parentElement) resizeObserver.observe(canvas.parentElement);
   resize();
 
+  const project = new THREE.Vector3();
   return {
-    setProgress(value) {
-      progress = clamp01(value);
-      if (reduced || !visible) apply(seconds());
+    intro,
+    setFinal() {
+      intro.light = 1;
+      intro.pull = 0;
+      intro.idle = 0;
+      intro.products.forEach((s) => Object.assign(s, { appear: 1, explode: 0, land: 1, glint: 0 }));
+      frame(0);
     },
-    resize,
+    bounds() {
+      const rect = canvas.getBoundingClientRect();
+      return products.map((p) => {
+        const box = new THREE.Box3().setFromObject(p.model);
+        if (p.plinth) box.expandByObject(p.plinth);
+        let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+        for (const x of [box.min.x, box.max.x])
+          for (const y of [box.min.y, box.max.y])
+            for (const z of [box.min.z, box.max.z]) {
+              project.set(x, y, z).project(camera);
+              const sx = rect.left + ((project.x + 1) / 2) * rect.width;
+              const sy = rect.top + ((1 - project.y) / 2) * rect.height;
+              left = Math.min(left, sx); right = Math.max(right, sx);
+              top = Math.min(top, sy); bottom = Math.max(bottom, sy);
+            }
+        return { left, top, right, bottom };
+      });
+    },
     dispose() {
-      cancelAnimationFrame(frame);
+      gsap.ticker.remove(tick);
       observer.disconnect();
       resizeObserver.disconnect();
       window.removeEventListener("pointermove", onPointer);
@@ -473,12 +644,71 @@ export function createHeroScene(
         if (Array.isArray(material)) material.forEach((mat) => mat.dispose());
         else material?.dispose();
       });
-      room.floor?.dispose();
-      [...room.textures, shadowTex, poolTex].forEach((texture) => texture.dispose());
+      [...studio.textures, shadowTex, glintTex, envTexture].forEach((t) => t.dispose());
       Object.values(m).forEach((mat) => mat.dispose());
-      pedestalMat.dispose();
-      roomRenderer.dispose();
-      frontRenderer.dispose();
+      plinthMat.dispose();
+      pmrem.dispose();
+      renderer.dispose();
     },
   };
+}
+
+/* ------------------------------------------------------------------------ */
+/* Single-product renders, for the card illustrations (dev capture page)     */
+/* ------------------------------------------------------------------------ */
+
+export const PRODUCT_BUILDERS = {
+  rack: serverRack,
+  cctv: cctvCamera,
+  laptop,
+  printer,
+  chair: officeChair,
+  gear,
+} as const;
+
+export type ProductName = keyof typeof PRODUCT_BUILDERS;
+
+/** Renders one product, lit like the hero, on a transparent background. */
+export function renderProduct(name: ProductName, size = 900): string {
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(1);
+  renderer.setSize(size, size, false);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.setClearColor(0x000000, 0);
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environment = env;
+  scene.environmentIntensity = HERO_TUNING.lights.environment;
+  const key = new THREE.DirectionalLight("#ffffff", HERO_TUNING.lights.key);
+  key.position.set(-7, 10, 7);
+  scene.add(key, new THREE.HemisphereLight("#ffffff", "#dfe7ef", 0.35));
+
+  const m = createMaterials();
+  const model = PRODUCT_BUILDERS[name](m);
+  const box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3());
+  const radius = box.getSize(new THREE.Vector3()).length() / 2;
+  model.position.sub(center);
+  model.rotation.y = -0.55;
+  scene.add(model);
+
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+  const distance = radius / Math.sin(THREE.MathUtils.degToRad(15)) * 1.04;
+  camera.position.set(0, distance * 0.42, distance * 0.91);
+  camera.lookAt(0, 0, 0);
+  renderer.render(scene, camera);
+  const url = renderer.domElement.toDataURL("image/png");
+
+  scene.traverse((object) => {
+    const mesh = object as THREE.Mesh;
+    mesh.geometry?.dispose();
+  });
+  Object.values(m).forEach((mat) => mat.dispose());
+  env.dispose();
+  pmrem.dispose();
+  renderer.dispose();
+  return url;
 }

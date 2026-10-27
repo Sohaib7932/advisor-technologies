@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import { Container, Section } from "@/components/ui/container";
-import { SectionBackdrop } from "@/components/ui/section-backdrop";
-import { sectionImage } from "@/lib/section-images";
 import { Eyebrow } from "@/components/ui/section-heading";
 import { RevealGroup } from "@/components/ui/reveal-group";
+import { ChatCard } from "@/components/ui/chat-card";
 import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "@/components/ui/icons";
 import { ContactForm } from "./contact-form";
 import { addressLines, site } from "@/lib/site";
@@ -21,28 +20,39 @@ const mapEmbed = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
  */
 export function ContactSection({ showHeading = true }: { showHeading?: boolean }) {
   return (
-    // The room again, dimmed under a scrim so the form stays easy to read.
     // On /contact it follows the page banner directly, so it starts tighter.
     <Section
       id="enquiry"
       tone="deep"
       divider={showHeading}
-      backdrop={<SectionBackdrop src={sectionImage("contact")} plateOpacity={0.55} details={["scrim", "glow-tl"]} />}
+     
       className={showHeading ? "overflow-hidden" : "overflow-hidden pt-10 md:pt-14 xl:pt-16"}
     >
       <Container>
         {showHeading && (
-          <div className="max-w-4xl">
-            <Eyebrow>Contact us</Eyebrow>
-            <h2 className="mt-5 text-display font-bold text-fg uppercase">
-              Let&rsquo;s discuss{" "}
-              <span className="text-glow">your requirement</span>
-            </h2>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
-              Send us a specification, a bill of quantities or a tender
-              reference and our team will respond with a documented technical
-              and commercial proposal.
-            </p>
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <Eyebrow>Contact us</Eyebrow>
+              <h2 className="mt-5 text-display font-bold text-fg uppercase">
+                Let&rsquo;s discuss{" "}
+                <span className="text-accent">your requirement</span>
+              </h2>
+              <p className="mt-6 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
+                Send us a specification, a bill of quantities or a tender
+                reference and our team will respond with a documented technical
+                and commercial proposal.
+              </p>
+            </div>
+            <ChatCard
+              className="lg:col-span-5 lg:pb-1"
+              caption="How an enquiry goes"
+              lines={[
+                { from: "you", text: "I have a BOQ to price." },
+                { from: "us", text: "Send it with the form below, or email it to us." },
+                { from: "us", text: "We reply with a documented technical proposal and a transparent quotation." },
+                { from: "us", text: `Office hours: ${site.hours.weekdays}` },
+              ]}
+            />
           </div>
         )}
 
@@ -68,7 +78,7 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
               </p>
               <div className="mt-8">
                 <Suspense
-                  fallback={<div className="h-96 animate-pulse rounded-2xl bg-white/5" />}
+                  fallback={<div className="h-96 animate-pulse rounded-2xl bg-surface-2" />}
                 >
                   <ContactForm />
                 </Suspense>
@@ -95,7 +105,7 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
 
             <div data-reveal id="office" className="motion-hide card-surface scroll-mt-32 overflow-hidden rounded-card">
               <div className="flex gap-4 p-6">
-                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-glow/15 text-glow ring-1 ring-glow/30">
+                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-glow/15 text-accent ring-1 ring-glow/30">
                   <MapPin className="size-5" />
                 </span>
                 <div className="min-w-0">
@@ -111,7 +121,7 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
                     href={directionsHref}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-glow hover:text-fg"
+                    className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-fg"
                   >
                     Get directions
                     <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -119,19 +129,19 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
                 </div>
               </div>
               {/* Fixed-ratio frame: the map loads lazily without shifting layout */}
-              <div className="relative aspect-16/10 border-t border-white/8 bg-surface-2">
+              <div className="relative aspect-16/10 border-t border-line bg-surface-2">
                 <iframe
                   src={mapEmbed}
                   title={`Map: ${site.contact.address.line2}, ${site.contact.address.city}`}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="absolute inset-0 size-full [filter:grayscale(1)_invert(0.9)_hue-rotate(180deg)_contrast(0.9)_brightness(0.95)]"
+                  className="absolute inset-0 size-full [filter:grayscale(0.85)_contrast(0.95)]"
                 />
               </div>
             </div>
 
             <div data-reveal className="motion-hide card-surface flex gap-4 rounded-card p-6">
-              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-glow/15 text-glow ring-1 ring-glow/30">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-glow/15 text-accent ring-1 ring-glow/30">
                 <Clock className="size-5" />
               </span>
               <div>
@@ -168,7 +178,7 @@ function DetailLink({
       href={href}
       className="group card-surface flex items-center gap-4 rounded-card p-6 transition-[translate,box-shadow] duration-400 ease-out-soft hover:-translate-y-0.5 hover:shadow-glow"
     >
-      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-glow text-bg">
+      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-glow text-on-glow">
         {icon}
       </span>
       <span className="min-w-0 flex-1">
@@ -177,7 +187,7 @@ function DetailLink({
           {value}
         </span>
       </span>
-      <ArrowUpRight className="size-4 shrink-0 text-fg-subtle transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-glow" />
+      <ArrowUpRight className="size-4 shrink-0 text-fg-subtle transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent" />
     </a>
   );
 }

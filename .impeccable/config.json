@@ -11,6 +11,16 @@
         ],
         "createdAt": "2026-09-29T09:10:59.026Z",
         "reason": "Claude: one-shot sheen animation on the hero wordmark; rest state is solid white, not a static gradient heading"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "var(--spring)",
+        "createdAt": "2026-10-27T15:34:31.750Z"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "createdAt": "2026-10-27T15:34:35.129Z"
       }
     ]
   }

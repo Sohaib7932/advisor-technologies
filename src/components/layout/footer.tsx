@@ -9,14 +9,10 @@ export function Footer() {
 
   return (
     <footer
+      data-theme="dark"
       data-tone="deep"
       className="relative isolate overflow-hidden bg-bg-deep text-fg-muted"
     >
-      {/* Faint grid, darkest navy */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(rgb(124_195_232/0.045)_1px,transparent_1px),linear-gradient(90deg,rgb(124_195_232/0.045)_1px,transparent_1px)] bg-size-[48px_48px] mask-[radial-gradient(80%_70%_at_50%_0%,black,transparent_85%)]"
-      />
       <span aria-hidden className="glow-line absolute inset-x-0 top-0" />
       <Container className="py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
@@ -50,7 +46,7 @@ export function Footer() {
 
             <ul className="mt-8 space-y-4 text-sm">
               <li className="flex gap-3">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-glow" />
+                <MapPin className="mt-0.5 size-4 shrink-0 text-accent" />
                 <address className="text-fg-muted not-italic">
                   {addressLines.map((line) => (
                     <span key={line} className="block">
@@ -60,7 +56,7 @@ export function Footer() {
                 </address>
               </li>
               <li className="flex gap-3">
-                <Mail className="mt-0.5 size-4 shrink-0 text-glow" />
+                <Mail className="mt-0.5 size-4 shrink-0 text-accent" />
                 <a
                   href={`mailto:${site.contact.email}`}
                   className="text-fg-muted transition-colors hover:text-fg"
@@ -69,7 +65,7 @@ export function Footer() {
                 </a>
               </li>
               <li className="flex gap-3">
-                <Phone className="mt-0.5 size-4 shrink-0 text-glow" />
+                <Phone className="mt-0.5 size-4 shrink-0 text-accent" />
                 <a
                   href={`tel:${site.contact.phoneHref}`}
                   className="text-fg-muted transition-colors hover:text-fg"
@@ -78,7 +74,7 @@ export function Footer() {
                 </a>
               </li>
               <li className="flex gap-3">
-                <Clock className="mt-0.5 size-4 shrink-0 text-glow" />
+                <Clock className="mt-0.5 size-4 shrink-0 text-accent" />
                 <span className="text-fg-muted">
                   {site.hours.weekdays}
                   <span className="block">{site.hours.saturday}</span>
@@ -93,7 +89,7 @@ export function Footer() {
               <nav key={group.title} aria-labelledby={`footer-${group.title}`}>
                 <h2
                   id={`footer-${group.title}`}
-                  className="eyebrow font-sans text-glow"
+                  className="eyebrow font-sans text-accent"
                 >
                   {group.title}
                 </h2>
@@ -136,14 +132,6 @@ export function Footer() {
           </p>
         </div>
       </Container>
-
-      {/* Oversized wordmark bleeding off the bottom edge */}
-      <p
-        aria-hidden
-        className="pointer-events-none -mb-[0.18em] text-center font-display text-[8.4vw] leading-none font-extrabold tracking-[-0.04em] whitespace-nowrap text-white/[0.035] uppercase select-none"
-      >
-        Advisor Technologies
-      </p>
     </footer>
   );
 }

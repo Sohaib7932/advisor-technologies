@@ -1,243 +1,113 @@
-"use client";
-
-import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/section-heading";
-import { SectionBackdrop } from "@/components/ui/section-backdrop";
-import { ArrowUpRight, Check, Icon } from "@/components/ui/icons";
-import { gsap, MOTION, useGSAP } from "@/lib/gsap";
+import { CardDeck, DeckCard } from "@/components/ui/card-deck";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { services } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
-// Transparent steel-tinted grain: the noise drives alpha only, so it never
-// lays an opaque grey sheet over the section.
-const grain =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.49 0 0 0 0 0.76 0 0 0 0 0.91 0 0 0 0.18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
-const fade = "radial-gradient(70% 70% at 70% 50%, black, transparent 80%)";
+/** The studio product that stands in for each division on its card. */
+const ILLUSTRATION: Record<string, string> = {
+  "plant-machinery": "chair",
+  "it-networks": "rack",
+  computing: "laptop",
+  "security-systems": "cctv",
+  printing: "printer",
+  maintenance: "gear",
+};
 
-/** A faint motif per division behind the stage: machinery = gear blueprint,
- *  networks = grid, CCTV = scan lines, office and printing = soft grain. */
-const gearBlueprint: React.CSSProperties = {
-  backgroundImage:
-    "repeating-radial-gradient(circle at 72% 50%, transparent 0 46px, rgb(124 195 232 / 0.09) 46px 47px), linear-gradient(90deg, transparent calc(72% - 0.5px), rgb(124 195 232 / 0.1) calc(72% - 0.5px) calc(72% + 0.5px), transparent 0), linear-gradient(transparent calc(50% - 0.5px), rgb(124 195 232 / 0.1) calc(50% - 0.5px) calc(50% + 0.5px), transparent 0)",
-  maskImage: fade,
-  WebkitMaskImage: fade,
-};
-const DIVISION_TINT: Record<string, React.CSSProperties> = {
-  "plant-machinery": gearBlueprint,
-  "it-networks": {
-    backgroundImage:
-      "linear-gradient(rgb(91 163 208 / 0.13) 1px, transparent 1px), linear-gradient(90deg, rgb(91 163 208 / 0.13) 1px, transparent 1px), radial-gradient(40% 50% at 70% 50%, rgb(31 72 120 / 0.35), transparent)",
-    backgroundSize: "44px 44px, 44px 44px, auto",
-    maskImage: fade,
-    WebkitMaskImage: fade,
-  },
-  computing: {
-    backgroundImage: `${grain}, radial-gradient(45% 55% at 70% 50%, rgb(63 109 133 / 0.3), transparent)`,
-    opacity: 0.9,
-  },
-  "security-systems": {
-    backgroundImage:
-      "repeating-linear-gradient(180deg, rgb(124 195 232 / 0.07) 0 1px, transparent 1px 5px), radial-gradient(40% 50% at 70% 50%, rgb(42 65 97 / 0.4), transparent)",
-    maskImage: fade,
-    WebkitMaskImage: fade,
-  },
-  printing: {
-    backgroundImage: `radial-gradient(rgb(124 195 232 / 0.16) 1px, transparent 1.4px), ${grain}`,
-    backgroundSize: "9px 9px, auto",
-    maskImage: fade,
-    WebkitMaskImage: fade,
-  },
-  maintenance: {
-    ...gearBlueprint,
-    backgroundImage: `${gearBlueprint.backgroundImage}, repeating-linear-gradient(135deg, rgb(124 195 232 / 0.04) 0 1px, transparent 1px 14px)`,
-  },
-};
+/** Bento spans on the 12-column desktop grid, with two navy cards set diagonally. */
+const SPAN = [
+  "lg:col-span-5",
+  "lg:col-span-4",
+  "lg:col-span-3",
+  "lg:col-span-3",
+  "lg:col-span-4",
+  "lg:col-span-5",
+];
+const NAVY = new Set([1, 4]);
 
 /**
- * The six divisions as a pinned, scroll-driven sequence on desktop: a
- * vertical timeline fills on the left while each division's panel takes the
- * stage on the right. The markup is a plain vertical list; GSAP only stacks
- * the panels into a stage when it can animate them (desktop, motion on), so
- * mobile, reduced motion and no-JS all read as a simple list.
+ * The six divisions as a dealt-out deck of cards: they rest tucked together
+ * and open once when the section comes into view, while the numbered
+ * progress line above draws across. Hovering a card lifts its product.
  */
-export function ActivityScope({ backdropSrc }: { backdropSrc: string }) {
-  const root = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(0);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add(`${MOTION.ok} and (min-width: 1024px)`, () => {
-        const panels = gsap.utils.toArray<HTMLElement>("[data-panel]");
-        const stage = root.current?.querySelector<HTMLElement>("[data-stage]");
-        if (!stage || panels.length < 2) return;
-
-        // Stack the panels in one stage; gsap.matchMedia reverts all of this.
-        gsap.set(stage, { position: "relative", height: "min(34rem, 64vh)" });
-        gsap.set(panels, { position: "absolute", inset: 0, margin: 0 });
-        gsap.set(panels.slice(1), { autoAlpha: 0, y: 90, scale: 1.04 });
-
-        const steps = panels.length - 1;
-        const tl = gsap.timeline({
-          defaults: { ease: "power2.inOut", duration: 1 },
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top top",
-            end: () => `+=${steps * window.innerHeight * 0.75}`,
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-            snap: { snapTo: 1 / steps, duration: 0.5, ease: "power2.inOut" },
-            onUpdate: (self) => setActive(Math.round(self.progress * steps)),
-          },
-        });
-
-        tl.fromTo("[data-fill]", { scaleY: 0 }, { scaleY: 1, ease: "none", duration: steps }, 0);
-        panels.forEach((panel, i) => {
-          const image = panel.querySelector("[data-parallax]");
-          if (image) tl.fromTo(image, { yPercent: -6 }, { yPercent: 6, ease: "none", duration: 1.6 }, Math.max(0, i - 0.6));
-          if (i === 0) return;
-          tl.to(panels[i - 1], { autoAlpha: 0, y: -70, scale: 0.96 }, i - 1)
-            .to(panel, { autoAlpha: 1, y: 0, scale: 1 }, i - 1);
-        });
-      });
-    },
-    { scope: root },
-  );
-
+export function ActivityScope() {
   return (
     <section
-      ref={root}
       id="activity-scope"
       aria-labelledby="activity-scope-title"
       data-tone="steel"
-      className="relative isolate overflow-hidden py-16 md:py-24 lg:flex lg:min-h-svh lg:items-center lg:py-0"
+      className="relative isolate overflow-hidden py-16 md:py-24"
     >
-      <SectionBackdrop src={backdropSrc} plateOpacity={0.14} details={["glow-top", "floor"]} />
-      {/* Per-division tint, cross-faded in step with the panels */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        {services.map((service, i) => (
-          <div
-            key={service.id}
-            className={cn(
-              "absolute inset-0 transition-opacity duration-700 ease-out-soft",
-              i === active ? "opacity-100" : "opacity-0",
-            )}
-            style={DIVISION_TINT[service.id]}
-          />
-        ))}
-      </div>
-
-      <Container className="lg:pt-24 lg:pb-12">
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
-          {/* Heading and timeline */}
-          <div className="lg:col-span-4">
+      <Container>
+        <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
             <Eyebrow>Activity scope</Eyebrow>
-            <h2
-              id="activity-scope-title"
-              className="mt-5 text-headline font-bold text-fg uppercase"
-            >
-              Six divisions,{" "}
-              <span className="text-glow">one contract</span>
+            <h2 id="activity-scope-title" className="mt-5 text-headline font-bold text-fg uppercase">
+              Six divisions, <span className="text-accent">one contract</span>
             </h2>
-            <p className="mt-5 max-w-sm text-[0.9375rem] leading-relaxed text-fg-muted">
-              A single purchase order can cover equipment, installation and the
-              years of service that follow.
-            </p>
+          </div>
+          <p className="max-w-md text-[0.9375rem] leading-relaxed text-fg-muted lg:col-span-5 lg:justify-self-end">
+            A single purchase order can cover equipment, installation and the
+            years of service that follow.
+          </p>
+        </div>
 
-            <ol aria-hidden className="relative mt-10 hidden space-y-1 lg:block">
-              <span className="absolute top-3 bottom-3 left-[0.6875rem] w-px bg-white/10" />
-              <span
-                data-fill
-                className="absolute top-3 bottom-3 left-[0.6875rem] w-px origin-top bg-glow shadow-[0_0_10px_rgb(91_163_208/0.8)]"
-              />
+        <CardDeck className="mt-10 md:mt-12">
+          {/* Progress line: one tick per division, drawn as the deck opens */}
+          <div aria-hidden className="relative mb-6 hidden md:block">
+            <div className="absolute top-1/2 right-0 left-0 h-px bg-line" />
+            <div data-progress className="absolute top-1/2 right-0 left-0 h-px bg-accent" />
+            <ol className="relative flex justify-between">
               {services.map((service, i) => (
                 <li
                   key={service.id}
-                  className={cn(
-                    "relative flex items-center gap-4 py-2 text-sm transition-colors duration-500",
-                    i === active ? "text-fg" : "text-fg-subtle",
-                  )}
+                  className="grid size-7 place-items-center rounded-full bg-white font-display text-[0.6875rem] font-bold text-accent tabular-nums ring-1 ring-line"
                 >
-                  <span
-                    className={cn(
-                      "relative z-10 grid size-6 shrink-0 place-items-center rounded-full font-display text-[0.625rem] font-bold ring-1 transition-all duration-500",
-                      i <= active
-                        ? "bg-glow text-bg ring-glow shadow-glow"
-                        : "bg-bg text-fg-subtle ring-white/15",
-                    )}
-                  >
-                    {i + 1}
-                  </span>
-                  <span className="font-medium">{service.title}</span>
+                  {String(i + 1).padStart(2, "0")}
                 </li>
               ))}
             </ol>
           </div>
 
-          {/* Panels */}
-          <div data-stage className="space-y-4 lg:col-span-8">
-            {services.map((service, i) => (
-              <article
-                key={service.id}
-                data-panel
-                id={`scope-${service.id}`}
-                className="card-surface grid overflow-hidden rounded-panel md:grid-cols-2"
-              >
-                <div className="relative min-h-56 overflow-hidden md:min-h-full">
-                  <div data-parallax className="absolute -inset-y-[8%] inset-x-0">
-                    <Image
-                      src={service.image}
-                      alt={service.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 bg-linear-to-t from-brand-deep/80 via-transparent to-transparent md:bg-linear-to-r md:from-transparent md:via-transparent md:to-surface/60"
-                  />
-                  <span className="absolute top-5 left-5 grid size-11 place-items-center rounded-full bg-bg/60 text-glow ring-1 ring-glow/30 backdrop-blur-md">
-                    <Icon name={service.icon} className="size-5" />
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:gap-5">
+            {services.map((service, i) => {
+              const navy = NAVY.has(i);
+              return (
+                <DeckCard
+                  key={service.id}
+                  as="li"
+                  tone={navy ? "navy" : "light"}
+                  className={SPAN[i]}
+                  illustration={`/images/illustrations/${ILLUSTRATION[service.id]}.webp`}
+                >
+                  <span className="text-xs font-medium text-fg-subtle">
+                    <span className={cn("font-display font-bold tabular-nums", navy ? "text-led" : "text-accent")}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span aria-hidden> · </span>
+                    {service.short}
                   </span>
-                </div>
-
-                <div className="flex flex-col p-7 sm:p-9">
-                  <span className="font-display text-sm font-semibold tracking-[0.2em] text-glow tabular-nums">
-                    {String(i + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-4 font-display text-[clamp(1.4rem,1rem+1vw,2rem)] leading-[1.1] font-bold text-fg uppercase">
+                  <h3 className="mt-2.5 font-display text-lg leading-tight font-bold text-fg uppercase">
                     {service.title}
                   </h3>
-                  <p className="mt-4 text-[0.9375rem] leading-relaxed text-fg-muted">
-                    {service.body}
-                  </p>
-                  <ul className="mt-6 grid gap-2 text-sm text-fg">
-                    {service.highlights.map((highlight) => (
-                      <li key={highlight} className="flex items-start gap-2.5">
-                        <span className="mt-0.5 grid size-4.5 shrink-0 place-items-center rounded-full bg-glow/15 text-glow">
-                          <Check className="size-3" />
-                        </span>
-                        {highlight}
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-fg-muted">{service.body}</p>
                   <Link
                     href={`/services#${service.id}`}
-                    className="group mt-auto inline-flex items-center gap-1.5 self-start pt-7 text-sm font-semibold text-glow hover:text-fg"
+                    className={cn(
+                      "mt-auto inline-flex items-center gap-1.5 self-start pt-5 text-sm font-semibold after:absolute after:inset-0 after:rounded-card",
+                      navy ? "text-white" : "text-accent",
+                    )}
                   >
                     Explore this division
-                    <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight className="size-4 transition-transform duration-300 group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5" />
                   </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
+                </DeckCard>
+              );
+            })}
+          </ul>
+        </CardDeck>
       </Container>
     </section>
   );

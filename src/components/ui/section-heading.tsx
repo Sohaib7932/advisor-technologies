@@ -10,7 +10,7 @@ export function Eyebrow({
 }) {
   return (
     <span
-      className={cn("eyebrow inline-flex items-center gap-3 text-glow", className)}
+      className={cn("eyebrow inline-flex items-center gap-3 text-accent", className)}
     >
       <span
         aria-hidden
@@ -23,7 +23,7 @@ export function Eyebrow({
 
 /**
  * The label + statement pair at the top of most sections. Titles are bold
- * uppercase display type; wrap a phrase in <span className="text-glow"> to
+ * uppercase display type; wrap a phrase in <span className="text-accent"> to
  * pick it out.
  */
 export function SectionHeading({

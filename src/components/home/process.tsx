@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { Container, Section } from "@/components/ui/container";
-import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Icon } from "@/components/ui/icons";
 import { gsap, MOTION, useGSAP } from "@/lib/gsap";
@@ -67,7 +66,7 @@ export function Process() {
       id="process"
       tone="charcoal"
       divider
-      backdrop={<SectionBackdrop plate="floor" plateOpacity={0.5} details={["glow-top", "floor"]} />}
+     
     >
       <Container>
         <SectionHeading
@@ -76,7 +75,7 @@ export function Process() {
           title={
             <>
               From first consultation to{" "}
-              <span className="text-glow">long-term service</span>
+              <span className="text-accent">long-term service</span>
             </>
           }
           lead="A predictable four-stage route that fits public-sector procurement as comfortably as a private purchase order."
@@ -86,7 +85,7 @@ export function Process() {
           {/* Track and the line that draws along it */}
           <span
             aria-hidden
-            className="absolute top-7 bottom-7 left-7 w-px bg-white/10 lg:top-7 lg:right-[12.5%] lg:bottom-auto lg:left-[12.5%] lg:h-px lg:w-auto"
+            className="absolute top-7 bottom-7 left-7 w-px bg-line lg:top-7 lg:right-[12.5%] lg:bottom-auto lg:left-[12.5%] lg:h-px lg:w-auto"
           />
           <span
             aria-hidden
@@ -103,12 +102,12 @@ export function Process() {
               >
                 <span
                   data-node
-                  className="relative z-10 grid size-14 shrink-0 place-items-center rounded-full bg-glow text-bg ring-1 ring-glow/40"
+                  className="relative z-10 grid size-14 shrink-0 place-items-center rounded-full bg-glow text-on-glow ring-1 ring-glow/40"
                 >
                   <Icon name={step.icon} className="size-5.5" />
                 </span>
                 <div className="pt-2 lg:pt-6">
-                  <span className="font-display text-xs font-semibold tracking-[0.2em] text-glow">
+                  <span className="font-display text-xs font-semibold tracking-[0.2em] text-accent">
                     STEP {step.step}
                   </span>
                   <h3 className="mt-2 font-display text-lg font-bold text-fg uppercase">

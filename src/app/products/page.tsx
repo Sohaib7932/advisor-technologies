@@ -5,10 +5,10 @@ import { HeroFacts, PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
 import { CatalogueNav } from "@/components/shared/catalogue-nav";
 import { Container, Section } from "@/components/ui/container";
-import { SectionBackdrop } from "@/components/ui/section-backdrop";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { FloodCard } from "@/components/ui/flood-card";
+import { CardDeck } from "@/components/ui/card-deck";
 import { ArrowUpRight, Icon } from "@/components/ui/icons";
 import {
   clients,
@@ -70,10 +70,10 @@ export default function ProductsPage() {
         title={
           <>
             A catalogue built for
-            <span className="text-glow"> procurement</span>
+            <span className="text-accent"> procurement</span>
           </>
         }
-        image="/images/computing-office.png"
+        image="/images/photos/computing.webp"
         lead={`${products.length} categories spanning infrastructure, IT hardware, connectivity and general order supply, all available on a single purchase order.`}
         aside={
           <HeroFacts
@@ -110,7 +110,7 @@ export default function ProductsPage() {
                 {/* Photo panel: stays pinned while the products scroll by */}
                 <div className="lg:col-span-5">
                   <Reveal className="lg:sticky lg:top-44">
-                    <div className="group/panel relative isolate flex aspect-16/11 flex-col overflow-hidden rounded-panel p-6 text-white shadow-lift sm:p-8 lg:aspect-auto lg:h-[min(34rem,calc(100vh-13rem))]">
+                    <div className="group/panel relative isolate flex aspect-16/11 bg-navy-950 flex-col overflow-hidden rounded-panel p-6 text-white shadow-lift sm:p-8 lg:aspect-auto lg:h-[min(34rem,calc(100vh-13rem))]">
                       <Image
                         src={group.details.image}
                         alt=""
@@ -124,7 +124,7 @@ export default function ProductsPage() {
                       />
 
                       <div className="flex items-start justify-between">
-                        <span className="grid size-11 place-items-center rounded-full bg-white/15 ring-1 ring-white/25 backdrop-blur-md">
+                        <span className="grid size-11 place-items-center rounded-full bg-navy-950/55 ring-1 ring-white/25">
                           <Icon name={group.details.icon} className="size-5" />
                         </span>
                         <span className="font-display text-sm font-semibold tracking-widest text-white/75 tabular-nums">
@@ -134,7 +134,7 @@ export default function ProductsPage() {
                       </div>
 
                       <div className="mt-auto">
-                        <span className="rounded-full bg-white/15 px-3.5 py-1 text-[0.625rem] font-semibold tracking-[0.14em] uppercase ring-1 ring-white/25 backdrop-blur-md">
+                        <span className="rounded-full bg-navy-950/55 px-3.5 py-1 text-[0.625rem] font-semibold tracking-[0.14em] uppercase ring-1 ring-white/25">
                           {group.items.length} product{" "}
                           {group.items.length === 1 ? "line" : "lines"}
                         </span>
@@ -153,12 +153,11 @@ export default function ProductsPage() {
                 </div>
 
                 {/* Products in this group */}
-                <ul className="grid content-start gap-3 sm:grid-cols-2 lg:col-span-7">
+                <CardDeck as="ul" className="grid content-start gap-3 sm:grid-cols-2 lg:col-span-7">
                   {group.items.map((product, index) => (
-                    <Reveal
-                      as="li"
+                    <li
                       key={product.id}
-                      delay={Math.min(index * 70, 280)}
+                      data-card
                       className={cn(group.items.length === 1 && "sm:col-span-2")}
                     >
                       <ProductCard
@@ -166,9 +165,9 @@ export default function ProductsPage() {
                         index={index}
                         enquiryFor={group.service?.title}
                       />
-                    </Reveal>
+                    </li>
                   ))}
-                </ul>
+                </CardDeck>
               </section>
             ))}
           </div>
@@ -176,7 +175,7 @@ export default function ProductsPage() {
       </Section>
 
       {/* Assurances */}
-      <Section tone="steel" divider backdrop={<SectionBackdrop details={["aurora", "glow-top"]} />}>
+      <Section tone="steel" divider>
         <Container>
           <SectionHeading
             eyebrow="With every order"
@@ -184,7 +183,7 @@ export default function ProductsPage() {
             title={
               <>
                 What comes with{" "}
-                <span className="text-glow">every order</span>
+                <span className="text-accent">every order</span>
               </>
             }
           />
@@ -226,11 +225,11 @@ function ProductCard({
     : "/contact#enquiry";
 
   return (
-    <div className="group relative isolate flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 shadow-soft ring-1 ring-white/10 transition-[translate,box-shadow] duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift sm:p-7">
+    <div className="group relative isolate flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 shadow-soft ring-1 ring-line transition-[translate,box-shadow] duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift sm:p-7">
       {/* Soft navy wash rising on hover */}
       <span
         aria-hidden
-        className="absolute inset-0 -z-10 bg-linear-to-t from-white/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        className="absolute inset-0 -z-10 bg-linear-to-t from-bg-raised to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
       />
 
       <div className="flex items-center justify-between">
@@ -239,7 +238,7 @@ function ProductCard({
         </span>
         <span
           aria-hidden
-          className="font-display text-4xl leading-none font-bold text-white/6 transition-colors duration-500 group-hover:text-glow/25"
+          className="font-display text-4xl leading-none font-bold text-fg/8 transition-colors duration-500 group-hover:text-accent/25"
         >
           {String(index + 1).padStart(2, "0")}
         </span>
@@ -254,7 +253,7 @@ function ProductCard({
 
       <Link
         href={href}
-        className="mt-auto inline-flex items-center gap-1.5 self-start pt-6 text-sm font-semibold text-glow transition-colors hover:text-fg"
+        className="mt-auto inline-flex items-center gap-1.5 self-start pt-6 text-sm font-semibold text-accent transition-colors hover:text-fg"
       >
         Enquire about this
         <span className="sr-only">: {product.title}</span>

@@ -135,7 +135,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
               className={cn(
                 "rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors duration-300",
                 index === front
-                  ? "bg-glow text-bg"
+                  ? "bg-glow text-on-glow"
                   : "text-white/55 ring-1 ring-white/15 hover:text-white hover:ring-white/35",
               )}
             >
@@ -148,7 +148,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
             type="button"
             onClick={() => go(-1)}
             aria-label="Previous category"
-            className="grid size-10 place-items-center rounded-full text-white ring-1 ring-white/20 transition-colors hover:bg-glow hover:text-bg hover:ring-glow"
+            className="grid size-10 place-items-center rounded-full text-white ring-1 ring-white/20 transition-colors hover:bg-glow hover:text-on-glow hover:ring-glow"
           >
             <ArrowRight className="size-4 rotate-180" />
           </button>
@@ -156,7 +156,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
             type="button"
             onClick={() => go(1)}
             aria-label="Next category"
-            className="grid size-10 place-items-center rounded-full text-white ring-1 ring-white/20 transition-colors hover:bg-glow hover:text-bg hover:ring-glow"
+            className="grid size-10 place-items-center rounded-full text-white ring-1 ring-white/20 transition-colors hover:bg-glow hover:text-on-glow hover:ring-glow"
           >
             <ArrowRight className="size-4" />
           </button>
@@ -184,14 +184,14 @@ function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; t
 
       <div className="relative flex items-start justify-between gap-4">
         <span className="inline-flex items-center gap-2.5">
-          <span className="grid size-9 place-items-center rounded-full bg-white/15 ring-1 ring-white/25 backdrop-blur-md">
+          <span className="grid size-9 place-items-center rounded-full bg-navy-950/55 ring-1 ring-white/25">
             <Icon name={card.icon} className="size-4" />
           </span>
           <span className="font-display text-xs font-medium tracking-widest text-white/80 tabular-nums">
             {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
         </span>
-        <span className="rounded-full bg-white/15 px-3.5 py-1 text-[0.625rem] font-semibold tracking-[0.14em] uppercase ring-1 ring-white/30 backdrop-blur-md">
+        <span className="rounded-full bg-navy-950/55 px-3.5 py-1 text-[0.625rem] font-semibold tracking-[0.14em] uppercase ring-1 ring-white/30">
           {card.items.length} product {card.items.length === 1 ? "line" : "lines"}
         </span>
       </div>
@@ -203,7 +203,7 @@ function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; t
         {card.items.map((item) => (
           <li
             key={item.id}
-            className="rounded-full bg-white/12 px-3 py-1 text-xs font-medium ring-1 ring-white/20 backdrop-blur-md"
+            className="rounded-full bg-navy-950/55 px-3 py-1 text-xs font-medium ring-1 ring-white/20"
           >
             {item.title}
           </li>
@@ -216,7 +216,7 @@ function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; t
       )}
       <Link
         href="/products"
-        className="group relative mt-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-fg px-3.5 py-1.5 text-xs font-semibold text-bg transition-transform duration-300 hover:-translate-y-0.5 sm:mt-5 sm:px-4 sm:py-2 sm:text-sm"
+        className="group relative mt-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-fg px-3.5 py-1.5 text-xs font-semibold text-on-glow transition-transform duration-300 hover:-translate-y-0.5 sm:mt-5 sm:px-4 sm:py-2 sm:text-sm"
       >
         View in catalogue
         <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

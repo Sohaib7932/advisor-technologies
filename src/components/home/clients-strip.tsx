@@ -6,7 +6,6 @@ import { ArrowUpRight } from "@/components/ui/icons";
 import { clients, type Client } from "@/lib/content";
 import { ClientLogo } from "@/components/ui/client-logo";
 import { cn } from "@/lib/utils";
-import { SectionBackdrop } from "@/components/ui/section-backdrop";
 
 /** Figures derived from the client list itself, never typed in by hand. */
 const stats = [
@@ -80,7 +79,7 @@ export function ClientsStrip() {
       tone="steel"
       divider
       className="overflow-hidden"
-      backdrop={<SectionBackdrop plate="haze" plateOpacity={0.35} details={["spot", "glow-top"]} />}
+     
     >
       <Container>
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
@@ -88,12 +87,12 @@ export function ClientsStrip() {
             <Eyebrow>Valued clients</Eyebrow>
             <h2 className="mt-5 text-headline font-bold text-fg uppercase">
               Trusted by {clients.length}+ ministries, authorities and{" "}
-              <span className="text-glow">enterprises across Pakistan</span>
+              <span className="text-accent">enterprises across Pakistan</span>
             </h2>
           </Reveal>
 
           <Reveal delay={100} className="lg:col-span-5">
-            <dl className="card-surface grid grid-cols-3 divide-x divide-white/10 rounded-2xl py-5">
+            <dl className="card-surface grid grid-cols-3 divide-x divide-line rounded-2xl py-5">
               {stats.map((stat) => (
                 <div key={stat.label} className="px-4 text-center sm:px-5">
                   <dt className="sr-only">{stat.label}</dt>
@@ -108,7 +107,7 @@ export function ClientsStrip() {
             </dl>
             <Link
               href="/clients"
-              className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-glow hover:text-fg"
+              className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-fg"
             >
               See the full client list
               <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

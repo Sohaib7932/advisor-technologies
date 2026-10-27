@@ -24,12 +24,12 @@ export function FloodCard({
         className="absolute inset-0 -z-10 origin-bottom scale-y-0 bg-linear-to-t from-brand to-brand-deep transition-transform duration-600 ease-out-soft group-hover:scale-y-100"
       />
       <div className="flex items-center justify-between">
-        <span className="grid size-12 place-items-center rounded-full bg-glow text-bg transition-colors duration-500 group-hover:bg-fg">
+        <span className="grid size-12 place-items-center rounded-full bg-glow text-on-glow transition-colors duration-500 group-hover:bg-fg">
           <Icon name={icon} className="size-5" />
         </span>
         <span
           aria-hidden
-          className="font-display text-5xl leading-none font-bold text-white/6 transition-colors duration-500 group-hover:text-glow/30"
+          className="font-display text-5xl leading-none font-bold text-fg/8 transition-colors duration-500 group-hover:text-accent/30"
         >
           {String(index + 1).padStart(2, "0")}
         </span>
