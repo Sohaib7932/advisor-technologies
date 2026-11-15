@@ -39,9 +39,9 @@ export function CatalogueNav({
   return (
     <nav
       aria-label="Catalogue categories"
-      className="sticky top-22 z-30 sm:top-26"
+      className="sticky top-24 z-30"
     >
-      <ul className="no-scrollbar mx-auto flex w-fit max-w-full gap-1 overflow-x-auto bg-white/95 rounded-full p-1.5 shadow-float ring-1 ring-line">
+      <ul className="no-scrollbar mx-auto flex w-fit max-w-full gap-1 overflow-x-auto bg-white/95 rounded-full p-1.5 shadow-card ring-1 ring-line">
         {items.map((item) => {
           const isActive = item.id === active;
 
@@ -53,8 +53,8 @@ export function CatalogueNav({
                 className={cn(
                   "flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors duration-300",
                   isActive
-                    ? "bg-glow text-on-glow shadow-glow"
-                    : "text-fg-muted hover:bg-bg-raised hover:text-fg",
+                    ? "bg-navy text-white"
+                    : "text-text-2 hover:bg-mist hover:text-navy",
                 )}
               >
                 <Icon name={item.icon} className="size-4" />
@@ -62,7 +62,7 @@ export function CatalogueNav({
                 <span
                   className={cn(
                     "grid min-w-5 place-items-center rounded-full px-1.5 text-[0.6875rem] tabular-nums",
-                    isActive ? "bg-bg/20 text-on-glow" : "bg-bg-raised text-fg-subtle",
+                    isActive ? "bg-white/15 text-white" : "bg-ice text-text-3",
                   )}
                 >
                   {item.count}

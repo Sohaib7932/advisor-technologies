@@ -1,4 +1,4 @@
-import { Container, Section } from "@/components/ui/container";
+import { Container, Section, type SectionTone } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/section-heading";
 import { CardDeck, DeckCard, IconArt } from "@/components/ui/card-deck";
 import { Icon } from "@/components/ui/icons";
@@ -10,9 +10,9 @@ const TONES = ["light", "navy", "light", "ice"] as const;
  * Core values: four cards that rest as a tucked stack and fan out once when
  * the section comes into view. On hover each card lifts and its icon moves.
  */
-export function Values({ id = "values" }: { id?: string }) {
+export function Values({ id = "values", tone = "white" }: { id?: string; tone?: SectionTone }) {
   return (
-    <Section id={id}>
+    <Section id={id} tone={tone}>
       <Container>
         <SectionHeading
           eyebrow="Core values"

@@ -1,4 +1,4 @@
-import { Container, Section } from "@/components/ui/container";
+import { Container, Section, type SectionTone } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/section-heading";
 import { CardDeck, DeckCard, IconArt } from "@/components/ui/card-deck";
 import { Icon } from "@/components/ui/icons";
@@ -7,9 +7,9 @@ import { objectiveParagraphs, principles } from "@/lib/content";
 const TONES = ["navy", "light", "ice", "light"] as const;
 
 /** Objective and the four principles as a 2x2 bento that opens on enter. */
-export function Principles({ id = "principles" }: { id?: string }) {
+export function Principles({ id = "principles", tone = "white" }: { id?: string; tone?: SectionTone }) {
   return (
-    <Section id={id} aria-labelledby={`${id}-title`}>
+    <Section id={id} tone={tone} aria-labelledby={`${id}-title`}>
       <Container>
         <SectionHeading
           id={`${id}-title`}

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { HeroFacts, PageHero } from "@/components/shared/page-hero";
+import { PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
 import { Container, Section } from "@/components/ui/container";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { Accent, SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
 import { FloodCard } from "@/components/ui/flood-card";
 import { clients, type IconName } from "@/lib/content";
@@ -50,28 +50,18 @@ export default function ClientsPage() {
     <>
       <PageHero
         eyebrow="Clients"
+        render="banner-clients"
         title={
           <>
-            Serving Pakistan&rsquo;s
-            <span className="text-accent"> public institutions</span>
+            Serving Pakistan&rsquo;s <Accent>public institutions</Accent>
           </>
         }
-        image="/images/photos/security.webp"
         lead={`${clients.length} ministries, authorities, utilities, academies and enterprises rely on Advisor Technologies for supply, installation and maintenance.`}
-        aside={
-          <HeroFacts
-            label="Our client base"
-            facts={[
-              { value: `${clients.length}+`, label: "Institutional clients" },
-              {
-                value: grouped["Federal Ministry"]?.length ?? 0,
-                label: "Federal ministries",
-              },
-              { value: sectorOrder.length, label: "Sectors served" },
-              { value: 2, label: "Cities of operation" },
-            ]}
-          />
-        }
+        facts={[
+          { value: `${clients.length}+`, label: "Institutional clients" },
+          { value: grouped["Federal Ministry"]?.length ?? 0, label: "Federal ministries" },
+          { value: sectorOrder.length, label: "Sectors served" },
+        ]}
       />
 
       {/* Full list, grouped by sector */}
@@ -82,27 +72,24 @@ export default function ClientsPage() {
             align="left"
             title={
               <>
-                Institutions we have{" "}
-                <span className="text-accent">supplied and served</span>
+                Institutions we have <Accent>supplied and served</Accent>
               </>
             }
             lead="A cross-section of federal ministries, civic authorities, law enforcement academies, utilities, welfare bodies and private enterprises."
           />
 
-          <div className="mt-14 space-y-12">
+          <div className="mt-14 grid gap-5 lg:grid-cols-2">
             {sectorOrder.map((sector, sectorIndex) => (
-              <div key={sector}>
+              <div key={sector} className="rounded-card bg-mist p-5 sm:p-7">
                 <Reveal className="flex items-center gap-4">
-                  <h3 className="font-display text-lg font-semibold text-fg">
-                    {sector}
-                  </h3>
-                  <span className="h-px flex-1 bg-linear-to-r from-line to-transparent" />
-                  <span className="grid min-w-8 place-items-center rounded-full bg-navy-950 px-2 py-1 font-display text-xs font-semibold text-white tabular-nums">
+                  <h3 className="text-h4 text-navy">{sector}</h3>
+                  <span className="h-px flex-1 bg-steel/15" />
+                  <span className="grid min-w-8 place-items-center rounded-full bg-navy px-2 py-1 font-display text-xs font-semibold text-white tabular-nums">
                     {String(grouped[sector].length).padStart(2, "0")}
                   </span>
                 </Reveal>
 
-                <ul className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
                   {grouped[sector].map((client, index) => {
                     return (
                       <Reveal
@@ -110,17 +97,17 @@ export default function ClientsPage() {
                         key={client.name}
                         delay={Math.min(index * 50 + sectorIndex * 20, 300)}
                       >
-                        <div className="group flex h-full items-center gap-4 rounded-2xl bg-surface p-4 shadow-soft ring-1 ring-line transition-[translate,box-shadow] duration-300 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift">
+                        <div className="group flex h-full items-center gap-4 rounded-[1.25rem] bg-white p-3.5 ring-1 ring-line transition-[translate,box-shadow] duration-500 ease-out-expo hover:-translate-y-0.5 hover:shadow-card">
                           <ClientLogo
                             client={client}
                             sizes="64px"
-                            className="size-16 rounded-2xl shadow-soft transition-transform duration-500 ease-out-soft group-hover:scale-105"
+                            className="size-14 rounded-2xl ring-1 ring-line transition-transform duration-500 ease-out-expo group-hover:-rotate-6"
                           />
                           <span className="min-w-0">
-                            <span className="block text-[0.9375rem] leading-snug font-medium text-fg">
+                            <span className="block text-sm leading-snug font-semibold text-navy">
                               {client.name}
                             </span>
-                            <span className="mt-1 block text-xs text-fg-subtle">
+                            <span className="mt-1 block text-xs text-text-3">
                               {client.sector}
                             </span>
                           </span>
@@ -143,8 +130,7 @@ export default function ClientsPage() {
             lead="Practical reasons we are a straightforward supplier to work with, from tender through to handover."
             title={
               <>
-                Built for how{" "}
-                <span className="text-accent">institutions buy</span>
+                Built for how <Accent>institutions buy</Accent>
               </>
             }
           />
