@@ -87,7 +87,7 @@ export function About() {
               <Image src="/images/photos/about.webp" alt="" fill sizes="(max-width: 1024px) 100vw, 42vw" className="-z-10 object-cover" />
               <div aria-hidden className="absolute inset-0 -z-10 bg-linear-to-t from-navy/90 via-navy/30 to-transparent" />
               <div className="flex h-full flex-col justify-end p-6 sm:p-7">
-                <p className="text-xs font-semibold tracking-[0.08em] text-white/80 uppercase">Sectors we serve</p>
+                <p className="text-xs font-semibold tracking-[0.08em] text-white uppercase">Sectors we serve</p>
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {sectors.map((sector) => (
                     <li key={sector} className="rounded-full bg-navy-950/70 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/20">

@@ -12,7 +12,7 @@ export const isActivePath = (pathname: string, href: string) =>
 /** Logo mark plus the two-line wordmark. */
 export function Brand({ compact = false, className }: { compact?: boolean; className?: string }) {
   return (
-    <Link href="/" aria-label={`${site.name} home`} className={cn("flex shrink-0 items-center gap-2.5", className)}>
+    <Link href="/" title={`${site.name} home`} className={cn("flex shrink-0 items-center gap-2.5", className)}>
       <span
         className={cn(
           "grid shrink-0 place-items-center rounded-full bg-white ring-1 ring-line",
@@ -31,7 +31,7 @@ export function Brand({ compact = false, className }: { compact?: boolean; class
       <span className="flex flex-col leading-none">
         <span className={cn("font-display font-bold tracking-tight text-navy", compact ? "text-[0.9375rem]" : "text-base")}>
           Advisor
-        </span>
+        </span>{" "}
         <span className="mt-1 text-[0.5625rem] font-semibold tracking-[0.22em] text-text-3 uppercase">Technologies</span>
       </span>
     </Link>

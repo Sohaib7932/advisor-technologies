@@ -42,7 +42,7 @@ export function Process() {
           });
           gsap.fromTo(
             nodes[i],
-            { backgroundColor: "#ffffff", color: "#2f5cc4" },
+            { backgroundColor: "#ffffff", color: "#1d5fbf" },
             { backgroundColor: "#14213a", color: "#8fb3ff", duration: 0.5, scrollTrigger: { trigger: step, start: wide ? "top 60%" : "top 55%", once: true } },
           );
         });

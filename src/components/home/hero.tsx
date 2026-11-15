@@ -17,10 +17,20 @@ const TRUST = ["NADRA Islamabad / Karachi", "Capital Development Authority", "Mi
   .map((name) => clients.find((c) => c.name === name))
   .filter((c): c is (typeof clients)[number] => Boolean(c?.logo));
 
-function webglAvailable() {
+/**
+ * Hardware WebGL only. A software rasteriser (SwiftShader, llvmpipe, the
+ * Windows basic renderer) would block the main thread compiling shaders,
+ * so those devices get the poster instead.
+ */
+function hardwareWebgl() {
   try {
     const c = document.createElement("canvas");
-    return Boolean(c.getContext("webgl2") || c.getContext("webgl"));
+    const gl = (c.getContext("webgl2") || c.getContext("webgl")) as WebGLRenderingContext | null;
+    if (!gl) return false;
+    const info = gl.getExtension("WEBGL_debug_renderer_info");
+    const renderer = String(info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    return !/swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer);
   } catch {
     return false;
   }
@@ -55,7 +65,10 @@ export function Hero() {
       const lowEnd =
         (navigator.hardwareConcurrency ?? 8) <= 2 ||
         Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
-      const use3d = !reduced && !lowEnd && webglAvailable();
+      // Phones get the poster (a render of this same scene): no three.js
+      // download, no render loop, no battery drain.
+      const phone = window.matchMedia("(max-width: 767px)").matches;
+      const use3d = !reduced && !lowEnd && !phone && hardwareWebgl();
 
       let scene: HeroScene | null = null;
       let disposed = false;
@@ -70,7 +83,10 @@ export function Hero() {
         idle: 0,
       };
 
-      if (use3d) {
+      // Start the scene once the browser is idle, so the headline paints first.
+      const whenIdle = (fn: () => void) =>
+        typeof window.requestIdleCallback === "function" ? window.requestIdleCallback(fn, { timeout: 900 }) : window.setTimeout(fn, 300);
+      if (use3d) whenIdle(() => {
         import("./hero-scene").then(({ createHeroScene }) => {
           if (disposed) return;
           try {
@@ -82,7 +98,7 @@ export function Hero() {
             showPoster();
           }
         });
-      }
+      });
 
       const mm = gsap.matchMedia();
       mm.add(MOTION.reduced, () => {
@@ -239,7 +255,7 @@ export function Hero() {
               alt="Server rack, CCTV camera, laptop, printer, office chair and gear on a glass platform"
               fill
               sizes="(max-width: 1024px) 100vw, 66vw"
-              className="motion-hide object-contain object-center"
+              className="motion-hide bob object-contain object-center"
             />
             <canvas ref={canvasRef} aria-hidden className="invisible absolute inset-0 size-full opacity-0" />
           </div>

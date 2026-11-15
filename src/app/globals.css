@@ -6,11 +6,11 @@
    Motion timings live next door in src/lib/motion.ts.
 
    Contrast (WCAG AA), measured:
-     on white   text 15.9 · text-2 7.5 · text-3 5.2 · steel (accent) 6.2
-     on mist    text 15.1 · text-2 7.1 · text-3 4.9 · steel 5.9
-     on ice     text 14.4 · text-2 6.8 · text-3 4.7 · steel 5.6
-     on navy    white 15.9 · text-2-dark 9.1 · text-3-dark 6.2 · sky 6.9
-     white on azure 5.2 (primary button) · white on azure-deep 6.7 (hover)
+     on white   text 15.9 · text-2 7.5 · text-3 5.2 · steel (accent) 6.3
+     on mist    text 15.1 · text-2 7.1 · text-3 4.9 · steel 6.0
+     on ice     text 14.4 · text-2 6.8 · text-3 4.7 · steel 5.7
+     on navy    white 15.9 · text-2-dark 9.1 · text-3-dark 6.2 · sky 6.0
+     white on azure 5.2 (primary button) · white on azure-deep 7.0 (hover)
    Sky and LED blue are accents on navy and fills only; never small text
    on white.
    ========================================================================== */
@@ -20,11 +20,11 @@
   --color-ink: #0b1626;
   --color-navy: #14213a;
   --color-brand: #2a4161;
-  --color-steel: #2f5cc4; /* royal steel blue: the accent on light */
-  --color-sky: #7aa2ff; /* periwinkle: the accent on navy, fills */
-  --color-sky-deep: #4f7fe8;
-  --color-azure: #2563eb; /* primary action */
-  --color-azure-deep: #1d4ed8;
+  --color-steel: #1d5fbf; /* deep blue: the accent on light */
+  --color-sky: #4fa3ff; /* clear blue: the accent on navy, fills */
+  --color-sky-deep: #2e88f0;
+  --color-azure: #1769d6; /* primary action */
+  --color-azure-deep: #1257b6;
   --color-ice: #edf2ff;
   --color-mist: #f5f7fc;
   --color-line: #e2e8f3;
@@ -40,7 +40,7 @@
   --color-fg: #14213a;
   --color-fg-muted: #4a5568;
   --color-fg-subtle: #5b6b80;
-  --color-accent: #2f5cc4; /* accent phrase on light: steel */
+  --color-accent: #1d5fbf; /* accent phrase on light: steel */
   --color-bg: #ffffff;
   --color-surface: #ffffff;
   --color-surface-2: #f4f8fb;
@@ -48,7 +48,7 @@
   --color-bg-deep: #f4f8fb;
   --color-bg-raised: #edf2ff;
   --color-on-glow: #0b1626; /* text on sky fills */
-  --color-glow: #7aa2ff;
+  --color-glow: #4fa3ff;
   --color-brand-deep: #14213a;
   --color-charcoal: #4a4a4a;
 
@@ -111,7 +111,7 @@
   --color-text-2: #c3cfdc;
   --color-fg-subtle: #9fb1c5;
   --color-text-3: #9fb1c5;
-  --color-accent: #7aa2ff; /* accent phrase on dark: sky */
+  --color-accent: #4fa3ff; /* accent phrase on dark: sky */
   --color-line: rgb(255 255 255 / 0.12);
   --color-surface: rgb(255 255 255 / 0.06);
   --color-surface-2: rgb(255 255 255 / 0.08);
@@ -134,7 +134,7 @@
   --color-text-2: #4a5568;
   --color-fg-subtle: #5b6b80;
   --color-text-3: #5b6b80;
-  --color-accent: #2f5cc4;
+  --color-accent: #1d5fbf;
   --color-line: #e2e8f3;
   --color-surface: #ffffff;
   --color-surface-2: #f4f8fb;
@@ -317,9 +317,9 @@ html.lenis body {
   border-radius: 9999px;
   aspect-ratio: 1;
   background:
-    radial-gradient(closest-side, transparent calc(100% - 1px), var(--ring-c, rgb(122 162 255 / 0.16)) calc(100% - 1px), transparent 100%),
-    radial-gradient(closest-side, transparent calc(78% - 1px), var(--ring-c, rgb(122 162 255 / 0.16)) calc(78% - 1px), transparent 78%),
-    radial-gradient(closest-side, transparent calc(56% - 1px), var(--ring-c, rgb(122 162 255 / 0.16)) calc(56% - 1px), transparent 56%);
+    radial-gradient(closest-side, transparent calc(100% - 1px), var(--ring-c, rgb(79 163 255 / 0.16)) calc(100% - 1px), transparent 100%),
+    radial-gradient(closest-side, transparent calc(78% - 1px), var(--ring-c, rgb(79 163 255 / 0.16)) calc(78% - 1px), transparent 78%),
+    radial-gradient(closest-side, transparent calc(56% - 1px), var(--ring-c, rgb(79 163 255 / 0.16)) calc(56% - 1px), transparent 56%);
 }
 
 /* ==========================================================================
@@ -433,15 +433,15 @@ html.lenis body {
   opacity: 0.6;
 }
 
-/* Primary: royal-blue fill, white text, white chip. Same on light and dark. */
+/* Primary: blue fill, white text, white chip. Same on light and dark. */
 .btn-primary {
-  --btn-bg: #2563eb;
+  --btn-bg: #1769d6;
   --btn-fg: #ffffff;
-  --btn-wipe: #1d4ed8;
+  --btn-wipe: #1257b6;
   --btn-chip-bg: #ffffff;
-  --btn-chip-fg: #2563eb;
-  --btn-chip-fg-hover: #1d4ed8;
-  box-shadow: 0 8px 22px -8px rgb(37 99 235 / 0.55);
+  --btn-chip-fg: #1769d6;
+  --btn-chip-fg-hover: #1257b6;
+  box-shadow: 0 8px 22px -8px rgb(23 105 214 / 0.5);
 }
 
 /* Secondary on light: navy outline; the wipe fills it navy, text turns white */

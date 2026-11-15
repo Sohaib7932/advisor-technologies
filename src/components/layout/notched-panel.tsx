@@ -125,14 +125,14 @@ export function NotchedPanel({
       {/* Header strip: logo on white, nav tab in the panel, button on white */}
       <div className="relative flex h-(--header-h) items-center gap-4 pl-1 sm:pl-2">
         <Brand />
-        <div className="min-w-8 flex-1" />
+        <div className="flex-1 lg:hidden" />
         <nav
           ref={tab}
           data-notch-tab
           aria-label="Main"
           data-theme="dark"
           className={cn(
-            "hidden h-full items-center self-start px-10 lg:flex xl:px-12",
+            "mr-12 ml-[clamp(2.5rem,6vw,6rem)] hidden h-full flex-1 items-center justify-center self-start px-10 lg:flex xl:px-12",
             !geo && "rounded-t-[24px] bg-ink",
           )}
         >
@@ -149,8 +149,6 @@ export function NotchedPanel({
             })}
           </ul>
         </nav>
-        {/* The tab sits centred between the logo and the button */}
-        <div className="hidden min-w-8 flex-1 lg:block" />
         <Button href="/contact#enquiry" className="hidden lg:inline-flex">
           Get a Quote
         </Button>

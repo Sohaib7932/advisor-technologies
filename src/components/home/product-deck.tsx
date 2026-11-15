@@ -106,7 +106,7 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
                     key={front}
                     aria-hidden
                     onAnimationEnd={() => go(1)}
-                    className="hero-progress absolute inset-x-0 bottom-0 h-1 origin-left bg-linear-to-r from-steel to-glow shadow-[0_0_12px_rgb(122_162_255/0.8)]"
+                    className="hero-progress absolute inset-x-0 bottom-0 h-1 origin-left bg-linear-to-r from-steel to-glow shadow-[0_0_12px_rgb(79_163_255/0.8)]"
                     style={{
                       animationDuration: `${CYCLE_MS}ms`,
                       animationPlayState: running ? "running" : "paused",
