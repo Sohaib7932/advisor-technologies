@@ -1,67 +1,37 @@
 import Link from "next/link";
-import { Container } from "@/components/ui/container";
+import { PageHero } from "@/components/shared/page-hero";
+import { Accent } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
 import { mainNav } from "@/lib/site";
 
-function rise(delay: number) {
-  return { "--rise-delay": `${delay}ms` } as React.CSSProperties;
-}
-
 export default function NotFound() {
   return (
-    <section className="px-2 pt-2 sm:px-3 sm:pt-3">
-      <div data-theme="dark" className="relative isolate flex min-h-[40rem] items-center overflow-hidden rounded-[1.75rem] bg-navy-950 sm:rounded-hero lg:min-h-[min(88vh,50rem)]">
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(55%_60%_at_85%_60%,rgb(31_107_255/0.3),transparent_70%)]"
-        />
-        {/* Ghost numerals behind the copy */}
-        <span
-          aria-hidden
-          style={rise(0)}
-          className="hero-rise pointer-events-none absolute -right-6 bottom-0 -z-10 font-display text-[clamp(10rem,32vw,28rem)] leading-[0.8] font-extrabold tracking-[-0.06em] text-white/[0.04] select-none"
-        >
-          404
-        </span>
-
-        <Container className="pt-32 pb-24">
-          <p style={rise(80)} className="hero-rise eyebrow text-accent">
-            Error 404
-          </p>
-          <h1
-            style={rise(180)}
-            className="hero-rise mt-6 max-w-3xl text-display text-white"
-          >
-            This page isn&rsquo;t
-            <span className="text-accent"> in our catalogue</span>
-          </h1>
-          <p
-            style={rise(300)}
-            className="hero-rise mt-7 max-w-md text-base leading-relaxed text-fg-muted"
-          >
-            The page you were looking for has moved or never existed. Try one of
-            the sections below.
-          </p>
-
-          <div style={rise(400)} className="hero-rise mt-10 flex flex-wrap gap-2">
-            {mainNav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-white/20 transition-colors hover:bg-glow hover:text-on-glow"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-
-          <div style={rise(500)} className="hero-rise">
-            <Button href="/" variant="light" size="lg" className="mt-10" withArrow>
-              Back to home
-            </Button>
-          </div>
-        </Container>
-      </div>
-    </section>
+    <PageHero
+      eyebrow="Error 404"
+      render="banner-404"
+      watermark="404"
+      title={
+        <>
+          This page isn&rsquo;t <Accent>in our catalogue</Accent>
+        </>
+      }
+      lead="The page you were looking for has moved or never existed. Try one of the sections below."
+    >
+      <ul className="flex flex-wrap gap-2">
+        {mainNav.map((item) => (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              className="inline-flex rounded-full bg-white/8 px-4 py-2 text-sm font-medium text-white ring-1 ring-white/15 transition-colors duration-300 hover:bg-white hover:text-navy"
+            >
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <Button href="/" className="mt-8">
+        Back to home
+      </Button>
+    </PageHero>
   );
 }

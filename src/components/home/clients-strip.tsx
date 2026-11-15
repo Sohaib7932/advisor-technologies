@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { Container, Section } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
-import { Eyebrow } from "@/components/ui/section-heading";
-import { ArrowUpRight } from "@/components/ui/icons";
+import { Accent, Eyebrow } from "@/components/ui/section-heading";
+import { Button } from "@/components/ui/button";
 import { clients, type Client } from "@/lib/content";
 import { ClientLogo } from "@/components/ui/client-logo";
+import { CountUp } from "@/components/ui/count-up";
 import { cn } from "@/lib/utils";
 
 /** Figures derived from the client list itself, never typed in by hand. */
@@ -26,13 +26,13 @@ function ClientCard({ client }: { client: Client }) {
       <ClientLogo
         client={client}
         sizes="48px"
-        className="size-12 rounded-xl shadow-soft transition-transform duration-500 ease-out-soft group-hover/client:-rotate-6"
+        className="size-12 rounded-xl ring-1 ring-line transition-transform duration-500 ease-out-expo group-hover/client:-rotate-6"
       />
       <span className="min-w-0">
-        <span className="block text-sm font-semibold whitespace-nowrap text-fg">
+        <span className="block text-sm font-semibold whitespace-nowrap text-navy">
           {client.name}
         </span>
-        <span className="mt-0.5 block text-xs whitespace-nowrap text-fg-subtle">
+        <span className="mt-0.5 block text-xs whitespace-nowrap text-text-3">
           {client.sector}
         </span>
       </span>
@@ -53,7 +53,7 @@ function MarqueeRow({
   return (
     <ul
       className={cn(
-        "flex w-max gap-3 hover:[animation-play-state:paused]",
+        "flex w-max gap-3",
         reverse ? "animate-marquee-reverse" : "animate-marquee",
       )}
     >
@@ -61,7 +61,7 @@ function MarqueeRow({
         <li
           key={`${client.name}-${index}`}
           aria-hidden={index >= items.length || undefined}
-          className="group/client card-surface flex shrink-0 items-center gap-3.5 rounded-2xl py-3 pr-6 pl-3 transition-[box-shadow,translate] duration-300 ease-out-soft hover:-translate-y-0.5 hover:shadow-glow"
+          className="group/client flex shrink-0 items-center gap-3.5 rounded-[1.25rem] bg-white py-3 pr-6 pl-3 ring-1 ring-line transition-[box-shadow,translate] duration-500 ease-out-expo hover:-translate-y-0.5 hover:shadow-card"
         >
           <ClientCard client={client} />
         </li>
@@ -74,44 +74,33 @@ export function ClientsStrip() {
   const half = Math.ceil(clients.length / 2);
 
   return (
-    <Section
-      id="clients"
-      tone="steel"
-      divider
-      className="overflow-hidden"
-     
-    >
+    <Section id="clients" className="overflow-hidden">
       <Container>
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
           <Reveal className="lg:col-span-7">
             <Eyebrow>Valued clients</Eyebrow>
-            <h2 className="mt-5 text-headline font-bold text-fg uppercase">
-              Trusted by {clients.length}+ ministries, authorities and{" "}
-              <span className="text-accent">enterprises across Pakistan</span>
+            <h2 className="mt-5 text-h2 text-fg">
+              Trusted by {clients.length}+ ministries, authorities and <Accent>enterprises across Pakistan</Accent>
             </h2>
           </Reveal>
 
           <Reveal delay={100} className="lg:col-span-5">
-            <dl className="card-surface grid grid-cols-3 divide-x divide-line rounded-2xl py-5">
+            <dl className="grid grid-cols-3 divide-x divide-steel/15 rounded-[1.5rem] bg-ice py-6">
               {stats.map((stat) => (
                 <div key={stat.label} className="px-4 text-center sm:px-5">
                   <dt className="sr-only">{stat.label}</dt>
-                  <dd className="font-display text-3xl font-bold tracking-tight text-fg tabular-nums sm:text-4xl">
-                    {stat.value}
+                  <dd className="font-display text-3xl font-bold tracking-tight text-navy tabular-nums sm:text-4xl">
+                    <CountUp value={stat.value} />
                   </dd>
-                  <dd className="mt-1.5 text-[0.6875rem] leading-snug font-medium tracking-wide text-fg-subtle uppercase">
+                  <dd className="mt-1.5 text-xs leading-snug font-medium text-text-3">
                     {stat.label}
                   </dd>
                 </div>
               ))}
             </dl>
-            <Link
-              href="/clients"
-              className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-fg"
-            >
+            <Button href="/clients" variant="link" className="mt-4">
               See the full client list
-              <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
+            </Button>
           </Reveal>
         </div>
       </Container>
@@ -119,7 +108,7 @@ export function ClientsStrip() {
       {/* Two full-bleed rows drifting in opposite directions, faded at both edges */}
       <Reveal
         delay={180}
-        className="mt-14 flex flex-col gap-3 mask-[linear-gradient(to_right,transparent,black_2.5rem,black_calc(100%-2.5rem),transparent)] sm:mask-[linear-gradient(to_right,transparent,black_8rem,black_calc(100%-8rem),transparent)]"
+        className="marquee mt-12 flex flex-col gap-3 py-2 mask-[linear-gradient(to_right,transparent,black_2.5rem,black_calc(100%-2.5rem),transparent)] sm:mask-[linear-gradient(to_right,transparent,black_8rem,black_calc(100%-8rem),transparent)]"
       >
         <MarqueeRow items={clients.slice(0, half)} />
         <MarqueeRow items={clients.slice(half)} reverse />

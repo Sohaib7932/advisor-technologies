@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
       {
         pathname: "/clients-logos/**",
       },
+      {
+        // Offline 3D renders (scripts/render-3d.mjs)
+        pathname: "/3d/**",
+      },
     ],
   },
 };

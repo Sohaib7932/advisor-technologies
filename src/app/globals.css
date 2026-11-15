@@ -1,51 +1,58 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   Advisor Technologies design tokens
-   Every colour comes from the logo: the navy circle, the white "A" and the
-   charcoal swoosh, plus one steel-blue accent and its brighter glow tone.
-   Contrast on --color-bg (#1B1F26): fg 15:1, fg-muted 9:1, fg-subtle 5.6:1,
-   glow 6:1, all WCAG AA for body text.
+   Advisor Technologies design system
+   Single source of truth for colour, type, radii, spacing and elevation.
+   Motion timings live next door in src/lib/motion.ts.
+
+   Contrast (WCAG AA), measured:
+     on white   text 15.9 · text-2 7.5 · text-3 5.2 · steel (accent) 6.3
+     on mist    text 15.1 · text-2 7.1 · text-3 4.9 · steel 6.0
+     on ice     text 14.4 · text-2 6.8 · text-3 4.7 · steel 5.7
+     on navy    white 15.9 · text-2-dark 9.1 · text-3-dark 6.2 · sky 6.0
+     white on navy 15.9 (primary button) · navy on white 15.9 (on dark)
+   Sky and LED blue are accents on navy and fills only; never small text
+   on white.
    ========================================================================== */
 
 @theme {
-  /* Brand */
-  --color-brand: #2a4161; /* primary navy, the logo circle */
-  --color-brand-deep: #14213a; /* deep navy for backgrounds */
-  --color-charcoal: #4a4a4a; /* the logo swoosh */
-  --color-steel: #3f6d85; /* accent */
-  --color-glow: #5ba3d0; /* highlights, active states, glow lines, CTAs */
+  /* Palette */
+  --color-ink: #0b1626;
+  --color-navy: #14213a;
+  --color-brand: #2a4161;
+  --color-steel: #1d5fbf; /* deep blue: the accent on light */
+  --color-sky: #4fa3ff; /* clear blue: the accent on navy, fills */
+  --color-sky-deep: #2e88f0;
+  --color-azure: #1769d6; /* primary action */
+  --color-azure-deep: #1257b6;
+  --color-ice: #edf2ff;
+  --color-mist: #f5f7fc;
+  --color-line: #e2e8f3;
+  --color-amber: #f5b84b; /* tiny highlights only, never a wash */
+  --color-led: #8fb3ff; /* light sources in renders and on dark panels */
 
-  /* Light theme (default). Contrast on white / on #EAF1F7:
-     fg #14213a 15.9 / 14.0 · fg-muted #4a5568 7.5 / 6.6 ·
-     fg-subtle #56657a 5.9 / 5.2 · accent #3f6d85 5.6 / 4.9 ·
-     navy on the glow-blue fill 6.0. Glow blue and LED blue fail AA as small
-     text on white: fills, lines, glows and large display text only. */
-  --color-bg-deep: #f5f8fb; /* mist */
-  --color-bg-base: #ffffff;
-  --color-bg-raised: #eaf1f7; /* pale steel */
-  --color-line: #d9e2ec;
-  --color-glow-soft: rgb(63 109 133 / 0.14);
-  --color-accent: #3f6d85; /* links, icons, small accent text */
-  --color-on-glow: #14213a; /* text on glow-blue fills */
+  /* Text (light surfaces) */
   --color-text: #14213a;
-  --color-text-muted: #4a5568;
-  --color-led: #7cc3e8; /* light sources: lines, glows (never small text) */
-  --color-amber: #f5b84b; /* one warm accent: tiny highlights only, never a wash */
+  --color-text-2: #4a5568;
+  --color-text-3: #5b6b80; /* #64748b fails AA on ice; darkened */
 
-  /* Surfaces */
-  --color-bg: #ffffff; /* page */
-  --color-canvas: #f5f8fb;
-  --color-surface: #ffffff; /* cards */
-  --color-surface-2: #f8fafc; /* raised cards, inputs */
-
-  /* Text */
+  /* Semantic aliases the components use. Re-pointed in dark scopes. */
   --color-fg: #14213a;
-  --color-ink: #14213a;
   --color-fg-muted: #4a5568;
-  --color-fg-subtle: #56657a;
+  --color-fg-subtle: #5b6b80;
+  --color-accent: #1d5fbf; /* accent phrase on light: steel */
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f8fb;
+  --color-canvas: #f4f8fb;
+  --color-bg-deep: #f4f8fb;
+  --color-bg-raised: #edf2ff;
+  --color-on-glow: #0b1626; /* text on sky fills */
+  --color-glow: #4fa3ff;
+  --color-brand-deep: #14213a;
+  --color-charcoal: #4a4a4a;
 
-  /* Navy ramp anchored on the brand navy (600) and deep navy (950) */
+  /* Navy ramp (product-line cards and photo overlays use 950) */
   --color-navy-50: #eef2f7;
   --color-navy-100: #dbe3ed;
   --color-navy-200: #b9c7d9;
@@ -62,93 +69,80 @@
   --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
-  /* Radii */
-  --radius-card: 1.5rem;
-  --radius-panel: 2rem;
+  /* Radii: panels 40, cards 28, pills full */
+  --radius-panel: 2.5rem;
+  --radius-card: 1.75rem;
+  --radius-tile: 1.25rem;
   --radius-hero: 2.5rem;
 
-  /* Elevation: shadows sink into the dark page; glow lifts accents */
-  --shadow-soft: 0 1px 2px rgb(20 33 58 / 0.06), 0 12px 32px rgb(20 33 58 / 0.08);
-  --shadow-lift: 0 2px 4px rgb(20 33 58 / 0.07), 0 20px 44px -12px rgb(20 33 58 / 0.18);
-  --shadow-float: 0 4px 10px rgb(20 33 58 / 0.08), 0 30px 64px -20px rgb(20 33 58 / 0.24);
-  --shadow-glow: 0 0 0 1px rgb(63 109 133 / 0.4), 0 14px 36px -10px rgb(91 163 208 / 0.55);
+  /* One shadow, plus a hover lift of the same light */
+  --shadow-card: 0 1px 2px rgb(11 22 38 / 0.05), 0 16px 40px rgb(11 22 38 / 0.08);
+  --shadow-card-hover: 0 2px 4px rgb(11 22 38 / 0.06), 0 24px 56px rgb(11 22 38 / 0.12);
+  /* Legacy names, mapped onto the one shadow */
+  --shadow-soft: var(--shadow-card);
+  --shadow-lift: var(--shadow-card-hover);
+  --shadow-float: var(--shadow-card-hover);
+  --shadow-glow: var(--shadow-card);
 
-  /* Motion: one curve everywhere (≈ GSAP power3.out / expo.out) */
-  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Easing: one family (expo.out / power3.out), one settle */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-settle: cubic-bezier(0.34, 1.3, 0.64, 1);
 }
 
-/* The spec's token names, for use in plain CSS, plus the values the card and
-   glass utilities read, so a [data-theme] scope can restyle them. */
+/* Layout constants for plain CSS (and the notched panel geometry) */
 :root {
-  --bg-deep: var(--color-bg-deep);
-  --bg-base: var(--color-bg-base);
-  --bg-raised: var(--color-bg-raised);
-  --surface: #ffffff;
-  --line: var(--color-line);
-  --glow: var(--color-led);
-  --glow-soft: var(--color-glow-soft);
-  --accent: var(--color-accent);
-  --text: var(--color-text);
-  --text-muted: var(--color-text-muted);
-  --card-edge: var(--color-line);
-  --card-highlight: rgb(255 255 255 / 0);
-  --glass-bg: rgb(255 255 255 / 0.9);
-  --glass-edge: rgb(20 33 58 / 0.08);
+  --gutter: clamp(20px, 4vw, 48px);
+  --inset: clamp(12px, 1.6vw, 24px); /* panel distance from the viewport edge */
+  --section-y: clamp(72px, 9vw, 128px);
+  --header-h: 76px; /* the white strip above the first panel */
+  --notch-r: 24px; /* concave shoulders and tab corners */
+  --surface-edge: var(--color-line);
 }
 
-/* Dark anchors: the footer, the call-to-action card, photo banners with white
-   text over them, and the hero until its light plate arrives. Not a toggle:
-   light is the only live theme. */
+/* Dark panels (hero, banners, stats band, contact, CTA, footer).
+   Not a theme toggle: a scope. The old dark site tokens are kept here. */
 [data-theme="dark"] {
   color-scheme: dark;
-  --color-bg-deep: #060c16;
-  --color-bg-base: #0d1926;
-  --color-bg-raised: #142538;
-  --color-line: rgb(243 246 250 / 0.1);
-  --color-glow-soft: rgb(91 163 208 / 0.18);
-  --color-accent: #5ba3d0;
-  --color-on-glow: #1b1f26;
-  --color-text: #f3f6fa;
-  --color-text-muted: #b4bfcc;
-  --color-bg: #1b1f26;
-  --color-canvas: #1b1f26;
-  --color-surface: #232932;
-  --color-surface-2: #2c333e;
-  --color-fg: #f3f6fa;
-  --color-ink: #f3f6fa;
-  --color-fg-muted: #b4bfcc;
-  --color-fg-subtle: #8c98a8;
-  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.2), 0 10px 28px -14px rgb(0 0 0 / 0.5);
-  --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.25), 0 28px 56px -22px rgb(0 0 0 / 0.65);
-  --shadow-float: 0 4px 12px rgb(0 0 0 / 0.3), 0 36px 72px -24px rgb(0 0 0 / 0.75);
-  --shadow-glow: 0 0 0 1px rgb(91 163 208 / 0.35), 0 12px 40px -8px rgb(91 163 208 / 0.45);
-  --surface: rgb(20 33 58 / 0.62);
-  --card-edge: rgb(243 246 250 / 0.08);
-  --card-highlight: rgb(243 246 250 / 0.08);
-  --glass-bg: rgb(27 31 38 / 0.72);
-  --glass-edge: rgb(243 246 250 / 0.1);
+  --color-fg: #ffffff;
+  --color-text: #ffffff;
+  --color-fg-muted: #c3cfdc;
+  --color-text-2: #c3cfdc;
+  --color-fg-subtle: #9fb1c5;
+  --color-text-3: #9fb1c5;
+  --color-accent: #4fa3ff; /* accent phrase on dark: sky */
+  --color-line: rgb(255 255 255 / 0.12);
+  --color-surface: rgb(255 255 255 / 0.06);
+  --color-surface-2: rgb(255 255 255 / 0.08);
+  --color-bg: #14213a;
+  --color-canvas: #0b1626;
+  --color-bg-deep: #0b1626;
+  --color-bg-raised: #1b2b47;
+  --color-on-glow: #0b1626;
+  --surface-edge: rgb(255 255 255 / 0.12);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.2), 0 16px 40px rgb(0 0 0 / 0.28);
   color: var(--color-fg);
 }
 
-/* A light island inside a dark scope (white cards on the navy band). */
+/* A light island inside a dark scope (a white form card on a navy panel). */
 [data-theme="light"] {
   color-scheme: light;
-  --color-line: #d9e2ec;
-  --color-accent: #3f6d85;
-  --color-on-glow: #14213a;
-  --color-surface: #ffffff;
-  --color-surface-2: #f8fafc;
   --color-fg: #14213a;
-  --color-ink: #14213a;
+  --color-text: #14213a;
   --color-fg-muted: #4a5568;
-  --color-fg-subtle: #56657a;
-  --shadow-soft: 0 1px 2px rgb(20 33 58 / 0.06), 0 12px 32px rgb(20 33 58 / 0.08);
-  --shadow-lift: 0 2px 4px rgb(20 33 58 / 0.07), 0 20px 44px -12px rgb(20 33 58 / 0.18);
-  --shadow-float: 0 4px 10px rgb(20 33 58 / 0.08), 0 30px 64px -20px rgb(20 33 58 / 0.24);
-  --card-edge: #d9e2ec;
+  --color-text-2: #4a5568;
+  --color-fg-subtle: #5b6b80;
+  --color-text-3: #5b6b80;
+  --color-accent: #1d5fbf;
+  --color-line: #e2e8f3;
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f8fb;
+  --color-bg: #ffffff;
+  --surface-edge: #e2e8f3;
+  --shadow-card: 0 1px 2px rgb(11 22 38 / 0.05), 0 16px 40px rgb(11 22 38 / 0.08);
   color: var(--color-fg);
 }
-
 
 /* ==========================================================================
    Base
@@ -160,16 +154,18 @@
   }
 
   html {
-    scroll-padding-top: 7rem;
+    scroll-padding-top: 6.5rem;
     -webkit-tap-highlight-color: transparent;
     color-scheme: light;
+    background-color: #ffffff;
   }
 
   body {
-    background-color: var(--color-bg);
+    background-color: #ffffff;
     color: var(--color-fg);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01" on, "cv11" on;
+    font-size: 1rem;
+    line-height: 1.6;
     text-rendering: optimizeLegibility;
   }
 
@@ -178,7 +174,9 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
     text-wrap: balance;
   }
 
@@ -187,14 +185,14 @@
   }
 
   ::selection {
-    background-color: var(--color-led);
+    background-color: var(--color-sky);
     color: var(--color-ink);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 3px;
-    border-radius: 6px;
+    outline: 2px solid var(--color-sky);
+    outline-offset: 2px;
+    border-radius: 8px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -205,13 +203,12 @@
       animation-iteration-count: 1 !important;
       animation-delay: 0ms !important;
       transition-duration: 0.01ms !important;
-      /* Staggered reveals must not hold content back when motion is off. */
       transition-delay: 0ms !important;
     }
   }
 }
 
-/* Lenis smooth scrolling (recommended base styles) */
+/* Lenis smooth scrolling */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -224,208 +221,432 @@ html.lenis body {
 }
 
 /* ==========================================================================
-   Type scale
-   hero 48→176px · display 26→56 · headline 22→42 · title 20→28 · eyebrow 12
+   Type: Sora bold, sentence case, tracking -0.02em, leading 1.05
    ========================================================================== */
 
-@utility text-hero {
-  font-size: clamp(3rem, 0.6rem + 9.4vw, 11rem);
-  line-height: 0.86;
-  letter-spacing: -0.04em;
-}
-
-@utility text-display {
-  font-size: clamp(1.625rem, 1.05rem + 2.5vw, 3.5rem);
-  line-height: 1;
-  letter-spacing: -0.035em;
-}
-
-@utility text-headline {
-  font-size: clamp(1.4rem, 1rem + 1.45vw, 2.625rem);
+@utility text-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.75rem, 5.5vw, 5.25rem);
   line-height: 1.05;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.02em;
 }
 
-@utility text-title {
-  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+@utility text-h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 3.6vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+@utility text-h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 1rem + 0.7vw, 1.625rem);
   line-height: 1.15;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
 }
 
-/* Small uppercase label used above section headings */
+@utility text-h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+@utility text-lead {
+  font-size: clamp(1rem, 0.94rem + 0.3vw, 1.125rem);
+  line-height: 1.65;
+}
+
+/* Small label above headings: a pill chip */
 @utility eyebrow {
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 /* ==========================================================================
-   Surfaces
+   Layout
    ========================================================================== */
 
-/* Frosted bar: near-opaque white glass in light, dark glass in dark scopes.
-   Used by the navbar only. */
-@utility glass {
-  background-color: var(--glass-bg);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
+@utility section-y {
+  padding-block: var(--section-y);
 }
 
-/* Card: white with a hairline edge and soft layered shadows in light; the
-   translucent navy glass card inside dark scopes. */
-@utility card-surface {
-  background-color: var(--surface);
+/* An inset rounded panel: 16-24px from the viewport edges, radius 40 */
+/* The site frame: every panel and every section's content shares these
+   left and right edges (the hero's), up to 1440px wide. */
+@utility frame {
+  width: min(100% - 2 * var(--inset), 90rem);
+  margin-inline: auto;
+}
+
+/* An inset rounded panel on the frame, radius 40 */
+@utility panel {
+  width: min(100% - 2 * var(--inset), 90rem);
+  margin-inline: auto;
+  border-radius: var(--radius-panel);
+}
+
+/* Two panels in a row never touch: the same gap as the panel inset. */
+.panel + .panel,
+section:has(> [data-notched]) + .panel {
+  margin-top: max(var(--inset), 1rem);
+}
+
+/* White card with the one shadow */
+@utility card {
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface);
   box-shadow:
-    inset 0 1px 0 var(--card-highlight),
-    0 0 0 1px var(--card-edge),
-    var(--shadow-soft);
+    0 0 0 1px var(--surface-edge),
+    var(--shadow-card);
 }
 
-/* Hairline rule used between and inside sections */
-@utility glow-line {
-  height: 1px;
-  background-image: linear-gradient(90deg, transparent, var(--color-line) 15%, var(--color-line) 85%, transparent);
+/* Hide scrollbar on horizontal rails */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Concentric rings: the one decorative motif (hero platform, stats panel) */
+.rings {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(closest-side, transparent calc(100% - 1px), var(--ring-c, rgb(79 163 255 / 0.16)) calc(100% - 1px), transparent 100%),
+    radial-gradient(closest-side, transparent calc(78% - 1px), var(--ring-c, rgb(79 163 255 / 0.16)) calc(78% - 1px), transparent 78%),
+    radial-gradient(closest-side, transparent calc(56% - 1px), var(--ring-c, rgb(79 163 255 / 0.16)) calc(56% - 1px), transparent 56%);
 }
 
 /* ==========================================================================
-   Motion
+   Button: one component (src/components/ui/button.tsx), three variants.
+   Pill, 48px (40px small), label + arrow-in-a-circle chip. Hover: a darker
+   fill wipes in from the left, the chip turns 45° up-right, the label nudges
+   2px and the button lifts 2px. Press scales to .97.
    ========================================================================== */
 
-/* Reveal-on-scroll, toggled by <Reveal />. Only opacity and transform move,
-   so the whole reveal stays on the compositor. Keep hover transitions on a
-   child element: a transition class here would replace this one, and the
-   stagger delay would lag every hover. */
-@utility reveal {
-  opacity: 0;
-  transform: translate3d(0, 28px, 0) scale(0.985);
+@layer components {
+.btn {
+  --btn-h: 3rem;
+  --btn-chip: 2.25rem;
+  --btn-pad: 1.375rem;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: var(--btn-h);
+  padding-inline: var(--btn-pad) calc((var(--btn-h) - var(--btn-chip)) / 2);
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--btn-bg);
+  color: var(--btn-fg);
+  box-shadow: inset 0 0 0 1px var(--btn-edge, transparent);
   transition:
-    opacity 0.9s var(--ease-out-soft),
-    transform 0.9s var(--ease-out-soft);
-  transition-delay: var(--reveal-delay, 0ms);
+    translate 0.35s var(--ease-out-expo),
+    scale 0.2s var(--ease-out-quart),
+    color 0.35s var(--ease-out-expo),
+    box-shadow 0.35s var(--ease-out-expo);
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--btn-wipe);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s var(--ease-out-expo);
+}
+.btn-label {
+  transition: translate 0.35s var(--ease-out-expo);
+}
+.btn-chip {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--btn-chip);
+  height: var(--btn-chip);
+  border-radius: 9999px;
+  background-color: var(--btn-chip-bg);
+  color: var(--btn-chip-fg);
+  transition:
+    rotate 0.35s var(--ease-out-expo),
+    background-color 0.35s var(--ease-out-expo),
+    color 0.35s var(--ease-out-expo);
+}
+.btn-chip svg {
+  width: 1rem;
+  height: 1rem;
+}
+.btn[data-size="sm"] {
+  --btn-h: 2.5rem;
+  --btn-chip: 1.875rem;
+  --btn-pad: 1.125rem;
+  font-size: 0.875rem;
+  gap: 0.625rem;
+}
+.btn[data-chipless] {
+  padding-inline: var(--btn-pad);
 }
 
-@utility reveal-in {
-  opacity: 1;
-  transform: none;
+@media (hover: hover) {
+  .btn:hover {
+    translate: 0 -2px;
+    color: var(--btn-fg-hover, var(--btn-fg));
+  }
+  .btn:hover::before {
+    transform: scaleX(1);
+  }
+  .btn:hover .btn-label {
+    translate: 2px 0;
+  }
+  .btn:hover .btn-chip {
+    rotate: -45deg;
+    background-color: var(--btn-chip-bg-hover, var(--btn-chip-bg));
+    color: var(--btn-chip-fg-hover, var(--btn-chip-fg));
+  }
+}
+.btn:active {
+  scale: 0.97;
+}
+.btn:focus-visible {
+  outline: 2px solid var(--color-sky);
+  outline-offset: 2px;
+  border-radius: 9999px;
+}
+.btn[aria-disabled="true"],
+.btn:disabled {
+  pointer-events: none;
+  opacity: 0.6;
 }
 
-/* Elements a scroll timeline animates in start hidden when motion is on,
-   decided by CSS before first paint (no script); GSAP's inline styles then
-   take over. Without JavaScript a <noscript> rule in the layout shows them. */
+/* Primary: the Advisor navy (from the logo), white text, white chip; the
+   wipe lifts it to the brand navy. On dark panels it flips to white with
+   navy text so it never sinks into the background. */
+.btn-primary {
+  --btn-bg: #14213a;
+  --btn-fg: #ffffff;
+  --btn-wipe: #2a4161;
+  --btn-chip-bg: #ffffff;
+  --btn-chip-fg: #14213a;
+  box-shadow: 0 8px 22px -10px rgb(20 33 58 / 0.55);
+}
+[data-theme="dark"] .btn-primary {
+  --btn-bg: #ffffff;
+  --btn-fg: #14213a;
+  --btn-wipe: #dfe8f7;
+  --btn-chip-bg: #14213a;
+  --btn-chip-fg: #ffffff;
+  box-shadow: 0 8px 22px -10px rgb(0 0 0 / 0.5);
+}
+[data-theme="light"] .btn-primary {
+  --btn-bg: #14213a;
+  --btn-fg: #ffffff;
+  --btn-wipe: #2a4161;
+  --btn-chip-bg: #ffffff;
+  --btn-chip-fg: #14213a;
+}
+
+/* Secondary on light: navy outline; the wipe fills it navy, text turns white */
+.btn-secondary {
+  --btn-bg: transparent;
+  --btn-fg: #14213a;
+  --btn-fg-hover: #ffffff;
+  --btn-edge: #14213a;
+  --btn-wipe: #14213a;
+  --btn-chip-bg: #14213a;
+  --btn-chip-fg: #ffffff;
+  --btn-chip-bg-hover: #ffffff;
+  --btn-chip-fg-hover: #14213a;
+}
+/* Secondary on dark: white/25 outline, white text, a white wipe */
+[data-theme="dark"] .btn-secondary {
+  --btn-fg: #ffffff;
+  --btn-fg-hover: #0b1626;
+  --btn-edge: rgb(255 255 255 / 0.25);
+  --btn-wipe: #ffffff;
+  --btn-chip-bg: rgb(255 255 255 / 0.12);
+  --btn-chip-fg: #ffffff;
+  --btn-chip-bg-hover: #14213a;
+  --btn-chip-fg-hover: #ffffff;
+}
+[data-theme="light"] .btn-secondary {
+  --btn-fg: #14213a;
+  --btn-fg-hover: #ffffff;
+  --btn-edge: #14213a;
+  --btn-wipe: #14213a;
+  --btn-chip-bg: #14213a;
+  --btn-chip-fg: #ffffff;
+  --btn-chip-bg-hover: #ffffff;
+  --btn-chip-fg-hover: #14213a;
+}
+
+/* Link: text plus a small arrow; the arrow turns and the label nudges */
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-underline-offset: 4px;
+  transition: color 0.35s var(--ease-out-expo);
+}
+.btn-link svg {
+  width: 1rem;
+  height: 1rem;
+  transition: rotate 0.35s var(--ease-out-expo), translate 0.35s var(--ease-out-expo);
+}
+@media (hover: hover) {
+  .btn-link:hover {
+    color: var(--color-fg);
+  }
+  .btn-link:hover svg,
+  .group:hover .btn-link svg {
+    rotate: -45deg;
+    translate: 2px 0;
+  }
+}
+
+/* Loading and success states for form buttons */
+.btn[data-state="loading"] .btn-chip svg {
+  animation: btn-spin 0.8s linear infinite;
+}
+@keyframes btn-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+}
+
+/* ==========================================================================
+   Notched header (ref 1): the first panel's silhouette carries a raised tab
+   for the nav links. Geometry is measured in JS; these are its states.
+   ========================================================================== */
+
+@layer components {
+.nav-link {
+  position: relative;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.78);
+  transition: color 0.3s var(--ease-out-expo);
+}
+.nav-link:hover,
+.nav-link[aria-current="page"] {
+  color: #ffffff;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -0.125rem;
+  width: 0.3125rem;
+  height: 0.3125rem;
+  border-radius: 9999px;
+  background-color: var(--color-sky);
+  translate: -50% 0;
+  scale: 0;
+  transition: scale 0.35s var(--ease-settle);
+}
+.nav-link[aria-current="page"]::after {
+  scale: 1;
+}
+/* Light variant inside the floating pill */
+.nav-pill .nav-link {
+  color: #4a5568;
+}
+.nav-pill .nav-link:hover,
+.nav-pill .nav-link[aria-current="page"] {
+  color: #14213a;
+}
+}
+
+/* ==========================================================================
+   Motion helpers (GSAP owns the timelines; see src/lib/motion.ts)
+   ========================================================================== */
+
+/* Elements a GSAP reveal animates in start hidden when motion is on, decided
+   by CSS before first paint. Without JavaScript a <noscript> rule shows them. */
 @media (prefers-reduced-motion: no-preference) {
   .motion-hide {
     opacity: 0;
   }
 }
 
-/* Only meaningful while a scroll timeline plays (e.g. the hero's opening
-   line, which the timeline fades out). Without motion it would overlap the
-   composed state, so it is not shown at all. */
-@media (prefers-reduced-motion: reduce) {
-  .motion-only {
-    display: none;
-  }
+/* Reveal-on-scroll toggled by <Reveal /> (IntersectionObserver) */
+@utility reveal {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+@utility reveal-in {
+  opacity: 1;
+  transform: none;
 }
 
-/* Inner-page banner entrance. Runs on first paint, so it needs no observer.
-   Each step sets its own --rise-delay. */
-.hero-rise {
-  animation: hero-rise 1.1s var(--ease-out-soft) var(--rise-delay, 0ms) both;
+/* Headline line masks: GSAP slides each line up from below its mask */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.line-mask > span {
+  display: block;
 }
 
-@keyframes hero-rise {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 28px, 0);
-    filter: blur(8px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-}
-
-/* Backdrop settles from a slight zoom */
-.hero-zoom {
-  animation: hero-zoom 2.6s var(--ease-out-soft) both;
-}
-
-@keyframes hero-zoom {
-  from {
-    transform: scale(1.14);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
-/* Hero loader: a logo mark and a ring that draws. Fades when the hero is
-   ready (data-loaded); the CSS fallback fades it regardless after 1.2s.
-   Never shown with reduced motion. */
-.hero-loader {
-  transition: opacity 0.35s var(--ease-out-soft);
-  animation: hero-loader-out 0.3s ease 1.2s forwards;
-}
-.hero-loader-ring {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: hero-loader-ring 0.55s var(--ease-out-soft) forwards;
-}
-@keyframes hero-loader-ring {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes hero-loader-out {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-loader {
-    display: none;
-  }
-}
-
-/* Idle: a soft light sweeps across the title every few seconds. */
-[data-idle] .hero-sweep {
-  background: linear-gradient(105deg, #14213a 42%, #6b9cc4 50%, #14213a 58%);
-  background-size: 260% 100%;
-  background-position: 100% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: hero-sweep 8s var(--ease-out-soft) 1s infinite;
-}
-@keyframes hero-sweep {
-  0%,
-  78% {
-    background-position: 100% 0;
-  }
-  100% {
-    background-position: 0% 0;
-  }
-}
-
-/* On the home page the navbar waits off screen from first paint until the
-   hero intro slides it in (data-nav-in). Not with reduced motion; a
-   <noscript> rule in the layout shows it without JavaScript. */
+/* Gentle bob for floating stat cards (staggered by --bob-delay) */
 @media (prefers-reduced-motion: no-preference) {
-  html:has(section[aria-label="Introduction"]:not([data-nav-in])) header {
-    translate: 0 -130%;
+  .bob {
+    animation: bob 6s var(--ease-out-quart) var(--bob-delay, 0s) infinite alternate;
+  }
+}
+@keyframes bob {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -10px;
   }
 }
 
-/* Timer bar in cycling panels; duration is set inline */
+/* 3D renders used as images: hover tilt set by JS (--rx/--ry) */
+.tilt {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.6s var(--ease-out-expo);
+  will-change: transform;
+}
+
+/* Product-line deck: its timer bar (unchanged from the original section) */
 .hero-progress {
   animation-name: hero-progress;
   animation-timing-function: linear;
   animation-fill-mode: both;
 }
-
 @keyframes hero-progress {
   from {
     transform: scaleX(0);
@@ -435,50 +656,13 @@ html.lenis body {
   }
 }
 
-/* "Scroll for more" cue: a dot travelling down a short track */
-.scroll-cue-dot {
-  animation: scroll-cue 1.8s var(--ease-out-soft) infinite;
-}
-
-@keyframes scroll-cue {
-  0% {
-    transform: translateY(0);
-    opacity: 0;
-  }
-  25% {
-    opacity: 1;
-  }
-  80%,
-  100% {
-    transform: translateY(14px);
-    opacity: 0;
-  }
-}
-
-/* WebGL backgrounds fade in once their canvas mounts, rather than snapping
-   over the CSS surface gradient beneath them. */
-.fx-layer canvas {
-  animation: fx-in 1.4s var(--ease-out-soft) both;
-}
-
-@keyframes fx-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Horizontal auto-scrolling strip */
+/* Marquees (logo strip, client cards) */
 @utility animate-marquee {
   animation: marquee 48s linear infinite;
 }
-
 @utility animate-marquee-reverse {
   animation: marquee 56s linear infinite reverse;
 }
-
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -487,119 +671,158 @@ html.lenis body {
     transform: translateX(-50%);
   }
 }
-
-/* Hide scrollbar on horizontally scrollable rails */
-@utility no-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+.marquee:hover .animate-marquee,
+.marquee:hover .animate-marquee-reverse,
+.marquee:focus-within .animate-marquee,
+.marquee:focus-within .animate-marquee-reverse {
+  animation-play-state: paused;
 }
 
 /* ==========================================================================
-   Deck cards (CardDeck / DeckCard). Open timing lives in
-   src/lib/card-motion.ts. The hover lift uses `translate`, not `transform`,
-   so it never fights the GSAP deal-out (which owns `transform`).
+   Deck cards (CardDeck / DeckCard): card-stack open on enter, icon motion
+   on hover. Timing in src/lib/motion.ts (CARD).
    ========================================================================== */
+@layer components {
 .deck-card {
-  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   background-color: #ffffff;
-  background-image: linear-gradient(165deg, #ffffff 0%, #f8fafc 45%, #eaf1f7 100%);
-  background-size: 100% 190%;
-  background-position: 50% 0%;
-  box-shadow: 0 0 0 1px var(--color-line), var(--shadow-soft);
+  box-shadow:
+    0 0 0 1px var(--color-line),
+    var(--shadow-card);
   transition:
-    translate 0.5s var(--ease-out-soft),
-    box-shadow 0.5s var(--ease-out-soft),
-    background-position 0.8s var(--ease-out-soft);
+    translate 0.5s var(--ease-out-expo),
+    box-shadow 0.5s var(--ease-out-expo);
 }
 .deck-card[data-tone-card="navy"] {
   --color-fg-muted: #d5dee8;
   --color-fg-subtle: #c3cfdc;
   background-color: #14213a;
-  background-image: linear-gradient(150deg, #14213a 0%, #1d3150 48%, #3f6d85 100%);
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06), var(--shadow-lift);
+  background-image: linear-gradient(150deg, #14213a 0%, #1b2b47 55%, #2a4161 100%);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06), var(--shadow-card);
   color: #fff;
+}
+.deck-card[data-tone-card="ice"] {
+  background-color: #edf2ff;
+  box-shadow: 0 0 0 1px rgb(47 92 196 / 0.12);
 }
 .deck-card-art {
   transform: perspective(700px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
   transition:
-    transform 0.6s var(--ease-out-soft),
-    translate 0.6s var(--spring),
-    scale 0.6s var(--spring);
+    transform 0.6s var(--ease-out-expo),
+    translate 0.6s var(--ease-settle),
+    scale 0.6s var(--ease-settle);
 }
-img.deck-card-art {
-  filter: drop-shadow(0 14px 14px rgb(20 33 58 / 0.14));
-}
-
-/* Icon art: a tile, a fine ring and a dashed orbit. */
 .icon-tile,
 .icon-glyph,
 .icon-orbit {
   transition:
-    translate 0.6s var(--spring),
-    rotate 0.6s var(--spring),
-    scale 0.6s var(--spring),
-    box-shadow 0.5s var(--ease-out-soft);
+    translate 0.6s var(--ease-settle),
+    rotate 0.6s var(--ease-settle),
+    scale 0.6s var(--ease-settle),
+    box-shadow 0.5s var(--ease-out-expo);
 }
 .deck-card[data-tone-card="navy"] .icon-tile {
   background: rgb(255 255 255 / 0.1);
-  box-shadow: inset 0 0 0 1px rgb(124 195 232 / 0.35);
-  color: #7cc3e8;
+  box-shadow: inset 0 0 0 1px rgb(143 179 255 / 0.35);
+  color: #8fb3ff;
 }
 .deck-card[data-tone-card="navy"] .icon-orbit {
-  border-color: rgb(124 195 232 / 0.35);
+  border-color: rgb(143 179 255 / 0.35);
 }
-
 @media (prefers-reduced-motion: no-preference) {
   @media (hover: hover) {
     .deck-card:hover {
       translate: 0 -6px;
-      background-position: 50% 100%;
-      box-shadow: 0 0 0 1px rgb(63 109 133 / 0.28), var(--shadow-float);
+      box-shadow:
+        0 0 0 1px rgb(47 92 196 / 0.22),
+        var(--shadow-card-hover);
     }
-    .deck-card[data-tone-card="navy"]:hover {
-      box-shadow: 0 0 0 1px rgb(124 195 232 / 0.3), var(--shadow-float);
-    }
-    /* Product illustrations lift and grow a touch (tilt follows the pointer). */
     .deck-card:hover img.deck-card-art {
       translate: 0 -8px;
       scale: 1.05;
     }
-    /* Icon tiles spring up and tip, the glyph pops, the orbit turns and the
-       ring ripples out once. */
     .deck-card:hover .icon-tile {
       translate: 0 -5px;
       rotate: -8deg;
       scale: 1.08;
-      box-shadow: 0 14px 28px -10px rgb(20 33 58 / 0.45);
     }
     .deck-card:hover .icon-glyph {
-      animation: icon-pop 0.7s var(--spring) both;
+      animation: icon-pop 0.7s var(--ease-settle) both;
     }
     .deck-card:hover .icon-orbit {
       rotate: 90deg;
       scale: 1.06;
     }
     .deck-card:hover .icon-ripple {
-      animation: icon-ripple 0.9s var(--ease-out-soft) both;
+      animation: icon-ripple 0.9s var(--ease-out-expo) both;
     }
   }
-  /* Touch: each icon plays the same move once, as its card opens. */
   .deck-card[data-live] .icon-glyph {
-    animation: icon-pop 0.7s var(--spring) both;
+    animation: icon-pop 0.7s var(--ease-settle) both;
   }
   .deck-card[data-live] .icon-ripple {
-    animation: icon-ripple 0.9s var(--ease-out-soft) both;
+    animation: icon-ripple 0.9s var(--ease-out-expo) both;
   }
 }
+}
+
 @keyframes icon-pop {
-  0% { scale: 1; rotate: 0deg; }
-  35% { scale: 1.28; rotate: 10deg; }
-  100% { scale: 1; rotate: 0deg; }
+  0% {
+    scale: 1;
+    rotate: 0deg;
+  }
+  35% {
+    scale: 1.24;
+    rotate: 10deg;
+  }
+  100% {
+    scale: 1;
+    rotate: 0deg;
+  }
 }
 @keyframes icon-ripple {
-  0% { scale: 1; opacity: 1; }
-  100% { scale: 1.45; opacity: 0; }
+  0% {
+    scale: 1;
+    opacity: 1;
+  }
+  100% {
+    scale: 1.45;
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Hero intro: the composed state is server-rendered; with motion on, these
+   are its first-paint starting values until the GSAP timeline runs
+   (data-reveal="pending" → "done"). No JS: the <noscript> rule clears them.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal="pending"] [data-notch-svg] {
+    clip-path: inset(0px 0px calc(100% - var(--header-h)) 0px);
+  }
+  [data-reveal="pending"] [data-panel-body] {
+    clip-path: inset(0% 18% 100% 18% round 40px);
+  }
+  [data-reveal="pending"] .line-mask > span {
+    transform: translateY(110%);
+  }
+  [data-reveal="pending"] [data-intro] {
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Page transitions: app/template.tsx remounts on every navigation, and the
+   new page rises in. Pure CSS (no View Transitions API), so it can never
+   abort when the tab is hidden. Off under reduced motion.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter {
+    animation: page-enter 0.5s var(--ease-out-expo) both;
+  }
+}
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
 }

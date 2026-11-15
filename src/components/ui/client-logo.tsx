@@ -4,8 +4,9 @@ import { cn, monogram } from "@/lib/utils";
 
 /**
  * A client's logo on a white tile, sized by `className` (e.g. "size-12
- * rounded-xl"). Logos with their own coloured background fill the tile;
- * the rest float on white with a little breathing room. Falls back to the
+ * rounded-xl"). Logos come from public/clients-logos/clean/ (see
+ * scripts/clean-logos.mjs): transparent, trimmed and centred, so they all
+ * sit the same way. Falls back to the
  * navy monogram badge for a client without a logo.
  */
 export function ClientLogo({
@@ -29,7 +30,7 @@ export function ClientLogo({
           ? { role: "img", "aria-label": client.name, title: client.name }
           : { "aria-hidden": true })}
         className={cn(
-          "grid shrink-0 place-items-center bg-linear-to-br from-brand to-brand-deep px-1 font-display font-semibold tracking-wider text-white",
+          "grid shrink-0 place-items-center bg-linear-to-br from-brand to-navy px-1 font-display font-semibold tracking-wider text-white",
           badge.length > 3 ? "text-[0.625rem]" : "text-xs",
           className,
         )}
@@ -42,7 +43,7 @@ export function ClientLogo({
   return (
     <span
       className={cn(
-        "relative block shrink-0 overflow-hidden bg-white ring-1 ring-white/20",
+        "relative block shrink-0 overflow-hidden bg-white",
         className,
       )}
     >
@@ -51,9 +52,7 @@ export function ClientLogo({
         alt={labelled ? client.name : ""}
         fill
         sizes={sizes}
-        // Next's optimiser does not process SVG; serve it as-is.
-        unoptimized={client.logo.endsWith(".svg")}
-        className={client.logoFill ? "object-cover" : "object-contain p-1.5"}
+        className="object-contain p-1"
       />
     </span>
   );

@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { HeroFacts, PageHero } from "@/components/shared/page-hero";
+import { PageHero } from "@/components/shared/page-hero";
 import { Cta } from "@/components/shared/cta";
 import { CatalogueNav } from "@/components/shared/catalogue-nav";
 import { Container, Section } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { Accent, SectionHeading } from "@/components/ui/section-heading";
 import { FloodCard } from "@/components/ui/flood-card";
 import { CardDeck } from "@/components/ui/card-deck";
-import { ArrowUpRight, Icon } from "@/components/ui/icons";
+import { ArrowRight, Icon } from "@/components/ui/icons";
 import {
-  clients,
   productCategories,
   productCategoryDetails,
   products,
@@ -67,25 +66,18 @@ export default function ProductsPage() {
     <>
       <PageHero
         eyebrow="Products"
+        render="banner-products"
         title={
           <>
-            A catalogue built for
-            <span className="text-accent"> procurement</span>
+            A catalogue built for <Accent>procurement</Accent>
           </>
         }
-        image="/images/photos/computing.webp"
         lead={`${products.length} categories spanning infrastructure, IT hardware, connectivity and general order supply, all available on a single purchase order.`}
-        aside={
-          <HeroFacts
-            label="The catalogue"
-            facts={[
-              { value: `${products.length}+`, label: "Product categories" },
-              { value: groups.length, label: "Catalogue groups" },
-              { value: services.length, label: "Service divisions" },
-              { value: `${clients.length}+`, label: "Institutional clients" },
-            ]}
-          />
-        }
+        facts={[
+          { value: `${products.length}+`, label: "Product categories" },
+          { value: groups.length, label: "Catalogue groups" },
+          { value: services.length, label: "Service divisions" },
+        ]}
       />
 
       <Section className="pt-12 md:pt-14 lg:pt-16">
@@ -175,15 +167,14 @@ export default function ProductsPage() {
       </Section>
 
       {/* Assurances */}
-      <Section tone="steel" divider>
+      <Section tone="ice">
         <Container>
           <SectionHeading
             eyebrow="With every order"
             lead="Supply, installation and support come as one commitment, not three separate purchases."
             title={
               <>
-                What comes with{" "}
-                <span className="text-accent">every order</span>
+                What comes with <Accent>every order</Accent>
               </>
             }
           />
@@ -251,13 +242,12 @@ function ProductCard({
         {product.body}
       </p>
 
-      <Link
-        href={href}
-        className="mt-auto inline-flex items-center gap-1.5 self-start pt-6 text-sm font-semibold text-accent transition-colors hover:text-fg"
-      >
-        Enquire about this
-        <span className="sr-only">: {product.title}</span>
-        <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      <Link href={href} className="btn-link mt-auto self-start pt-6 text-sm">
+        <span>
+          Enquire about this
+          <span className="sr-only">: {product.title}</span>
+        </span>
+        <ArrowRight aria-hidden />
       </Link>
 
       <span

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { gsap, MOTION, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { CARD_MOTION as M } from "@/lib/card-motion";
+import { CARD as M } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -54,7 +54,7 @@ export function CardDeck({
             zIndex: cards.length - i,
           });
         });
-        gsap.set(art, { y: M.illustration.y, autoAlpha: 0 });
+        if (art.length) gsap.set(art, { y: M.illustration.y, autoAlpha: 0 });
         if (progress) gsap.set(progress, { scaleX: 0, transformOrigin: "left center" });
 
         const touch = window.matchMedia("(hover: none)").matches;
@@ -75,7 +75,7 @@ export function CardDeck({
               stagger: M.open.stagger,
               clearProps: "transform,zIndex",
             });
-            tl.to(
+            if (art.length) tl.to(
               art,
               {
                 y: 0,
@@ -134,7 +134,7 @@ export function DeckCard({
   illustrationAlt?: string;
   /** Custom art in place of an illustration image (rises the same way). */
   art?: React.ReactNode;
-  tone?: "light" | "navy";
+  tone?: "light" | "navy" | "ice";
   className?: string;
   bodyClassName?: string;
   artClassName?: string;

@@ -2,15 +2,15 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { ArrowUpRight, Check } from "@/components/ui/icons";
+import { Button, type ButtonState } from "@/components/ui/button";
 import { services, sectors } from "@/lib/content";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const fieldClass =
-  "w-full rounded-2xl border-0 bg-surface-2 px-5 py-3.5 text-[0.9375rem] text-fg ring-1 ring-inset ring-line transition-shadow placeholder:text-fg-subtle focus:shadow-[0_0_0_4px_rgb(91_163_208/0.16),0_0_28px_rgb(91_163_208/0.3)] focus:ring-2 focus:ring-glow focus:outline-none";
+  "w-full rounded-2xl border-0 bg-mist px-5 py-3.5 text-[0.9375rem] text-navy ring-1 ring-inset ring-line transition-[box-shadow,background-color] duration-300 placeholder:text-text-3 hover:bg-white focus:bg-white focus:shadow-[0_0_0_4px_rgb(79_163_255/0.18)] focus:ring-2 focus:ring-sky focus:outline-none";
 
-const labelClass = "block text-sm font-medium text-fg";
+const labelClass = "block text-sm font-medium text-navy";
 
 /**
  * Enquiry form. There is no backend yet, so submitting opens the visitor's
@@ -19,7 +19,7 @@ const labelClass = "block text-sm font-medium text-fg";
  */
 export function ContactForm() {
   const params = useSearchParams();
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<ButtonState>("idle");
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,8 +41,10 @@ export function ContactForm() {
 
     const subject = `Enquiry: ${get("requirement") || "General"} for ${get("organisation") || get("name")}`;
 
+    setStatus("loading");
     window.location.href = `mailto:${site.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    // The mail app takes over; show success once the hand-off has happened.
+    window.setTimeout(() => setStatus("success"), 700);
   }
 
   return (
@@ -159,26 +161,18 @@ export function ContactForm() {
       </div>
 
       <div className="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs leading-relaxed text-fg-subtle">
+        <p className="text-xs leading-relaxed text-text-3">
           Your details are used only to respond to this enquiry.
         </p>
-        <button
-          type="submit"
-          className="group inline-flex h-13 shrink-0 items-center justify-center gap-2 rounded-full bg-glow px-8 font-semibold text-on-glow shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-white"
-        >
-          {sent ? "Opening your mail app" : "Send enquiry"}
-          {sent ? (
-            <Check className="size-4" />
-          ) : (
-            <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          )}
-        </button>
+        <Button type="submit" state={status} className="shrink-0">
+          {status === "success" ? "Opening your mail app" : status === "loading" ? "Preparing" : "Send enquiry"}
+        </Button>
       </div>
 
-      {sent && (
+      {status === "success" && (
         <p
           role="status"
-          className="sm:col-span-2 rounded-2xl bg-glow/10 px-5 py-4 text-sm text-fg ring-1 ring-glow/30"
+          className="sm:col-span-2 rounded-2xl bg-ice px-5 py-4 text-sm text-navy ring-1 ring-sky/40"
         >
           We have opened your email client with the enquiry composed. If nothing
           happened, write to{" "}

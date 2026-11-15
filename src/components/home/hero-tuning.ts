@@ -1,83 +1,109 @@
 /**
- * Every tunable value for the hero, in one place: studio, camera, lights,
- * product layout and intro timing. Units are three.js world units (the floor
- * is y = 0; one unit is roughly one metre).
+ * Hero tuning: camera, the platform skyline, floating tiles, idle motion
+ * and the intro timeline. Units are three.js world units; the platform's
+ * top surface is at y ≈ 0.56 and its radius is 4.4. Times are seconds.
  */
+import type { IconKey } from "@/components/three/textures";
+import type { ProductName } from "@/components/three/products";
 
-export type Slot = {
-  /** Horizontal screen position of the product's base, −1 (left edge) → 1. */
-  nx: number;
-  /** Depth on the floor: 0 is the front row, negative is further back. */
+export type ProductSlot = {
+  name: ProductName;
+  /** Position on the platform top (x, z). */
+  x: number;
   z: number;
-  /** Plinth height under the product; 0 = it stands on the floor. */
+  /** Glass plinth height under the product. */
   plinth: number;
-  /** Turn toward the centre, radians. */
+  /** Plinth footprint (width, depth). */
+  size: [number, number];
   turn: number;
   scale: number;
 };
 
+export type TileSlot = { icon: IconKey; pos: [number, number, number]; rot: [number, number, number]; size: number; navy?: boolean };
+
 export const HERO_TUNING = {
   camera: {
-    fov: { desktop: 32, mobile: 42 },
-    position: { desktop: [0, 3.1, 14], mobile: [0, 3.6, 15] },
-    lookAt: { desktop: [0, 2.15, 0], mobile: [0, 2.9, 0] },
-    /** The camera starts this much further back and eases in during the intro. */
-    introPullBack: 2.2,
+    fov: 30,
+    /** 3/4 high angle, like ref 2. */
+    desktop: { position: [0.6, 9.2, 17.6] as const, target: [-0.9, 1.5, 0] as const },
+    mobile: { position: [0, 9.4, 18] as const, target: [0, 1.5, 0] as const },
   },
+  dprCap: 2,
+  lights: { environment: 0.85, key: 2.1, rim: 3.2, exposure: 1.02 },
 
-  /** Desktop mouse parallax: how far the camera drifts, and the damping. */
-  parallax: { x: 0.45, y: 0.22, damping: 3.5 },
-
-  /** Hero content drifts up and fades as the page scrolls past (no pin). */
-  scrollFade: { distance: 140, fadeBy: 0.7 },
-
-  lights: {
-    /** Image-based light from a neutral studio environment. */
-    environment: 0.9,
-    /** One soft key from the upper left, matching the window light. */
-    key: 1.35,
-    exposure: 1.0,
-  },
-
-  studio: {
-    wall: { top: "#ffffff", bottom: "#eaf1f7" },
-    floor: "#e6ecf2",
-    shadowOpacity: 0.28,
-  },
-
-  /** Order matches the builders: rack, CCTV, laptop, printer, chair, gear.
-   *  Left and right arcs, the centre column kept clear for the copy. */
+  /** Tallest at centre-back, gear and chair at the sides, three in front. */
   layout: {
     desktop: [
-      { nx: -0.8, z: 1.4, plinth: 0, turn: 0.55, scale: 0.95 }, // rack
-      { nx: -0.6, z: -0.6, plinth: 0.9, turn: 0.4, scale: 0.72 }, // CCTV
-      { nx: -0.45, z: 2.6, plinth: 0.35, turn: 0.3, scale: 0.6 }, // laptop
-      { nx: 0.45, z: 2.6, plinth: 0.35, turn: -0.3, scale: 0.6 }, // printer
-      { nx: 0.56, z: -0.6, plinth: 0, turn: -0.95, scale: 0.85 }, // chair
-      { nx: 0.82, z: 1.4, plinth: 0, turn: -0.5, scale: 0.66 }, // gear
-    ] as Slot[],
+      { name: "rack", x: 0, z: -1.5, plinth: 0.9, size: [1.4, 1.3], turn: 0.25, scale: 1 },
+      { name: "gear", x: 2.55, z: -0.55, plinth: 0.55, size: [1.15, 1.0], turn: -0.55, scale: 0.85 },
+      { name: "chair", x: -2.6, z: -0.5, plinth: 0.35, size: [1.25, 1.2], turn: 0.7, scale: 0.85 },
+      { name: "laptop", x: -1.45, z: 1.55, plinth: 0.45, size: [1.55, 1.25], turn: 0.35, scale: 0.72 },
+      { name: "printer", x: 1.5, z: 1.5, plinth: 0.3, size: [1.4, 1.2], turn: -0.35, scale: 0.72 },
+      { name: "cctv", x: 0.1, z: 2.55, plinth: 0.2, size: [0.75, 0.75], turn: -0.15, scale: 0.75 },
+    ] as ProductSlot[],
     mobile: [
-      { nx: -0.7, z: 1.6, plinth: 0, turn: 0.45, scale: 0.8 }, // rack
-      { nx: -0.25, z: 3, plinth: 0.35, turn: 0.2, scale: 0.6 }, // CCTV
-      { nx: 0.25, z: 3, plinth: 0.3, turn: -0.2, scale: 0.55 }, // laptop
-      { nx: 0.7, z: 1.6, plinth: 0, turn: -0.45, scale: 0.62 }, // gear
-    ] as Slot[],
+      { name: "rack", x: 0, z: -1.3, plinth: 0.8, size: [1.4, 1.3], turn: 0.2, scale: 1 },
+      { name: "gear", x: 2.3, z: -0.2, plinth: 0.5, size: [1.15, 1.0], turn: -0.5, scale: 0.85 },
+      { name: "laptop", x: -2.0, z: 0.7, plinth: 0.4, size: [1.55, 1.25], turn: 0.4, scale: 0.75 },
+      { name: "cctv", x: 0.3, z: 2.2, plinth: 0.2, size: [0.75, 0.75], turn: -0.2, scale: 0.8 },
+    ] as ProductSlot[],
   },
 
-  /** Intro timeline, seconds from the moment assets are ready. */
-  intro: {
-    lightsUp: 0,
-    partsAppear: 0.35,
-    assembleStart: 1.15,
-    assembleStagger: 0.18,
-    assembleDuration: 1.25,
-    title: 2.5,
-    titleTracking: 3.1,
-    tagline: 3.6,
-    nav: 3.9,
-    /** How far parts fly out when exploded. */
-    explode: 0.42,
-    /** Idle loop: seconds between light sweeps across the title. */
+  /** Frosted tiles at different depths; some cross the panel edge. */
+  tiles: {
+    desktop: [
+      { icon: "shield", pos: [-3.4, 4.8, -2.6], rot: [0.2, 0.5, -0.12], size: 0.95 },
+      { icon: "network", pos: [-2.1, 4.9, -2.6], rot: [0.25, 0.25, 0.08], size: 0.9, navy: true },
+      { icon: "gear", pos: [2.6, 4.6, -2.4], rot: [0.3, -0.35, 0.1], size: 1.0 },
+      { icon: "camera", pos: [5.6, 3.1, 0.2], rot: [0.15, -0.6, 0.16], size: 1.1 },
+      { icon: "printer", pos: [5.2, 0.6, 2.9], rot: [-0.1, -0.5, -0.1], size: 0.9, navy: true },
+      { icon: "laptop", pos: [-2.6, -0.5, 4.6], rot: [-0.15, 0.5, 0.12], size: 0.8 },
+    ] as TileSlot[],
+    mobile: [
+      { icon: "shield", pos: [-3.6, 4.2, -1.2], rot: [0.2, 0.45, -0.1], size: 1.0 },
+      { icon: "gear", pos: [3.4, 4.4, -1.6], rot: [0.3, -0.35, 0.1], size: 1.0 },
+      { icon: "network", pos: [3.9, 1.0, 2.3], rot: [-0.1, -0.5, -0.1], size: 0.9, navy: true },
+    ] as TileSlot[],
+  },
+  spheres: {
+    desktop: [
+      { pos: [-3.0, 2.5, 2.2] as [number, number, number], r: 0.3 },
+      { pos: [3.8, 2.6, -1.4] as [number, number, number], r: 0.22 },
+      { pos: [-0.9, 4.2, 0.6] as [number, number, number], r: 0.16 },
+    ],
+    mobile: [{ pos: [-3.0, 2.2, 2.0] as [number, number, number], r: 0.3 }],
+  },
+
+  idle: {
+    /** Platform yaw swing (radians, ±8°) and its period. */
+    swing: 0.14,
+    swingPeriod: 16,
+    float: 0.06,
+    tileDrift: 0.18,
+    /** A light sweeps across the products every N seconds. */
     sweepEvery: 8,
+    ledPulse: 0.35,
+    parallax: { x: 0.5, y: 0.28, damping: 3.2 },
+  },
+
+  /** Autoplay intro (≈5.5s). Offsets from the start of the timeline. */
+  intro: {
+    panel: 0,
+    panelDuration: 0.9,
+    chip: 0.35,
+    headline: 0.45,
+    tagline: 1.0,
+    platform: 0.7,
+    led: 1.3,
+    products: 1.5,
+    productStagger: 0.22,
+    assemble: 1.1,
+    tiles: 3.0,
+    tileStagger: 0.12,
+    buttons: 3.6,
+    trust: 3.9,
+    idle: 5.5,
+    /** How far parts fly out before assembling. */
+    explode: 0.9,
   },
 } as const;

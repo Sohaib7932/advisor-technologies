@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Sora } from "next/font/google";
-import { Navbar } from "@/components/layout/navbar";
+import { FloatingNav, MobileMenu } from "@/components/layout/site-nav";
 import { Footer } from "@/components/layout/footer";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
-import { Atmosphere } from "@/components/layout/atmosphere";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -53,7 +52,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1b1f26",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -70,17 +69,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       >
         {/* Without JS the reveal observer never runs, so un-hide that content. */}
         <noscript>
-          <style>{`.reveal,.motion-hide{opacity:1!important;transform:none!important}header{translate:none!important}`}</style>
+          <style>{`.reveal,.motion-hide,[data-intro]{opacity:1!important;transform:none!important}[data-reveal] *{clip-path:none!important}.line-mask>span{transform:none!important}`}</style>
         </noscript>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-60 focus:rounded-full focus:bg-glow focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-on-glow"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-60 focus:rounded-full focus:bg-sky focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-ink"
         >
           Skip to content
         </a>
         <SmoothScroll />
-        <Atmosphere />
-        <Navbar />
+        <FloatingNav />
+        <MobileMenu />
         <main id="main" className="flex-1">
           {children}
         </main>

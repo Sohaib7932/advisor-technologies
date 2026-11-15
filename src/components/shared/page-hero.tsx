@@ -1,154 +1,134 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Container } from "@/components/ui/container";
-import { cn } from "@/lib/utils";
+"use client";
 
-/** Staggered entrance: pairs with the `hero-rise` class. */
-function rise(delay: number) {
-  return { "--rise-delay": `${delay}ms` } as React.CSSProperties;
-}
+import Link from "next/link";
+import { useRef } from "react";
+import { NotchedPanel } from "@/components/layout/notched-panel";
+import { Render3D } from "@/components/three/render-3d";
+import type { RenderName } from "@/components/three/renders";
+import { gsap, MOTION, useGSAP } from "@/lib/gsap";
+import { EASE } from "@/lib/motion";
 
 /**
- * Dark banner used at the top of every inner page, with the same entrance
- * as the home hero: the photograph settles from a slight zoom and the copy
- * rises in step by step. It sits under the transparent navbar, so it always
- * provides the contrast the nav needs. `aside` fills the right-hand column
- * on large screens (a glass panel of facts, a deck, and so on).
+ * The dark banner that opens every inner page, with the notched header built
+ * in: breadcrumb, sentence-case title (one accent phrase), lead, a row of
+ * real key figures as chips, and the page's 3D render on the right. The
+ * panel pours out of the notch and the copy rises in, like the home hero.
  */
 export function PageHero({
   eyebrow,
   title,
   lead,
-  image = "/images/photos/corridor.webp",
-  aside,
+  render,
+  facts = [],
+  watermark,
   children,
 }: {
-  /** Page name, shown in the breadcrumb above the title. */
+  /** Page name, shown in the breadcrumb. */
   eyebrow: string;
   title: React.ReactNode;
   lead?: string;
-  image?: string;
-  aside?: React.ReactNode;
+  render: RenderName;
+  facts?: { value: React.ReactNode; label: string }[];
+  /** Giant faint text behind the copy (the 404 page). */
+  watermark?: string;
   /** Extra content under the lead, such as buttons. */
   children?: React.ReactNode;
 }) {
+  const root = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const panel = root.current!.querySelector<HTMLElement>("[data-notched]")!;
+      const mm = gsap.matchMedia();
+      mm.add(MOTION.reduced, () => {
+        panel.dataset.reveal = "done";
+      });
+      mm.add(MOTION.ok, () => {
+        const body = panel.querySelector<HTMLElement>("[data-panel-body]")!;
+        const tl = gsap.timeline({
+          paused: true,
+          defaults: { ease: EASE.out },
+          onComplete: () => {
+            panel.dataset.reveal = "done";
+            gsap.set(panel.querySelectorAll("[data-panel-body],[data-notch-svg]"), { clearProps: "clipPath" });
+          },
+        });
+        tl.fromTo(body, { clipPath: "inset(0% 18% 100% 18% round 40px)" }, { clipPath: "inset(0% 0% 0% 0% round 40px)", duration: 0.8, ease: "expo.inOut" }, 0);
+        tl.add(() => {
+          const svg = panel.querySelector<SVGElement>("[data-notch-svg]");
+          if (!svg) return;
+          const h = panel.offsetHeight - body.offsetTop;
+          gsap.fromTo(svg, { clipPath: `inset(0px 0px ${h}px 0px)` }, { clipPath: "inset(0px 0px 0px 0px)", duration: 0.8, ease: "expo.inOut" });
+        }, 0);
+        tl.fromTo(panel.querySelectorAll(".line-mask > span"), { yPercent: 110, y: 0 }, { yPercent: 0, y: 0, duration: 1, stagger: 0.08 }, 0.35);
+        tl.fromTo(panel.querySelectorAll("[data-intro]"), { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.9, stagger: 0.08 }, 0.3);
+        const raf = requestAnimationFrame(() => requestAnimationFrame(() => tl.play()));
+        return () => cancelAnimationFrame(raf);
+      });
+    },
+    { scope: root },
+  );
+
   return (
-    <section className="px-2 pt-2 sm:px-3 sm:pt-3">
-      <div data-theme="dark" className="relative isolate overflow-hidden rounded-[1.75rem] bg-brand-deep ring-1 ring-white/8 sm:rounded-hero">
-        <div className="hero-zoom absolute inset-0 -z-10">
-          <Image
-            src={image}
-            alt=""
-            fill
-            loading="eager"
-            fetchPriority="high"
-            sizes="100vw"
-            className="object-cover"
-          />
-        </div>
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-linear-to-r from-brand-deep/95 via-brand-deep/80 to-brand-deep/40"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-linear-to-t from-bg via-transparent to-brand-deep/60"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(55%_60%_at_85%_70%,rgb(63_109_133/0.35),transparent_70%)] mix-blend-screen"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(40%_45%_at_5%_0%,rgb(91_163_208/0.16),transparent_70%)]"
-        />
-
-        <Container className="pt-32 pb-14 sm:pt-40 sm:pb-18 lg:pt-44 lg:pb-20">
-          <div
-            className={cn(
-              "grid gap-12",
-              Boolean(aside) && "lg:grid-cols-12 lg:items-end lg:gap-10",
+    <section ref={root} aria-label={eyebrow}>
+      <NotchedPanel
+        reveal
+        backdrop={
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+            <div className="absolute top-[-10%] right-[-8%] aspect-square w-[70%] rounded-full bg-[radial-gradient(closest-side,rgb(47_92_196/0.5),rgb(30_48_96/0.15)_55%,transparent)] lg:w-[48%]" />
+            <div className="rings top-[-6%] right-[-4%] w-[80%] lg:w-[46%]" />
+            {watermark && (
+              <span className="absolute bottom-[-0.12em] left-[-0.04em] font-display text-[clamp(9rem,26vw,22rem)] leading-none font-extrabold tracking-[-0.05em] text-white/[0.045] select-none">
+                {watermark}
+              </span>
             )}
-          >
-            <div className={cn(Boolean(aside) && "lg:col-span-7")}>
-              <nav
-                aria-label="Breadcrumb"
-                style={rise(60)}
-                className="hero-rise flex items-center gap-2 text-xs font-medium text-fg-subtle"
-              >
-                <Link href="/" className="transition-colors hover:text-accent">
-                  Home
-                </Link>
-                <span aria-hidden className="text-white/30">
-                  /
-                </span>
-                <span aria-current="page" className="text-accent">
-                  {eyebrow}
-                </span>
-              </nav>
-
-              <h1
-                style={rise(240)}
-                className="hero-rise mt-8 max-w-3xl text-display font-bold text-fg uppercase"
-              >
-                {title}
-              </h1>
-              {lead && (
-                <p
-                  style={rise(380)}
-                  className="hero-rise mt-7 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg"
-                >
-                  {lead}
-                </p>
-              )}
-              {children && (
-                <div style={rise(480)} className="hero-rise mt-9">
-                  {children}
-                </div>
-              )}
-            </div>
-
-            {aside && (
-              <div style={rise(520)} className="hero-rise lg:col-span-5">
-                {aside}
+          </div>
+        }
+      >
+        <div className="grid items-center gap-6 px-(--gutter) pt-12 pb-10 sm:pt-14 lg:grid-cols-12 lg:gap-10 lg:py-16">
+          <div className="lg:col-span-7">
+            <nav aria-label="Breadcrumb" data-intro className="flex items-center gap-2 text-sm font-medium text-fg-subtle">
+              <Link href="/" className="transition-colors hover:text-white">
+                Home
+              </Link>
+              <span aria-hidden className="text-white/30">
+                /
+              </span>
+              <span aria-current="page" className="text-sky">
+                {eyebrow}
+              </span>
+            </nav>
+            <h1 className="mt-6 max-w-3xl text-[clamp(2.4rem,4.4vw,4rem)] leading-[1.05] font-bold tracking-[-0.02em] text-white">
+              <span className="line-mask">
+                <span>{title}</span>
+              </span>
+            </h1>
+            {lead && (
+              <p data-intro className="mt-6 max-w-2xl text-lead text-fg-muted">
+                {lead}
+              </p>
+            )}
+            {facts.length > 0 && (
+              <dl data-intro className="mt-8 flex flex-wrap gap-2.5">
+                {facts.map((fact) => (
+                  <div key={fact.label} className="flex items-baseline gap-2 rounded-full bg-white/7 px-4 py-2 ring-1 ring-white/12">
+                    <dt className="order-2 text-sm text-fg-muted">{fact.label}</dt>
+                    <dd className="order-1 font-display text-lg font-bold text-white tabular-nums">{fact.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            {children && (
+              <div data-intro className="mt-9">
+                {children}
               </div>
             )}
           </div>
-        </Container>
-      </div>
-    </section>
-  );
-}
-
-/** Frosted panel of headline figures for a page hero's `aside`. */
-export function HeroFacts({
-  label,
-  facts,
-}: {
-  label: string;
-  facts: { value: React.ReactNode; label: string }[];
-}) {
-  return (
-    <div className="rounded-[1.75rem] bg-navy-950/88 p-2 shadow-float ring-1 ring-white/15">
-      <p className="eyebrow px-4 pt-3 pb-3 text-[0.6875rem] text-fg-muted">
-        {label}
-      </p>
-      <dl className="grid grid-cols-2 gap-1">
-        {facts.map((fact) => (
-          <div
-            key={fact.label}
-            className="rounded-2xl bg-white/6 px-4 py-4 ring-1 ring-white/8"
-          >
-            <dt className="sr-only">{fact.label}</dt>
-            <dd className="font-display text-3xl font-semibold tracking-tight text-white tabular-nums">
-              {fact.value}
-            </dd>
-            <dd className="mt-1.5 text-xs leading-snug text-white/60">
-              {fact.label}
-            </dd>
+          <div data-intro data-tilt-host className="mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none">
+            <Render3D name={render} priority float sizes="(max-width: 1024px) 80vw, 36vw" />
           </div>
-        ))}
-      </dl>
-    </div>
+        </div>
+      </NotchedPanel>
+    </section>
   );
 }

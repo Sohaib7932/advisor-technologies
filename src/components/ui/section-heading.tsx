@@ -1,30 +1,24 @@
 import { cn } from "@/lib/utils";
 import { Reveal } from "./reveal";
 
-export function Eyebrow({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+/** Small pill label above a heading. Reads correctly on light and dark. */
+export function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
     <span
-      className={cn("eyebrow inline-flex items-center gap-3 text-accent", className)}
+      className={cn(
+        "eyebrow inline-flex w-fit items-center gap-2 rounded-full bg-surface px-3 py-1.5 text-[0.6875rem] text-accent ring-1 ring-line",
+        className,
+      )}
     >
-      <span
-        aria-hidden
-        className="h-px w-8 bg-linear-to-r from-transparent to-glow shadow-[0_0_8px_rgb(91_163_208/0.7)]"
-      />
+      <span aria-hidden className="size-1.5 rounded-full bg-sky" />
       {children}
     </span>
   );
 }
 
 /**
- * The label + statement pair at the top of most sections. Titles are bold
- * uppercase display type; wrap a phrase in <span className="text-accent"> to
- * pick it out.
+ * Eyebrow + sentence-case heading (+ lead and action). Wrap one phrase of
+ * the title in <Accent> to colour it (steel on light, sky on dark).
  */
 export function SectionHeading({
   eyebrow,
@@ -33,6 +27,7 @@ export function SectionHeading({
   align = "split",
   className,
   action,
+  id,
 }: {
   eyebrow?: string;
   title: React.ReactNode;
@@ -40,29 +35,23 @@ export function SectionHeading({
   align?: "split" | "center" | "left";
   className?: string;
   action?: React.ReactNode;
+  id?: string;
 }) {
   const heading = (
-    <h2 className="text-headline font-bold text-fg uppercase">{title}</h2>
+    <h2 id={id} className="text-h2 text-fg">
+      {title}
+    </h2>
   );
 
   if (align === "split") {
     return (
-      <div
-        className={cn(
-          "grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12",
-          className,
-        )}
-      >
+      <div className={cn("grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12", className)}>
         <Reveal className="lg:col-span-7">
           {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
           <div className="mt-5">{heading}</div>
         </Reveal>
         <Reveal delay={90} className="lg:col-span-5">
-          {lead && (
-            <p className="max-w-md text-base leading-relaxed text-fg-muted">
-              {lead}
-            </p>
-          )}
+          {lead && <p className="max-w-md text-lead text-fg-muted">{lead}</p>}
           {action && <div className="mt-7">{action}</div>}
         </Reveal>
       </div>
@@ -70,32 +59,18 @@ export function SectionHeading({
   }
 
   return (
-    <div
-      className={cn(
-        align === "center" && "mx-auto max-w-3xl text-center",
-        align === "left" && "max-w-3xl",
-        className,
-      )}
-    >
+    <div className={cn(align === "center" && "mx-auto max-w-3xl text-center", align === "left" && "max-w-3xl", className)}>
       <Reveal>
-        {eyebrow && (
-          <Eyebrow className={align === "center" ? "justify-center" : ""}>
-            {eyebrow}
-          </Eyebrow>
-        )}
+        {eyebrow && <Eyebrow className={align === "center" ? "mx-auto" : ""}>{eyebrow}</Eyebrow>}
         <div className="mt-5">{heading}</div>
-        {lead && (
-          <p
-            className={cn(
-              "mt-6 text-base leading-relaxed text-fg-muted sm:text-lg",
-              align === "center" && "mx-auto max-w-2xl",
-            )}
-          >
-            {lead}
-          </p>
-        )}
-        {action && <div className="mt-8">{action}</div>}
+        {lead && <p className={cn("mt-6 text-lead text-fg-muted", align === "center" && "mx-auto max-w-2xl")}>{lead}</p>}
+        {action && <div className={cn("mt-8", align === "center" && "flex justify-center")}>{action}</div>}
       </Reveal>
     </div>
   );
+}
+
+/** The one accent phrase in a heading. */
+export function Accent({ children }: { children: React.ReactNode }) {
+  return <span className="text-accent">{children}</span>;
 }
