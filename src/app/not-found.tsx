@@ -56,7 +56,7 @@ export default function NotFound() {
           </div>
 
           <div style={rise(500)} className="hero-rise">
-            <Button href="/" variant="light" size="lg" className="mt-10" withArrow>
+            <Button href="/" className="mt-10">
               Back to home
             </Button>
           </div>

@@ -32,10 +32,10 @@ export function Cta({
                   {body}
                 </p>
                 <div className="mt-7 flex flex-wrap gap-3">
-                  <Button href="/contact#enquiry" withArrow>
+                  <Button href="/contact#enquiry">
                     Get a Quote
                   </Button>
-                  <Button href="/services" variant="ghost">
+                  <Button href="/services" variant="secondary">
                     Explore our services
                   </Button>
                 </div>

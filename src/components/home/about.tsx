@@ -30,7 +30,7 @@ export function About() {
           }
           lead="Exclusive territory agents for world-class industrial manufacturing brands in the Pakistan market, focused on high quality brands and international standards of after-sales service."
           action={
-            <Button href="/about" variant="secondary" withArrow>
+            <Button href="/about" variant="secondary">
               More about us
             </Button>
           }

@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { ArrowRight, ArrowUpRight, Icon } from "@/components/ui/icons";
+import { ArrowRight, Icon } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
 import type { IconName, Product } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
@@ -214,13 +214,9 @@ function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; t
           {card.items[0].body}
         </p>
       )}
-      <Link
-        href="/products"
-        className="group relative mt-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-fg px-3.5 py-1.5 text-xs font-semibold text-on-glow transition-transform duration-300 hover:-translate-y-0.5 sm:mt-5 sm:px-4 sm:py-2 sm:text-sm"
-      >
+      <Button href="/products" size="sm" className="relative mt-3 w-fit sm:mt-5">
         View in catalogue
-        <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-      </Link>
+      </Button>
     </div>
   );
 }

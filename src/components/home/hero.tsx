@@ -195,10 +195,10 @@ export function Hero() {
           Complete technology and supply solutions, built for Pakistan.
         </p>
         <div data-reveal-hero className="mt-7 flex flex-wrap justify-center gap-3">
-          <Button href="/contact#enquiry" size="lg" withArrow>
+          <Button href="/contact#enquiry">
             Get a Quote
           </Button>
-          <Button href="/services" variant="ghost" size="lg">
+          <Button href="/services" variant="secondary">
             Explore services
           </Button>
         </div>

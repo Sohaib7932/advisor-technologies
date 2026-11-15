@@ -4,69 +4,56 @@ import Link from "next/link";
 import { useRef } from "react";
 import { gsap, MOTION, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight } from "./icons";
+import { ArrowRight, Check } from "./icons";
 
-type Variant = "primary" | "secondary" | "ghost" | "light";
-type Size = "sm" | "md" | "lg";
-
-const base =
-  "group relative inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-[background-color,color,box-shadow] duration-300 ease-out-soft disabled:pointer-events-none disabled:opacity-50";
-
-const variants: Record<Variant, string> = {
-  // Glow-blue CTA with navy text (6.0:1); deepens on hover (navy on #4a8fbd: 4.9:1).
-  primary: "bg-glow text-on-glow shadow-glow hover:bg-[#4a8fbd]",
-  // Tokens make these work in both themes: navy outline on light,
-  // light outline inside dark scopes.
-  secondary:
-    "bg-surface-2 text-fg ring-1 ring-inset ring-line hover:ring-accent/60 hover:shadow-glow",
-  ghost:
-    "text-fg ring-1 ring-inset ring-fg/35 hover:bg-fg/6 hover:ring-fg/70",
-  light: "bg-fg text-bg shadow-soft hover:shadow-glow",
-};
-
-const sizes: Record<Size, string> = {
-  sm: "h-10 px-4 text-sm",
-  md: "h-12 px-6 text-[0.9375rem]",
-  lg: "h-12 px-7 text-[0.9375rem] xl:h-14 xl:px-8 xl:text-base",
-};
+export type ButtonVariant = "primary" | "secondary" | "link";
+export type ButtonSize = "md" | "sm";
+export type ButtonState = "idle" | "loading" | "success";
 
 type ButtonProps = {
+  /** Renders a Next.js Link when set, otherwise a <button>. */
   href?: string;
-  variant?: Variant;
-  size?: Size;
+  /** primary: sky fill. secondary: outline (navy on light, white on dark). link: text + arrow. */
+  variant?: ButtonVariant;
+  /** md is 48px tall, sm is 40px. */
+  size?: ButtonSize;
+  /** Form buttons: loading spins the chip, success shows a tick. */
+  state?: ButtonState;
   className?: string;
   children: React.ReactNode;
-  withArrow?: boolean;
 } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className" | "children">;
 
 /**
- * Pill button. Primary buttons are magnetic: they lean a few pixels toward
- * the pointer (gsap.quickTo, transform only) and spring back on leave.
+ * The site's one button. Pill, label plus an arrow-in-a-circle chip.
+ * Hover (CSS, see `.btn` in globals.css): a darker fill wipes in from the
+ * left, the chip turns 45° up-right, the label nudges 2px, the button lifts
+ * 2px; press scales to .97. On fine pointers it is also magnetic: it leans
+ * up to 6px toward the pointer (GSAP quickTo, transform only).
  */
 export function Button({
   href,
   variant = "primary",
   size = "md",
+  state = "idle",
   className,
   children,
-  withArrow = false,
   ...props
 }: ButtonProps) {
   const ref = useRef<HTMLElement>(null);
-  const classes = cn(base, variants[variant], sizes[size], className);
 
   useGSAP(
     (_, contextSafe) => {
       const node = ref.current;
-      if (!node || variant !== "primary" || !contextSafe) return;
-      if (!window.matchMedia(`${MOTION.ok} and (hover: hover)`).matches) return;
+      if (!node || variant === "link" || !contextSafe) return;
+      if (!window.matchMedia(`${MOTION.ok} and (hover: hover) and (pointer: fine)`).matches) return;
 
       const toX = gsap.quickTo(node, "x", { duration: 0.5, ease: "power3.out" });
       const toY = gsap.quickTo(node, "y", { duration: 0.5, ease: "power3.out" });
+      const clamp = gsap.utils.clamp(-6, 6);
       const onMove = contextSafe((event: PointerEvent) => {
         const rect = node.getBoundingClientRect();
-        toX((event.clientX - rect.left - rect.width / 2) * 0.25);
-        toY((event.clientY - rect.top - rect.height / 2) * 0.35);
+        toX(clamp((event.clientX - rect.left - rect.width / 2) * 0.12));
+        toY(clamp((event.clientY - rect.top - rect.height / 2) * 0.25));
       });
       const onLeave = contextSafe(() => {
         toX(0);
@@ -82,22 +69,37 @@ export function Button({
     { dependencies: [variant] },
   );
 
+  if (variant === "link") {
+    const content = (
+      <>
+        <span>{children}</span>
+        <ArrowRight aria-hidden />
+      </>
+    );
+    return href ? (
+      <Link href={href} className={cn("btn-link", className)}>
+        {content}
+      </Link>
+    ) : (
+      <button className={cn("btn-link", className)} {...props}>
+        {content}
+      </button>
+    );
+  }
+
+  const classes = cn("btn", variant === "primary" ? "btn-primary" : "btn-secondary", className);
   const content = (
     <>
-      {children}
-      {withArrow && (
-        <ArrowUpRight className="size-4 transition-transform duration-300 ease-out-soft group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-      )}
+      <span className="btn-label">{children}</span>
+      <span className="btn-chip" aria-hidden>
+        {state === "success" ? <Check /> : state === "loading" ? <Spinner /> : <ArrowRight />}
+      </span>
     </>
   );
 
   if (href) {
     return (
-      <Link
-        ref={ref as React.Ref<HTMLAnchorElement>}
-        href={href}
-        className={classes}
-      >
+      <Link ref={ref as React.Ref<HTMLAnchorElement>} href={href} className={classes} data-size={size}>
         {content}
       </Link>
     );
@@ -107,9 +109,20 @@ export function Button({
     <button
       ref={ref as React.Ref<HTMLButtonElement>}
       className={classes}
+      data-size={size}
+      data-state={state}
+      aria-busy={state === "loading" || undefined}
       {...props}
     >
       {content}
     </button>
+  );
+}
+
+function Spinner() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round">
+      <path d="M12 3a9 9 0 1 0 9 9" />
+    </svg>
   );
 }

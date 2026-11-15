@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { ArrowUpRight, Check } from "@/components/ui/icons";
+import { Button, type ButtonState } from "@/components/ui/button";
 import { services, sectors } from "@/lib/content";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -19,7 +19,7 @@ const labelClass = "block text-sm font-medium text-fg";
  */
 export function ContactForm() {
   const params = useSearchParams();
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<ButtonState>("idle");
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,8 +41,10 @@ export function ContactForm() {
 
     const subject = `Enquiry: ${get("requirement") || "General"} for ${get("organisation") || get("name")}`;
 
+    setStatus("loading");
     window.location.href = `mailto:${site.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    // The mail app takes over; show success once the hand-off has happened.
+    window.setTimeout(() => setStatus("success"), 700);
   }
 
   return (
@@ -162,20 +164,12 @@ export function ContactForm() {
         <p className="text-xs leading-relaxed text-fg-subtle">
           Your details are used only to respond to this enquiry.
         </p>
-        <button
-          type="submit"
-          className="group inline-flex h-13 shrink-0 items-center justify-center gap-2 rounded-full bg-glow px-8 font-semibold text-on-glow shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-white"
-        >
-          {sent ? "Opening your mail app" : "Send enquiry"}
-          {sent ? (
-            <Check className="size-4" />
-          ) : (
-            <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          )}
-        </button>
+        <Button type="submit" state={status} className="shrink-0">
+          {status === "success" ? "Opening your mail app" : status === "loading" ? "Preparing" : "Send enquiry"}
+        </Button>
       </div>
 
-      {sent && (
+      {status === "success" && (
         <p
           role="status"
           className="sm:col-span-2 rounded-2xl bg-glow/10 px-5 py-4 text-sm text-fg ring-1 ring-glow/30"

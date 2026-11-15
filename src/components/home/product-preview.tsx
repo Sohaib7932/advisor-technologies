@@ -54,7 +54,7 @@ export function ProductPreview() {
                 hardware, connectivity and general order supply from a single
                 accountable vendor.
               </p>
-              <Button href="/products" variant="light" size="lg" withArrow className="mt-9">
+              <Button href="/products" className="mt-9">
                 Browse full catalogue
               </Button>
             </Reveal>
