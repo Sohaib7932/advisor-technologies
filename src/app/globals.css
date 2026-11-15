@@ -816,3 +816,36 @@ html.lenis body {
     opacity: 0;
   }
 }
+
+/* ==========================================================================
+   Page transitions: the old page fades out fast, the new one rises in.
+   Only the page content (main) animates; the header pill stays put.
+   ========================================================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-old(.page) {
+  animation: 160ms var(--ease-out-quart) both vt-fade reverse;
+}
+::view-transition-new(.page) {
+  animation: 420ms var(--ease-out-expo) 120ms both vt-rise;
+}
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes vt-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
