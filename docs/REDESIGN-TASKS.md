@@ -14,5 +14,9 @@ style only; all text comes from `src/lib/content.ts` and `src/lib/site.ts`.
 - [x] Phase 7: inner pages (About, Services, Products, Clients, Contact, 404)
 - [x] Phase 8: motion system pass
 - [x] Phase 9: cleanup (dead code, atmosphere, old hero)
-- [ ] Verification: screenshots at 1440/1920/768/375, intro frames, hovers,
+- [x] Verification: screenshots at 1440/1920/768/375, intro frames, hovers,
       design review x2, contrast, Lighthouse, build, lint
+
+Follow-ups from review: royal/clear-blue palette (no purple), one shared
+frame so every section aligns with the hero, nav tab spans logo to button,
+phones and software-WebGL devices use the hero poster.
