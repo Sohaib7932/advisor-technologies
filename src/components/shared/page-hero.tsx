@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { cn } from "@/lib/utils";
+import { NotchedPanel } from "@/components/layout/notched-panel";
 
 /** Staggered entrance: pairs with the `hero-rise` class. */
 function rise(delay: number) {
@@ -33,8 +34,8 @@ export function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="px-2 pt-2 sm:px-3 sm:pt-3">
-      <div data-theme="dark" className="relative isolate overflow-hidden rounded-[1.75rem] bg-brand-deep ring-1 ring-white/8 sm:rounded-hero">
+    <section>
+      <NotchedPanel>
         <div className="hero-zoom absolute inset-0 -z-10">
           <Image
             src={image}
@@ -63,7 +64,7 @@ export function PageHero({
           className="absolute inset-0 -z-10 bg-[radial-gradient(40%_45%_at_5%_0%,rgb(91_163_208/0.16),transparent_70%)]"
         />
 
-        <Container className="pt-32 pb-14 sm:pt-40 sm:pb-18 lg:pt-44 lg:pb-20">
+        <Container className="py-14 sm:py-18 lg:py-20">
           <div
             className={cn(
               "grid gap-12",
@@ -115,7 +116,7 @@ export function PageHero({
             )}
           </div>
         </Container>
-      </div>
+      </NotchedPanel>
     </section>
   );
 }

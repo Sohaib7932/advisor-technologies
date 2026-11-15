@@ -357,6 +357,7 @@ html.lenis body {
    2px and the button lifts 2px. Press scales to .97.
    ========================================================================== */
 
+@layer components {
 .btn {
   --btn-h: 3rem;
   --btn-chip: 2.25rem;
@@ -539,12 +540,14 @@ html.lenis body {
     rotate: 360deg;
   }
 }
+}
 
 /* ==========================================================================
    Notched header (ref 1): the first panel's silhouette carries a raised tab
    for the nav links. Geometry is measured in JS; these are its states.
    ========================================================================== */
 
+@layer components {
 .nav-link {
   position: relative;
   padding: 0.5rem 0.25rem;
@@ -580,6 +583,7 @@ html.lenis body {
 .nav-pill .nav-link:hover,
 .nav-pill .nav-link[aria-current="page"] {
   color: #14213a;
+}
 }
 
 /* ==========================================================================
@@ -687,6 +691,7 @@ html.lenis body {
    Deck cards (CardDeck / DeckCard): card-stack open on enter, icon motion
    on hover. Timing in src/lib/motion.ts (CARD).
    ========================================================================== */
+@layer components {
 .deck-card {
   background-color: #ffffff;
   box-shadow:
@@ -767,6 +772,8 @@ html.lenis body {
     animation: icon-ripple 0.9s var(--ease-out-expo) both;
   }
 }
+}
+
 @keyframes icon-pop {
   0% {
     scale: 1;

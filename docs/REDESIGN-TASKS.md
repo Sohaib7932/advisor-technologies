@@ -7,7 +7,7 @@ style only; all text comes from `src/lib/content.ts` and `src/lib/site.ts`.
 
 - [x] Phase 1: design system (globals.css tokens, src/lib/motion.ts)
 - [x] Phase 2: one Button component everywhere
-- [ ] Phase 3: notched navbar + floating pill + mobile panel
+- [x] Phase 3: notched navbar + floating pill + mobile panel
 - [ ] Phase 4: hero (inset dark panel, live 3D platform scene, poster)
 - [ ] Phase 5: 3D asset library + scripts/render-3d.mjs -> public/3d/
 - [ ] Phase 6: home sections
