@@ -33,7 +33,9 @@ to see the photographer, and add the name here if you want to credit them.
   site's own three.js scenes (`src/components/three/`). Re-render with
   `npm run dev`, then `node scripts/render-3d.mjs`.
 - The live hero scene is the same code, running in the browser.
-- Client logos in `public/clients-logos/` belong to their owners.
+- Client logos in `public/clients-logos/` belong to their owners. The site uses
+  the cleaned copies in `public/clients-logos/clean/` (transparent, trimmed,
+  stray frame lines removed), made by `node scripts/clean-logos.mjs`.
 
 ## Not used
 

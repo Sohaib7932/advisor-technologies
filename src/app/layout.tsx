@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { ViewTransition } from "react";
 import { Plus_Jakarta_Sans, Sora } from "next/font/google";
 import { FloatingNav, MobileMenu } from "@/components/layout/site-nav";
 import { Footer } from "@/components/layout/footer";
@@ -82,8 +81,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <FloatingNav />
         <MobileMenu />
         <main id="main" className="flex-1">
-          {/* Short page transition on navigation (View Transitions API) */}
-          <ViewTransition default="page">{children}</ViewTransition>
+          {children}
         </main>
         <Footer />
       </body>

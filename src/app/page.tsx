@@ -7,7 +7,6 @@ import { ProductPreview } from "@/components/home/product-preview";
 import { Principles } from "@/components/home/principles";
 import { Process } from "@/components/home/process";
 import { ClientsStrip } from "@/components/home/clients-strip";
-import { ContactSection } from "@/components/shared/contact-section";
 import { Cta } from "@/components/shared/cta";
 
 export default function HomePage() {
@@ -22,7 +21,6 @@ export default function HomePage() {
       <Principles />
       <Process />
       <ClientsStrip />
-      <ContactSection />
       <Cta />
     </>
   );

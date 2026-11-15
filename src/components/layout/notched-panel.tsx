@@ -136,7 +136,7 @@ export function NotchedPanel({
             !geo && "rounded-t-[24px] bg-ink",
           )}
         >
-          <ul data-notch-links className="flex items-center gap-8 xl:gap-10">
+          <ul data-notch-links className="flex items-center gap-12 xl:gap-16">
             {navLinks.map((item) => {
               const active = isActivePath(pathname, item.href);
               return (

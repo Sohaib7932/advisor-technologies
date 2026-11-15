@@ -363,36 +363,34 @@ export type Client = {
   sector: string;
   /** Path under /public. */
   logo?: string;
-  /** The logo artwork has its own background, so it should fill its tile. */
-  logoFill?: boolean;
 };
 
 export const clients: Client[] = [
-  { name: "Hashwani Hotels Limited", sector: "Hospitality", logo: "/clients-logos/hashwani.jpg" },
-  { name: "Islamabad Club", sector: "Hospitality", logo: "/clients-logos/islamabad-club.png" },
-  { name: "Ministry of Ports & Shipping", sector: "Federal Ministry", logo: "/clients-logos/Ministry-ports.png" },
-  { name: "Capital Development Authority", sector: "Civic Authority", logo: "/clients-logos/CDA.png" },
-  { name: "NADRA Islamabad / Karachi", sector: "Federal Authority", logo: "/clients-logos/nadra.svg" },
-  { name: "National Tariff Commission, Ministry of Commerce", sector: "Federal Ministry", logo: "/clients-logos/NTC.jpg" },
-  { name: "Chief Commissioner Office ICT", sector: "Civic Authority", logo: "/clients-logos/CCO.jpg" },
-  { name: "National Police Academy Islamabad", sector: "Law Enforcement", logo: "/clients-logos/NPA.jpg" },
-  { name: "Islamabad Social Security Institutions", sector: "Public Welfare", logo: "/clients-logos/social-security.jpg" },
-  { name: "Ministry of Education & Technical Training", sector: "Federal Ministry", logo: "/clients-logos/ministry-education.jpg" },
-  { name: "Narcotics Control Division Islamabad", sector: "Federal Division", logo: "/clients-logos/norcotics.png" },
-  { name: "Ministry of Parliamentary Affairs", sector: "Federal Ministry", logo: "/clients-logos/ministry-parliamentary.jpg" },
-  { name: "Ministry of Kashmir Affairs", sector: "Federal Ministry", logo: "/clients-logos/ministry-kashmir.png" },
-  { name: "Pakistan Housing Authority Foundation", sector: "Federal Authority", logo: "/clients-logos/PHA.jpg" },
-  { name: "Directorate General Post Clearance Audit", sector: "Revenue & Audit", logo: "/clients-logos/general-post-clearance-audit.webp", logoFill: true },
-  { name: "Excise & Taxation Department ICT", sector: "Revenue & Audit", logo: "/clients-logos/excise.jpg" },
-  { name: "National Counter Terrorism Authority", sector: "Federal Authority", logo: "/clients-logos/NCT.jpg" },
-  { name: "Ministry of Information & Broadcasting", sector: "Federal Ministry", logo: "/clients-logos/ministry-information.jpg" },
-  { name: "Wafaqi Mohtasib Secretariat Islamabad", sector: "Federal Authority", logo: "/clients-logos/wafaqi.png" },
-  { name: "Ministry of Religious Affairs Islamabad", sector: "Federal Ministry", logo: "/clients-logos/ministry-religious-affair.png" },
-  { name: "IESCO, Islamabad", sector: "Power Utility", logo: "/clients-logos/iesco-logo.webp" },
-  { name: "Nai Zindagi Trust Islamabad", sector: "NGO", logo: "/clients-logos/naizindagitrust_logo.jpg", logoFill: true },
-  { name: "Women Welfare Department ICT", sector: "Public Welfare", logo: "/clients-logos/women-welfare.jpg" },
-  { name: "Marine Fisheries Department Karachi", sector: "Federal Department", logo: "/clients-logos/marine-fisheries.jpg" },
-  { name: "Pakistan Marine Academy Karachi", sector: "Education", logo: "/clients-logos/Pakistan_Marine_Academy.webp", logoFill: true },
+  { name: "Hashwani Hotels Limited", sector: "Hospitality", logo: "/clients-logos/clean/hashwani.webp" },
+  { name: "Islamabad Club", sector: "Hospitality", logo: "/clients-logos/clean/islamabad-club.webp" },
+  { name: "Ministry of Ports & Shipping", sector: "Federal Ministry", logo: "/clients-logos/clean/Ministry-ports.webp" },
+  { name: "Capital Development Authority", sector: "Civic Authority", logo: "/clients-logos/clean/CDA.webp" },
+  { name: "NADRA Islamabad / Karachi", sector: "Federal Authority", logo: "/clients-logos/clean/nadra.webp" },
+  { name: "National Tariff Commission, Ministry of Commerce", sector: "Federal Ministry", logo: "/clients-logos/clean/NTC.webp" },
+  { name: "Chief Commissioner Office ICT", sector: "Civic Authority", logo: "/clients-logos/clean/CCO.webp" },
+  { name: "National Police Academy Islamabad", sector: "Law Enforcement", logo: "/clients-logos/clean/NPA.webp" },
+  { name: "Islamabad Social Security Institutions", sector: "Public Welfare", logo: "/clients-logos/clean/social-security.webp" },
+  { name: "Ministry of Education & Technical Training", sector: "Federal Ministry", logo: "/clients-logos/clean/ministry-education.webp" },
+  { name: "Narcotics Control Division Islamabad", sector: "Federal Division", logo: "/clients-logos/clean/norcotics.webp" },
+  { name: "Ministry of Parliamentary Affairs", sector: "Federal Ministry", logo: "/clients-logos/clean/ministry-parliamentary.webp" },
+  { name: "Ministry of Kashmir Affairs", sector: "Federal Ministry", logo: "/clients-logos/clean/ministry-kashmir.webp" },
+  { name: "Pakistan Housing Authority Foundation", sector: "Federal Authority", logo: "/clients-logos/clean/PHA.webp" },
+  { name: "Directorate General Post Clearance Audit", sector: "Revenue & Audit", logo: "/clients-logos/clean/general-post-clearance-audit.webp" },
+  { name: "Excise & Taxation Department ICT", sector: "Revenue & Audit", logo: "/clients-logos/clean/excise.webp" },
+  { name: "National Counter Terrorism Authority", sector: "Federal Authority", logo: "/clients-logos/clean/NCT.webp" },
+  { name: "Ministry of Information & Broadcasting", sector: "Federal Ministry", logo: "/clients-logos/clean/ministry-information.webp" },
+  { name: "Wafaqi Mohtasib Secretariat Islamabad", sector: "Federal Authority", logo: "/clients-logos/clean/wafaqi.webp" },
+  { name: "Ministry of Religious Affairs Islamabad", sector: "Federal Ministry", logo: "/clients-logos/clean/ministry-religious-affair.webp" },
+  { name: "IESCO, Islamabad", sector: "Power Utility", logo: "/clients-logos/clean/iesco-logo.webp" },
+  { name: "Nai Zindagi Trust Islamabad", sector: "NGO", logo: "/clients-logos/clean/naizindagitrust_logo.webp" },
+  { name: "Women Welfare Department ICT", sector: "Public Welfare", logo: "/clients-logos/clean/women-welfare.webp" },
+  { name: "Marine Fisheries Department Karachi", sector: "Federal Department", logo: "/clients-logos/clean/marine-fisheries.webp" },
+  { name: "Pakistan Marine Academy Karachi", sector: "Education", logo: "/clients-logos/clean/Pakistan_Marine_Academy.webp" },
 ];
 
 /* -------------------------------------------------------------------------- */

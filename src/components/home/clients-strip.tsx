@@ -108,7 +108,7 @@ export function ClientsStrip() {
       {/* Two full-bleed rows drifting in opposite directions, faded at both edges */}
       <Reveal
         delay={180}
-        className="marquee mt-14 flex flex-col gap-3 mask-[linear-gradient(to_right,transparent,black_2.5rem,black_calc(100%-2.5rem),transparent)] sm:mask-[linear-gradient(to_right,transparent,black_8rem,black_calc(100%-8rem),transparent)]"
+        className="marquee mt-12 flex flex-col gap-3 py-2 mask-[linear-gradient(to_right,transparent,black_2.5rem,black_calc(100%-2.5rem),transparent)] sm:mask-[linear-gradient(to_right,transparent,black_8rem,black_calc(100%-8rem),transparent)]"
       >
         <MarqueeRow items={clients.slice(0, half)} />
         <MarqueeRow items={clients.slice(half)} reverse />

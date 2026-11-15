@@ -237,7 +237,7 @@ export function Hero() {
               <span className="flex -space-x-2.5">
                 {TRUST.map((c) => (
                   <span key={c.name} className="grid size-9 place-items-center overflow-hidden rounded-full bg-white ring-2 ring-navy">
-                    <Image src={c.logo!} alt="" width={36} height={36} unoptimized={c.logo!.endsWith(".svg")} className="size-7 object-contain" />
+                    <Image src={c.logo!} alt="" width={36} height={36} className="size-7 object-contain" />
                   </span>
                 ))}
               </span>
@@ -255,6 +255,7 @@ export function Hero() {
               alt="Server rack, CCTV camera, laptop, printer, office chair and gear on a glass platform"
               fill
               sizes="(max-width: 1024px) 100vw, 66vw"
+              loading="eager"
               className="motion-hide bob object-contain object-center"
             />
             <canvas ref={canvasRef} aria-hidden className="invisible absolute inset-0 size-full opacity-0" />

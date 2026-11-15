@@ -10,7 +10,7 @@
      on mist    text 15.1 · text-2 7.1 · text-3 4.9 · steel 6.0
      on ice     text 14.4 · text-2 6.8 · text-3 4.7 · steel 5.7
      on navy    white 15.9 · text-2-dark 9.1 · text-3-dark 6.2 · sky 6.0
-     white on azure 5.2 (primary button) · white on azure-deep 7.0 (hover)
+     white on navy 15.9 (primary button) · navy on white 15.9 (on dark)
    Sky and LED blue are accents on navy and fills only; never small text
    on white.
    ========================================================================== */
@@ -292,6 +292,12 @@ html.lenis body {
   border-radius: var(--radius-panel);
 }
 
+/* Two panels in a row never touch: the same gap as the panel inset. */
+.panel + .panel,
+section:has(> [data-notched]) + .panel {
+  margin-top: max(var(--inset), 1rem);
+}
+
 /* White card with the one shadow */
 @utility card {
   border-radius: var(--radius-card);
@@ -433,15 +439,31 @@ html.lenis body {
   opacity: 0.6;
 }
 
-/* Primary: blue fill, white text, white chip. Same on light and dark. */
+/* Primary: the Advisor navy (from the logo), white text, white chip; the
+   wipe lifts it to the brand navy. On dark panels it flips to white with
+   navy text so it never sinks into the background. */
 .btn-primary {
-  --btn-bg: #1769d6;
+  --btn-bg: #14213a;
   --btn-fg: #ffffff;
-  --btn-wipe: #1257b6;
+  --btn-wipe: #2a4161;
   --btn-chip-bg: #ffffff;
-  --btn-chip-fg: #1769d6;
-  --btn-chip-fg-hover: #1257b6;
-  box-shadow: 0 8px 22px -8px rgb(23 105 214 / 0.5);
+  --btn-chip-fg: #14213a;
+  box-shadow: 0 8px 22px -10px rgb(20 33 58 / 0.55);
+}
+[data-theme="dark"] .btn-primary {
+  --btn-bg: #ffffff;
+  --btn-fg: #14213a;
+  --btn-wipe: #dfe8f7;
+  --btn-chip-bg: #14213a;
+  --btn-chip-fg: #ffffff;
+  box-shadow: 0 8px 22px -10px rgb(0 0 0 / 0.5);
+}
+[data-theme="light"] .btn-primary {
+  --btn-bg: #14213a;
+  --btn-fg: #ffffff;
+  --btn-wipe: #2a4161;
+  --btn-chip-bg: #ffffff;
+  --btn-chip-fg: #14213a;
 }
 
 /* Secondary on light: navy outline; the wipe fills it navy, text turns white */
@@ -789,34 +811,18 @@ html.lenis body {
 }
 
 /* ==========================================================================
-   Page transitions: the old page fades out fast, the new one rises in.
-   Only the page content (main) animates; the header pill stays put.
+   Page transitions: app/template.tsx remounts on every navigation, and the
+   new page rises in. Pure CSS (no View Transitions API), so it can never
+   abort when the tab is hidden. Off under reduced motion.
    ========================================================================== */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-}
-::view-transition-old(.page) {
-  animation: 160ms var(--ease-out-quart) both vt-fade reverse;
-}
-::view-transition-new(.page) {
-  animation: 420ms var(--ease-out-expo) 120ms both vt-rise;
-}
-@keyframes vt-fade {
-  from {
-    opacity: 0;
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter {
+    animation: page-enter 0.5s var(--ease-out-expo) both;
   }
 }
-@keyframes vt-rise {
+@keyframes page-enter {
   from {
     opacity: 0;
-    transform: translateY(16px);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
+    transform: translateY(14px);
   }
 }

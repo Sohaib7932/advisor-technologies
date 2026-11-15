@@ -10,9 +10,6 @@ import { Render3D } from "@/components/three/render-3d";
 import { sectors, stats } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
-/** Where each stat card floats in the cluster (desktop), and its bob delay. */
-const FLOAT = ["lg:mt-12", "", "lg:mt-4", "lg:-mt-8"];
-
 /**
  * About (ref 1's stats panel, ref 3's bento). An ice panel: statement and
  * button on the left, a staggered cluster of floating stat cards with the
@@ -40,27 +37,27 @@ export function About() {
               </Button>
             </Reveal>
 
-            <div className="relative lg:col-span-7">
-              <Render3D
-                name="chart"
-                alt=""
-                float
-                className="pointer-events-none absolute -right-10 -bottom-24 hidden w-[52%] opacity-95 lg:block"
-                sizes="30vw"
-              />
-              <ul className="relative grid grid-cols-2 gap-4 sm:gap-5 lg:w-[78%]">
-                {stats.map((stat, i) => (
-                  <li
-                    key={stat.label}
-                    className={cn("bob card rounded-[1.5rem] p-5 sm:p-6", FLOAT[i])}
-                    style={{ "--bob-delay": `${i * -1.4}s` } as React.CSSProperties}
-                  >
-                    <CountUp value={stat.value} className="block font-display text-[clamp(2rem,1.4rem+2vw,2.75rem)] leading-none font-bold tracking-tight text-navy tabular-nums" />
-                    <p className="mt-3 text-sm font-semibold text-navy">{stat.label}</p>
-                    <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-text-3">{stat.detail}</p>
-                  </li>
-                ))}
-              </ul>
+            {/* Two staggered columns of stat cards (each column floats as one,
+                so cards never overlap) and the glass chart in its own column. */}
+            <div className="grid grid-cols-2 items-center gap-4 sm:gap-5 lg:col-span-7 lg:grid-cols-[1fr_1fr_0.95fr]">
+              {[0, 1].map((col) => (
+                <ul
+                  key={col}
+                  className={cn("bob flex flex-col gap-4 sm:gap-5", col === 0 && "lg:mt-16")}
+                  style={{ "--bob-delay": `${col * -3}s` } as React.CSSProperties}
+                >
+                  {stats
+                    .filter((_, i) => i % 2 === col)
+                    .map((stat) => (
+                      <li key={stat.label} className="card rounded-[1.5rem] p-5 sm:p-6">
+                        <CountUp value={stat.value} className="block font-display text-[clamp(2rem,1.4rem+2vw,2.75rem)] leading-none font-bold tracking-tight text-navy tabular-nums" />
+                        <p className="mt-3 text-sm font-semibold text-navy">{stat.label}</p>
+                        <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-text-3">{stat.detail}</p>
+                      </li>
+                    ))}
+                </ul>
+              ))}
+              <Render3D name="chart" alt="" float className="hidden scale-125 lg:block" sizes="24vw" />
             </div>
           </div>
         </Container>

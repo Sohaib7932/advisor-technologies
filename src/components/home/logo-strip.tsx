@@ -20,15 +20,14 @@ export function LogoStrip() {
       <div className="marquee mt-8 overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
         <ul className="animate-marquee flex w-max items-center gap-14 md:gap-20">
           {track.map((client, i) => (
-            <li key={`${client.name}-${i}`} aria-hidden={i >= withLogos.length || undefined} className="shrink-0">
+            <li key={`${client.name}-${i}`} aria-hidden={i >= withLogos.length || undefined} className="relative h-12 w-28 shrink-0 md:h-14 md:w-32">
               <Image
                 src={client.logo!}
                 alt={i < withLogos.length ? client.name : ""}
                 title={client.name}
-                width={120}
-                height={56}
-                unoptimized={client.logo!.endsWith(".svg")}
-                className="h-12 w-auto max-w-[8rem] object-contain opacity-60 grayscale transition-[filter,opacity] duration-500 ease-out-expo hover:opacity-100 hover:grayscale-0 md:h-14"
+                fill
+                sizes="128px"
+                className="object-contain opacity-60 grayscale transition-[filter,opacity] duration-500 ease-out-expo hover:opacity-100 hover:grayscale-0"
               />
             </li>
           ))}

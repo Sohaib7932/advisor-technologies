@@ -4,8 +4,9 @@ import { cn, monogram } from "@/lib/utils";
 
 /**
  * A client's logo on a white tile, sized by `className` (e.g. "size-12
- * rounded-xl"). Logos with their own coloured background fill the tile;
- * the rest float on white with a little breathing room. Falls back to the
+ * rounded-xl"). Logos come from public/clients-logos/clean/ (see
+ * scripts/clean-logos.mjs): transparent, trimmed and centred, so they all
+ * sit the same way. Falls back to the
  * navy monogram badge for a client without a logo.
  */
 export function ClientLogo({
@@ -51,9 +52,7 @@ export function ClientLogo({
         alt={labelled ? client.name : ""}
         fill
         sizes={sizes}
-        // Next's optimiser does not process SVG; serve it as-is.
-        unoptimized={client.logo.endsWith(".svg")}
-        className={client.logoFill ? "object-cover" : "object-contain p-1.5"}
+        className="object-contain p-1"
       />
     </span>
   );

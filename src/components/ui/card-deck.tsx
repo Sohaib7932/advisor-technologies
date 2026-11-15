@@ -54,7 +54,7 @@ export function CardDeck({
             zIndex: cards.length - i,
           });
         });
-        gsap.set(art, { y: M.illustration.y, autoAlpha: 0 });
+        if (art.length) gsap.set(art, { y: M.illustration.y, autoAlpha: 0 });
         if (progress) gsap.set(progress, { scaleX: 0, transformOrigin: "left center" });
 
         const touch = window.matchMedia("(hover: none)").matches;
@@ -75,7 +75,7 @@ export function CardDeck({
               stagger: M.open.stagger,
               clearProps: "transform,zIndex",
             });
-            tl.to(
+            if (art.length) tl.to(
               art,
               {
                 y: 0,

@@ -117,7 +117,7 @@ export function FloatingNav() {
       >
         <Brand compact />
         <nav aria-label="Main" className="mx-auto hidden lg:block">
-          <ul className="flex items-center gap-7">
+          <ul className="flex items-center gap-9">
             {navLinks.map((item) => {
               const active = isActivePath(pathname, item.href);
               return (
