@@ -13,6 +13,6 @@ style only; all text comes from `src/lib/content.ts` and `src/lib/site.ts`.
 - [x] Phase 6: home sections
 - [x] Phase 7: inner pages (About, Services, Products, Clients, Contact, 404)
 - [x] Phase 8: motion system pass
-- [ ] Phase 9: cleanup (dead code, atmosphere, old hero)
+- [x] Phase 9: cleanup (dead code, atmosphere, old hero)
 - [ ] Verification: screenshots at 1440/1920/768/375, intro frames, hovers,
       design review x2, contrast, Lighthouse, build, lint

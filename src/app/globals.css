@@ -258,25 +258,6 @@ html.lenis body {
   line-height: 1.65;
 }
 
-/* Legacy names kept for the product-line section */
-@utility text-headline {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2rem, 3.6vw, 3.25rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-}
-@utility text-display {
-  font-size: clamp(2rem, 3.6vw, 3.25rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-}
-@utility text-title {
-  font-size: clamp(1.25rem, 1rem + 0.7vw, 1.625rem);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
-
 /* Small label above headings: a pill chip */
 @utility eyebrow {
   font-size: 0.75rem;
@@ -306,25 +287,6 @@ html.lenis body {
   box-shadow:
     0 0 0 1px var(--surface-edge),
     var(--shadow-card);
-}
-
-/* Navbar-only glass (the floating pill is solid white; this stays for it) */
-@utility glass {
-  background-color: rgb(255 255 255 / 0.96);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-}
-
-/* Legacy surface names, mapped to the card */
-@utility card-surface {
-  background-color: var(--color-surface);
-  box-shadow:
-    0 0 0 1px var(--surface-edge),
-    var(--shadow-card);
-}
-@utility glow-line {
-  height: 1px;
-  background-color: var(--color-line);
 }
 
 /* Hide scrollbar on horizontal rails */
@@ -593,11 +555,6 @@ html.lenis body {
 @media (prefers-reduced-motion: no-preference) {
   .motion-hide {
     opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .motion-only {
-    display: none;
   }
 }
 
