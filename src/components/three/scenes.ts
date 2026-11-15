@@ -37,7 +37,8 @@ function miniStage(m: Materials, shared: Shared, items: [ProductName, number, nu
   const group = new THREE.Group();
   const platform = buildPlatform(m, shared, 2.4);
   group.add(platform.group);
-  for (const [name, x, z, plinthH, scale] of items) {
+  for (const [name, x, z, plinthH, s] of items) {
+    const scale = s * 1.45;
     const plinth = buildPlinth(m, 1.25 * scale + 0.2, 1.1 * scale + 0.2, plinthH);
     plinth.group.position.set(x, PLATFORM_TOP, z);
     const model = buildProduct(name, m);
@@ -51,7 +52,7 @@ function miniStage(m: Materials, shared: Shared, items: [ProductName, number, nu
 
 function withTiles(group: THREE.Group, m: Materials, tiles: [IconKey, number, number, number, boolean?][]) {
   for (const [icon, x, y, z, navy] of tiles) {
-    const tile = buildTile(m, icon, navy ? "navy" : "frost", 0.9);
+    const tile = buildTile(m, icon, navy ? "navy" : "frost", 1.15);
     tile.position.set(x, y, z);
     tile.rotation.set(0.2, x > 0 ? -0.45 : 0.45, x > 0 ? 0.08 : -0.08);
     group.add(tile);
@@ -96,7 +97,7 @@ export function buildNamedScene(name: string, m: Materials, shared: Shared): THR
   }
   switch (name) {
     case "banner-about":
-      return withTiles(miniStage(m, shared, [["gear", -0.7, -0.3, 0.45, 0.8], ["rack", 0.8, -0.5, 0.25, 0.75]]), m, [["shield", -2.4, 2.4, 0.6]]);
+      return withTiles(miniStage(m, shared, [["gear", -0.85, -0.2, 0.45, 0.75], ["rack", 0.9, -0.5, 0.25, 0.7]]), m, [["shield", -2.4, 2.4, 0.6]]);
     case "banner-services":
       return withTiles(miniStage(m, shared, [["laptop", -0.8, 0.5, 0.3, 0.65], ["cctv", 0.9, 0.2, 0.55, 0.7], ["gear", 0.1, -0.9, 0.2, 0.6]]), m, [["wrench", 2.5, 2.4, -0.2, true]]);
     case "banner-products":
@@ -105,12 +106,8 @@ export function buildNamedScene(name: string, m: Materials, shared: Shared): THR
       return withTiles(miniStage(m, shared, [["chair", -0.6, -0.2, 0.35, 0.75], ["laptop", 0.9, 0.5, 0.25, 0.6]]), m, [["network", 2.4, 2.5, -0.3, true], ["shield", -2.4, 2.2, 0.4]]);
     case "banner-contact":
       return withTiles(miniStage(m, shared, [["laptop", -0.4, 0.2, 0.35, 0.75]]), m, [["network", 2.0, 2.2, 0, true], ["camera", -2.1, 2.5, -0.2]]);
-    case "banner-404": {
-      const g = miniStage(m, shared, []);
-      const s = buildSphere(m, 0.7);
-      s.position.set(0, PLATFORM_TOP + 0.9, 0);
-      return withTiles(g.add(s), m, [["gear", 2.0, 2.4, -0.2, true], ["wrench", -2.0, 2.0, 0.3]]);
-    }
+    case "banner-404":
+      return withTiles(miniStage(m, shared, [["gear", 0, -0.2, 0.3, 0.9]]), m, [["wrench", 2.2, 2.6, -0.2, true], ["shield", -2.2, 2.2, 0.3]]);
   }
   throw new Error(`Unknown scene: ${name}`);
 }

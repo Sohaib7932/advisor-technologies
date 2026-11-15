@@ -100,7 +100,7 @@ export function createMaterials(quality: Quality) {
     glass: glass("#e8f3fb", 0.08),
     /** Floating tiles and spheres sit over the page, not the scene, so they
      *  use fake glass: transmission over a transparent canvas reads milky. */
-    frost: glass("#cfe5f6", 0.08, 0.22, true),
+    frost: glass("#8fc2e6", 0.06, 0.34, true),
     bubble: glass("#d6ebf9", 0.04, 0.2, true),
     /** Bar-chart columns, tinted sky. */
     glassSky: glass("#9fd0ee", 0.06, 0.45),
