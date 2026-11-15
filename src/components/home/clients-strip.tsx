@@ -76,8 +76,7 @@ export function ClientsStrip() {
   return (
     <Section
       id="clients"
-      tone="steel"
-      divider
+      tone="ice"
       className="overflow-hidden"
      
     >

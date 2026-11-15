@@ -175,7 +175,7 @@ export default function ProductsPage() {
       </Section>
 
       {/* Assurances */}
-      <Section tone="steel" divider>
+      <Section tone="ice">
         <Container>
           <SectionHeading
             eyebrow="With every order"

@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
-import type { Tone } from "@/lib/atmosphere";
 
-/** Page gutter + max width. Every section uses this so edges stay aligned. */
+/** Content width (1280px) and gutters (20-48px). Every section uses this. */
 export function Container({
   className,
   children,
@@ -9,15 +8,13 @@ export function Container({
 }: {
   className?: string;
   children: React.ReactNode;
-  size?: "default" | "wide" | "narrow";
+  size?: "default" | "narrow";
 }) {
   return (
     <div
       className={cn(
-        "mx-auto w-full px-5 sm:px-8",
-        size === "wide" && "max-w-[110rem]",
-        size === "default" && "max-w-[80rem]",
-        size === "narrow" && "max-w-[56rem]",
+        "mx-auto w-full px-(--gutter)",
+        size === "default" ? "max-w-[80rem]" : "max-w-[56rem]",
         className,
       )}
     >
@@ -26,34 +23,42 @@ export function Container({
   );
 }
 
+export type SectionTone = "white" | "mist" | "ice" | "navy";
+
+const TONE: Record<SectionTone, string> = {
+  white: "bg-white",
+  mist: "panel bg-mist",
+  ice: "panel bg-ice",
+  navy: "panel bg-navy",
+};
+
 /**
- * Consistent vertical rhythm between sections. A section never paints an
- * opaque background of its own: it declares a `tone`, which the fixed global
- * layer (Atmosphere) cross-fades to as the section scrolls in.
+ * A section of the page. White sections are plain bands; mist, ice and navy
+ * sections are inset rounded panels (radius 40, 12-24px from the viewport
+ * edge). Navy panels are dark scopes, so tokens and buttons flip.
  */
 export function Section({
   className,
   children,
   id,
-  tone = "base",
-  divider = false,
+  tone = "white",
+  pad = true,
+  ...rest
 }: {
   className?: string;
   children: React.ReactNode;
   id?: string;
-  tone?: Tone;
-  /** A thin glowing line along the top edge. */
-  divider?: boolean;
-}) {
+  tone?: SectionTone;
+  /** Vertical padding of clamp(72px, 9vw, 128px). */
+  pad?: boolean;
+} & Omit<React.HTMLAttributes<HTMLElement>, "className" | "children" | "id">) {
   return (
     <section
       id={id}
-      data-tone={tone}
-      className={cn("relative isolate py-16 md:py-24 xl:py-32", className)}
+      data-theme={tone === "navy" ? "dark" : undefined}
+      className={cn("relative isolate", TONE[tone], pad && "section-y", className)}
+      {...rest}
     >
-      {divider && (
-        <span aria-hidden className="glow-line absolute inset-x-[8%] top-0 opacity-60" />
-      )}
       {children}
     </section>
   );

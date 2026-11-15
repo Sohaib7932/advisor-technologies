@@ -136,7 +136,7 @@ export default function ClientsPage() {
       </Section>
 
       {/* Why institutions choose us */}
-      <Section tone="steel" divider>
+      <Section tone="ice">
         <Container>
           <SectionHeading
             eyebrow="Why institutions choose us"

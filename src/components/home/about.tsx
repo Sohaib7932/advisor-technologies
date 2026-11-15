@@ -16,7 +16,7 @@ export function About() {
   return (
     <Section
       id="about"
-      tone="base"
+      tone="white"
      
     >
       <Container>

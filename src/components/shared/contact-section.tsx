@@ -23,8 +23,7 @@ export function ContactSection({ showHeading = true }: { showHeading?: boolean }
     // On /contact it follows the page banner directly, so it starts tighter.
     <Section
       id="enquiry"
-      tone="deep"
-      divider={showHeading}
+      tone="mist"
      
       className={showHeading ? "overflow-hidden" : "overflow-hidden pt-10 md:pt-14 xl:pt-16"}
     >

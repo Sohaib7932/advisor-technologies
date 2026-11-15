@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { gsap, MOTION, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { CARD_MOTION as M } from "@/lib/card-motion";
+import { CARD as M } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 /**

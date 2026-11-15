@@ -3,7 +3,6 @@ import { Plus_Jakarta_Sans, Sora } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
-import { Atmosphere } from "@/components/layout/atmosphere";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -79,7 +78,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <SmoothScroll />
-        <Atmosphere />
         <Navbar />
         <main id="main" className="flex-1">
           {children}

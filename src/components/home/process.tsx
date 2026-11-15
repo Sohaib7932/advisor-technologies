@@ -64,8 +64,7 @@ export function Process() {
   return (
     <Section
       id="process"
-      tone="charcoal"
-      divider
+      tone="mist"
      
     >
       <Container>
