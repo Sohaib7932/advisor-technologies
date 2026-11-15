@@ -69,7 +69,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       >
         {/* Without JS the reveal observer never runs, so un-hide that content. */}
         <noscript>
-          <style>{`.reveal,.motion-hide{opacity:1!important;transform:none!important}`}</style>
+          <style>{`.reveal,.motion-hide,[data-intro]{opacity:1!important;transform:none!important}[data-reveal] *{clip-path:none!important}.line-mask>span{transform:none!important}`}</style>
         </noscript>
         <a
           href="#main"

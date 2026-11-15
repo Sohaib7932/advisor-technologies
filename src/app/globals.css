@@ -798,3 +798,23 @@ html.lenis body {
     opacity: 0;
   }
 }
+
+/* ==========================================================================
+   Hero intro: the composed state is server-rendered; with motion on, these
+   are its first-paint starting values until the GSAP timeline runs
+   (data-reveal="pending" → "done"). No JS: the <noscript> rule clears them.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal="pending"] [data-notch-svg] {
+    clip-path: inset(0px 0px calc(100% - var(--header-h)) 0px);
+  }
+  [data-reveal="pending"] [data-panel-body] {
+    clip-path: inset(0% 18% 100% 18% round 40px);
+  }
+  [data-reveal="pending"] .line-mask > span {
+    transform: translateY(110%);
+  }
+  [data-reveal="pending"] [data-intro] {
+    opacity: 0;
+  }
+}
