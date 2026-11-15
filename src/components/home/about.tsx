@@ -23,7 +23,7 @@ export function About() {
   return (
     <>
       <Section id="about" tone="ice" className="overflow-hidden">
-        <div aria-hidden className="rings top-1/2 right-[-12%] w-[70%] -translate-y-1/2 [--ring-c:rgb(63_109_133/0.14)]" />
+        <div aria-hidden className="rings top-1/2 right-[-12%] w-[70%] -translate-y-1/2 [--ring-c:rgb(47_92_196/0.14)]" />
         <Container>
           <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-10">
             <Reveal className="lg:col-span-5">
@@ -67,7 +67,7 @@ export function About() {
       </Section>
 
       {/* Bento: the facts the company stands on */}
-      <section aria-label="What we stand on" className="pt-6 pb-(--section-y)">
+      <section aria-label="What we stand on" className="frame pt-6 pb-(--section-y)">
         <Container>
           <CardDeck className="grid gap-4 md:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[auto_auto] lg:gap-5">
             <article data-card data-theme="dark" className="relative isolate flex min-h-[22rem] flex-col overflow-hidden rounded-card bg-navy p-7 sm:p-8 lg:col-span-4 lg:row-span-2">

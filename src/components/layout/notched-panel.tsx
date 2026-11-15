@@ -103,7 +103,7 @@ export function NotchedPanel({
   }, []);
 
   return (
-    <div ref={wrap} data-notched data-reveal={reveal ? "pending" : undefined} className={cn("relative isolate mx-(--inset) mt-2 sm:mt-3", className)}>
+    <div ref={wrap} data-notched data-reveal={reveal ? "pending" : undefined} className={cn("frame relative isolate mt-2 sm:mt-3", className)}>
       {geo && (
         <svg
           aria-hidden
@@ -125,7 +125,7 @@ export function NotchedPanel({
       {/* Header strip: logo on white, nav tab in the panel, button on white */}
       <div className="relative flex h-(--header-h) items-center gap-4 pl-1 sm:pl-2">
         <Brand />
-        <div className="flex-1" />
+        <div className="min-w-8 flex-1" />
         <nav
           ref={tab}
           data-notch-tab
@@ -149,8 +149,8 @@ export function NotchedPanel({
             })}
           </ul>
         </nav>
-        {/* Room for the right shoulder */}
-        <div className="hidden w-6 lg:block" />
+        {/* The tab sits centred between the logo and the button */}
+        <div className="hidden min-w-8 flex-1 lg:block" />
         <Button href="/contact#enquiry" className="hidden lg:inline-flex">
           Get a Quote
         </Button>

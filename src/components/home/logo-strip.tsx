@@ -11,7 +11,7 @@ const withLogos = clients.filter((c) => c.logo);
 export function LogoStrip() {
   const track = [...withLogos, ...withLogos];
   return (
-    <section aria-label="Clients" className="py-12 md:py-16">
+    <section aria-label="Clients" className="frame py-12 md:py-16">
       <Container>
         <p className="text-center text-sm font-medium text-text-3">
           Supplying <span className="font-semibold text-navy">{clients.length}+ institutional clients</span> across Pakistan

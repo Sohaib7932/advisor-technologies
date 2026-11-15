@@ -185,7 +185,7 @@ export function Hero() {
         backdrop={
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
             {/* One soft steel-blue light behind the platform, and its rings */}
-            <div className="absolute top-[18%] right-[-6%] aspect-square w-[95%] rounded-full bg-[radial-gradient(closest-side,rgb(63_109_133/0.55),rgb(42_65_97/0.18)_55%,transparent)] lg:top-[4%] lg:right-[-4%] lg:w-[62%]" />
+            <div className="absolute top-[18%] right-[-6%] aspect-square w-[95%] rounded-full bg-[radial-gradient(closest-side,rgb(47_92_196/0.55),rgb(30_48_96/0.18)_55%,transparent)] lg:top-[4%] lg:right-[-4%] lg:w-[62%]" />
             <div className="rings top-[30%] right-[-14%] w-[110%] lg:top-[8%] lg:right-[-6%] lg:w-[66%]" />
           </div>
         }

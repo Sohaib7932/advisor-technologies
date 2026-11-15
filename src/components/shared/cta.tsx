@@ -17,7 +17,7 @@ export function Cta({
   return (
     <Section tone="navy" pad={false} className="mt-6 overflow-hidden" aria-label="Get a quote">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-1/2 right-[-6%] aspect-square w-[50%] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(63_109_133/0.5),transparent)]" />
+        <div className="absolute top-1/2 right-[-6%] aspect-square w-[50%] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(47_92_196/0.5),transparent)]" />
         <div className="rings top-1/2 right-[2%] w-[38%] -translate-y-1/2" />
       </div>
       <Container>

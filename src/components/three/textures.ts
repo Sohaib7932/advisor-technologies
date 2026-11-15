@@ -74,7 +74,7 @@ export function iconTexture(icon: IconKey, color = "#ffffff") {
     ctx.lineJoin = "round";
     ctx.lineWidth = 1.7;
     ctx.strokeStyle = color;
-    ctx.shadowColor = "rgba(124,195,232,0.9)";
+    ctx.shadowColor = "rgba(143,179,255,0.9)";
     ctx.shadowBlur = 1.2;
     for (const d of ICON_PATHS[icon]) ctx.stroke(new Path2D(d));
   });
@@ -88,14 +88,14 @@ export function screenTexture(kind: "laptop" | "printer") {
     bg.addColorStop(1, "#0f2742");
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, 512, 320);
-    ctx.fillStyle = "rgba(124,195,232,0.9)";
+    ctx.fillStyle = "rgba(143,179,255,0.9)";
     if (kind === "laptop") {
       ctx.fillRect(36, 40, 180, 14);
       ctx.fillStyle = "rgba(255,255,255,0.35)";
       [80, 108, 136].forEach((y, i) => ctx.fillRect(36, y, 220 - i * 40, 9));
       const bars = [0.45, 0.7, 0.55, 0.9, 0.75];
       bars.forEach((h, i) => {
-        ctx.fillStyle = i === 3 ? "#7cc3e8" : "rgba(124,195,232,0.45)";
+        ctx.fillStyle = i === 3 ? "#8fb3ff" : "rgba(143,179,255,0.45)";
         ctx.fillRect(300 + i * 36, 260 - h * 170, 22, h * 170);
       });
       ctx.fillStyle = "rgba(255,255,255,0.18)";

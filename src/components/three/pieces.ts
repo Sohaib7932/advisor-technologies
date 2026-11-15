@@ -14,7 +14,7 @@ export const PLATFORM_TOP = 0.56;
 export function createShared() {
   return {
     shadow: radialTexture("11,22,38", 0.85, 0.32),
-    pool: radialTexture("91,163,208", 0.55, 0.18),
+    pool: radialTexture("91,141,239", 0.55, 0.18),
   };
 }
 export type Shared = ReturnType<typeof createShared>;
@@ -91,7 +91,7 @@ export function buildTile(m: Materials, icon: IconKey, variant: "frost" | "navy"
   // A sky-tinted inner card behind the glyph, so it reads through the glass.
   const inner = new THREE.Mesh(
     new RoundedBoxGeometry(size * 0.72, size * 0.72, 0.02, 2, size * 0.14),
-    new THREE.MeshBasicMaterial({ color: variant === "navy" ? "#1d3557" : "#4f97c6", transparent: true, opacity: variant === "navy" ? 1 : 0.92, toneMapped: false }),
+    new THREE.MeshBasicMaterial({ color: variant === "navy" ? "#1d3557" : "#3f74e0", transparent: true, opacity: variant === "navy" ? 1 : 0.92, toneMapped: false }),
   );
   inner.position.z = size * 0.06;
   group.add(inner, slab, glyph);

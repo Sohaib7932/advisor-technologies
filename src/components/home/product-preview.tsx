@@ -28,7 +28,7 @@ export function ProductPreview() {
   return (
     <Section id="products" tone="navy" className="overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-[10%] right-[-8%] aspect-square w-[60%] rounded-full bg-[radial-gradient(closest-side,rgb(63_109_133/0.45),transparent)]" />
+        <div className="absolute top-[10%] right-[-8%] aspect-square w-[60%] rounded-full bg-[radial-gradient(closest-side,rgb(47_92_196/0.45),transparent)]" />
       </div>
       <Container>
         <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-10">

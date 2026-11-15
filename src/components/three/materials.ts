@@ -11,9 +11,9 @@ export const PALETTE = {
   ink: "#0b1626",
   navy: "#14213a",
   brand: "#2a4161",
-  steel: "#3f6d85",
-  sky: "#5ba3d0",
-  led: "#7cc3e8",
+  steel: "#3a5fb4",
+  sky: "#5b8def",
+  led: "#8fb3ff",
   ceramic: "#f3f6fa",
   chrome: "#dfe6ee",
 };
@@ -100,10 +100,10 @@ export function createMaterials(quality: Quality) {
     glass: glass("#e8f3fb", 0.08),
     /** Floating tiles and spheres sit over the page, not the scene, so they
      *  use fake glass: transmission over a transparent canvas reads milky. */
-    frost: glass("#8fc2e6", 0.06, 0.34, true),
+    frost: glass("#9dbbf5", 0.06, 0.34, true),
     bubble: glass("#d6ebf9", 0.04, 0.2, true),
     /** Bar-chart columns, tinted sky. */
-    glassSky: glass("#9fd0ee", 0.06, 0.45),
+    glassSky: glass("#a9c4ff", 0.06, 0.45),
   };
 }
 

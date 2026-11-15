@@ -22,7 +22,7 @@ export function ContactSection({ headingLevel = "h2" }: { headingLevel?: "h1" | 
   return (
     <Section id="enquiry" tone="navy" className="overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-[20%] -left-[10%] aspect-square w-[55%] rounded-full bg-[radial-gradient(closest-side,rgb(63_109_133/0.4),transparent)]" />
+        <div className="absolute -top-[20%] -left-[10%] aspect-square w-[55%] rounded-full bg-[radial-gradient(closest-side,rgb(47_92_196/0.4),transparent)]" />
       </div>
       <Container>
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-14">

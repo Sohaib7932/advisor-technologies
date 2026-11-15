@@ -6,12 +6,13 @@
    Motion timings live next door in src/lib/motion.ts.
 
    Contrast (WCAG AA), measured:
-     on white   text 15.9 · text-2 7.5 · text-3 5.2 · steel 5.6
-     on mist    text 15.0 · text-2 7.1 · text-3 4.9 · steel 5.3
-     on ice     text 14.3 · text-2 6.7 · text-3 4.7 · steel 5.0
-     on navy    white 15.9 · text-2-dark 9.1 · text-3-dark 6.2 · sky 5.9
-     ink on sky 6.9 (primary button) · ink on sky-deep 5.0 (its hover)
-   Sky and LED blue are fills, lines and large display text only on white.
+     on white   text 15.9 · text-2 7.5 · text-3 5.2 · steel (accent) 6.2
+     on mist    text 15.1 · text-2 7.1 · text-3 4.9 · steel 5.9
+     on ice     text 14.4 · text-2 6.8 · text-3 4.7 · steel 5.6
+     on navy    white 15.9 · text-2-dark 9.1 · text-3-dark 6.2 · sky 6.9
+     white on azure 5.2 (primary button) · white on azure-deep 6.7 (hover)
+   Sky and LED blue are accents on navy and fills only; never small text
+   on white.
    ========================================================================== */
 
 @theme {
@@ -19,14 +20,16 @@
   --color-ink: #0b1626;
   --color-navy: #14213a;
   --color-brand: #2a4161;
-  --color-steel: #3f6d85;
-  --color-sky: #5ba3d0;
-  --color-sky-deep: #3f88b8; /* sky's pressed / hover-wipe tone */
-  --color-ice: #eaf3fa;
-  --color-mist: #f4f8fb;
-  --color-line: #e3e9f0;
+  --color-steel: #2f5cc4; /* royal steel blue: the accent on light */
+  --color-sky: #7aa2ff; /* periwinkle: the accent on navy, fills */
+  --color-sky-deep: #4f7fe8;
+  --color-azure: #2563eb; /* primary action */
+  --color-azure-deep: #1d4ed8;
+  --color-ice: #edf2ff;
+  --color-mist: #f5f7fc;
+  --color-line: #e2e8f3;
   --color-amber: #f5b84b; /* tiny highlights only, never a wash */
-  --color-led: #7cc3e8; /* light sources in renders and on dark panels */
+  --color-led: #8fb3ff; /* light sources in renders and on dark panels */
 
   /* Text (light surfaces) */
   --color-text: #14213a;
@@ -37,15 +40,15 @@
   --color-fg: #14213a;
   --color-fg-muted: #4a5568;
   --color-fg-subtle: #5b6b80;
-  --color-accent: #3f6d85; /* accent phrase on light: steel */
+  --color-accent: #2f5cc4; /* accent phrase on light: steel */
   --color-bg: #ffffff;
   --color-surface: #ffffff;
   --color-surface-2: #f4f8fb;
   --color-canvas: #f4f8fb;
   --color-bg-deep: #f4f8fb;
-  --color-bg-raised: #eaf3fa;
+  --color-bg-raised: #edf2ff;
   --color-on-glow: #0b1626; /* text on sky fills */
-  --color-glow: #5ba3d0;
+  --color-glow: #7aa2ff;
   --color-brand-deep: #14213a;
   --color-charcoal: #4a4a4a;
 
@@ -108,7 +111,7 @@
   --color-text-2: #c3cfdc;
   --color-fg-subtle: #9fb1c5;
   --color-text-3: #9fb1c5;
-  --color-accent: #5ba3d0; /* accent phrase on dark: sky */
+  --color-accent: #7aa2ff; /* accent phrase on dark: sky */
   --color-line: rgb(255 255 255 / 0.12);
   --color-surface: rgb(255 255 255 / 0.06);
   --color-surface-2: rgb(255 255 255 / 0.08);
@@ -131,12 +134,12 @@
   --color-text-2: #4a5568;
   --color-fg-subtle: #5b6b80;
   --color-text-3: #5b6b80;
-  --color-accent: #3f6d85;
-  --color-line: #e3e9f0;
+  --color-accent: #2f5cc4;
+  --color-line: #e2e8f3;
   --color-surface: #ffffff;
   --color-surface-2: #f4f8fb;
   --color-bg: #ffffff;
-  --surface-edge: #e3e9f0;
+  --surface-edge: #e2e8f3;
   --shadow-card: 0 1px 2px rgb(11 22 38 / 0.05), 0 16px 40px rgb(11 22 38 / 0.08);
   color: var(--color-fg);
 }
@@ -275,8 +278,17 @@ html.lenis body {
 }
 
 /* An inset rounded panel: 16-24px from the viewport edges, radius 40 */
+/* The site frame: every panel and every section's content shares these
+   left and right edges (the hero's), up to 1440px wide. */
+@utility frame {
+  width: min(100% - 2 * var(--inset), 90rem);
+  margin-inline: auto;
+}
+
+/* An inset rounded panel on the frame, radius 40 */
 @utility panel {
-  margin-inline: var(--inset);
+  width: min(100% - 2 * var(--inset), 90rem);
+  margin-inline: auto;
   border-radius: var(--radius-panel);
 }
 
@@ -305,9 +317,9 @@ html.lenis body {
   border-radius: 9999px;
   aspect-ratio: 1;
   background:
-    radial-gradient(closest-side, transparent calc(100% - 1px), var(--ring-c, rgb(91 163 208 / 0.16)) calc(100% - 1px), transparent 100%),
-    radial-gradient(closest-side, transparent calc(78% - 1px), var(--ring-c, rgb(91 163 208 / 0.16)) calc(78% - 1px), transparent 78%),
-    radial-gradient(closest-side, transparent calc(56% - 1px), var(--ring-c, rgb(91 163 208 / 0.16)) calc(56% - 1px), transparent 56%);
+    radial-gradient(closest-side, transparent calc(100% - 1px), var(--ring-c, rgb(122 162 255 / 0.16)) calc(100% - 1px), transparent 100%),
+    radial-gradient(closest-side, transparent calc(78% - 1px), var(--ring-c, rgb(122 162 255 / 0.16)) calc(78% - 1px), transparent 78%),
+    radial-gradient(closest-side, transparent calc(56% - 1px), var(--ring-c, rgb(122 162 255 / 0.16)) calc(56% - 1px), transparent 56%);
 }
 
 /* ==========================================================================
@@ -421,13 +433,15 @@ html.lenis body {
   opacity: 0.6;
 }
 
-/* Primary: sky fill, ink text, navy chip. Same on light and dark. */
+/* Primary: royal-blue fill, white text, white chip. Same on light and dark. */
 .btn-primary {
-  --btn-bg: #5ba3d0;
-  --btn-fg: #0b1626;
-  --btn-wipe: #3f88b8;
-  --btn-chip-bg: #14213a;
-  --btn-chip-fg: #ffffff;
+  --btn-bg: #2563eb;
+  --btn-fg: #ffffff;
+  --btn-wipe: #1d4ed8;
+  --btn-chip-bg: #ffffff;
+  --btn-chip-fg: #2563eb;
+  --btn-chip-fg-hover: #1d4ed8;
+  box-shadow: 0 8px 22px -8px rgb(37 99 235 / 0.55);
 }
 
 /* Secondary on light: navy outline; the wipe fills it navy, text turns white */
@@ -665,8 +679,8 @@ html.lenis body {
   color: #fff;
 }
 .deck-card[data-tone-card="ice"] {
-  background-color: #eaf3fa;
-  box-shadow: 0 0 0 1px rgb(63 109 133 / 0.12);
+  background-color: #edf2ff;
+  box-shadow: 0 0 0 1px rgb(47 92 196 / 0.12);
 }
 .deck-card-art {
   transform: perspective(700px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
@@ -686,18 +700,18 @@ html.lenis body {
 }
 .deck-card[data-tone-card="navy"] .icon-tile {
   background: rgb(255 255 255 / 0.1);
-  box-shadow: inset 0 0 0 1px rgb(124 195 232 / 0.35);
-  color: #7cc3e8;
+  box-shadow: inset 0 0 0 1px rgb(143 179 255 / 0.35);
+  color: #8fb3ff;
 }
 .deck-card[data-tone-card="navy"] .icon-orbit {
-  border-color: rgb(124 195 232 / 0.35);
+  border-color: rgb(143 179 255 / 0.35);
 }
 @media (prefers-reduced-motion: no-preference) {
   @media (hover: hover) {
     .deck-card:hover {
       translate: 0 -6px;
       box-shadow:
-        0 0 0 1px rgb(63 109 133 / 0.22),
+        0 0 0 1px rgb(47 92 196 / 0.22),
         var(--shadow-card-hover);
     }
     .deck-card:hover img.deck-card-art {

@@ -1,6 +1,9 @@
 import { cn } from "@/lib/utils";
 
-/** Content width (1280px) and gutters (20-48px). Every section uses this. */
+/**
+ * Content inside the frame, with the 20-48px gutter. Sections and panels
+ * set the frame width, so every section's content lines up with the hero's.
+ */
 export function Container({
   className,
   children,
@@ -14,7 +17,7 @@ export function Container({
     <div
       className={cn(
         "mx-auto w-full px-(--gutter)",
-        size === "default" ? "max-w-[80rem]" : "max-w-[56rem]",
+        size === "narrow" && "max-w-[56rem]",
         className,
       )}
     >
@@ -26,7 +29,7 @@ export function Container({
 export type SectionTone = "white" | "mist" | "ice" | "navy";
 
 const TONE: Record<SectionTone, string> = {
-  white: "bg-white",
+  white: "frame",
   mist: "panel bg-mist",
   ice: "panel bg-ice",
   navy: "panel bg-navy",

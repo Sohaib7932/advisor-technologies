@@ -75,7 +75,7 @@ export function PageHero({
         reveal
         backdrop={
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-            <div className="absolute top-[-10%] right-[-8%] aspect-square w-[70%] rounded-full bg-[radial-gradient(closest-side,rgb(63_109_133/0.5),rgb(42_65_97/0.15)_55%,transparent)] lg:w-[48%]" />
+            <div className="absolute top-[-10%] right-[-8%] aspect-square w-[70%] rounded-full bg-[radial-gradient(closest-side,rgb(47_92_196/0.5),rgb(30_48_96/0.15)_55%,transparent)] lg:w-[48%]" />
             <div className="rings top-[-6%] right-[-4%] w-[80%] lg:w-[46%]" />
             {watermark && (
               <span className="absolute bottom-[-0.12em] left-[-0.04em] font-display text-[clamp(9rem,26vw,22rem)] leading-none font-extrabold tracking-[-0.05em] text-white/[0.045] select-none">
@@ -85,7 +85,7 @@ export function PageHero({
           </div>
         }
       >
-        <div className="mx-auto grid max-w-[80rem] items-center gap-6 px-(--gutter) pt-12 pb-10 sm:pt-14 lg:grid-cols-12 lg:gap-10 lg:py-16">
+        <div className="grid items-center gap-6 px-(--gutter) pt-12 pb-10 sm:pt-14 lg:grid-cols-12 lg:gap-10 lg:py-16">
           <div className="lg:col-span-7">
             <nav aria-label="Breadcrumb" data-intro className="flex items-center gap-2 text-sm font-medium text-fg-subtle">
               <Link href="/" className="transition-colors hover:text-white">
