@@ -134,7 +134,7 @@ export function DeckCard({
   illustrationAlt?: string;
   /** Custom art in place of an illustration image (rises the same way). */
   art?: React.ReactNode;
-  tone?: "light" | "navy";
+  tone?: "light" | "navy" | "ice";
   className?: string;
   bodyClassName?: string;
   artClassName?: string;

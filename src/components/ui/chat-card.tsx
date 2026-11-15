@@ -11,19 +11,10 @@ export type ChatLine = {
 
 /**
  * A short conversation whose bubbles pop in one after another when the card
- * is a quarter of the way into view (once, not scrubbed). Reduced motion or
- * no JavaScript: every bubble is simply shown.
+ * comes into view (once, not scrubbed). Works on light and dark panels.
+ * Reduced motion or no JavaScript: every bubble is simply shown.
  */
-export function ChatCard({
-  lines,
-  className,
-  caption,
-}: {
-  lines: ChatLine[];
-  className?: string;
-  /** Small label above the conversation. */
-  caption?: string;
-}) {
+export function ChatCard({ lines, className, caption }: { lines: ChatLine[]; className?: string; caption?: string }) {
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -31,20 +22,13 @@ export function ChatCard({
       const mm = gsap.matchMedia();
       mm.add(MOTION.ok, () => {
         const bubbles = gsap.utils.toArray<HTMLElement>("[data-bubble]");
-        gsap.set(bubbles, { autoAlpha: 0, y: 14, scale: 0.92 });
+        gsap.set(bubbles, { autoAlpha: 0, y: 14, scale: 0.94 });
         ScrollTrigger.create({
           trigger: root.current,
-          start: "top 75%",
+          start: "top 80%",
           once: true,
           onEnter: () =>
-            gsap.to(bubbles, {
-              autoAlpha: 1,
-              y: 0,
-              scale: 1,
-              duration: 0.6,
-              ease: "back.out(1.6)",
-              stagger: 0.55,
-            }),
+            gsap.to(bubbles, { autoAlpha: 1, y: 0, scale: 1, duration: 0.7, ease: "back.out(1.1)", stagger: 0.45 }),
         });
       });
     },
@@ -53,16 +37,16 @@ export function ChatCard({
 
   return (
     <div ref={root} className={cn("flex flex-col gap-2.5", className)}>
-      {caption && <p className="eyebrow mb-1 text-fg-subtle">{caption}</p>}
+      {caption && <p className="mb-1 text-xs font-semibold tracking-[0.08em] text-fg-subtle uppercase">{caption}</p>}
       {lines.map((line, i) => (
         <div
           key={i}
           data-bubble
           className={cn(
-            "motion-hide max-w-[85%] rounded-2xl px-4 py-2.5 text-[0.9375rem] leading-snug shadow-soft",
+            "motion-hide max-w-[88%] px-4 py-3 text-[0.9375rem] leading-snug",
             line.from === "us"
-              ? "self-start rounded-bl-md bg-white text-brand-deep ring-1 ring-line"
-              : "self-end rounded-br-md bg-glow text-brand-deep",
+              ? "self-start rounded-[1.25rem] rounded-bl-md bg-white text-navy shadow-card"
+              : "self-end rounded-[1.25rem] rounded-br-md bg-sky text-ink",
           )}
         >
           {line.text}

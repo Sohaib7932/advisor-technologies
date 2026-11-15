@@ -1,114 +1,97 @@
 import Link from "next/link";
-import { Container } from "@/components/ui/container";
-import { Eyebrow } from "@/components/ui/section-heading";
-import { CardDeck, DeckCard } from "@/components/ui/card-deck";
-import { ArrowUpRight } from "@/components/ui/icons";
+import { Container, Section } from "@/components/ui/container";
+import { Accent, Eyebrow } from "@/components/ui/section-heading";
+import { Reveal } from "@/components/ui/reveal";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Check, Icon } from "@/components/ui/icons";
+import { Render3D } from "@/components/three/render-3d";
+import type { RenderName } from "@/components/three/renders";
 import { services } from "@/lib/content";
-import { cn } from "@/lib/utils";
 
-/** The studio product that stands in for each division on its card. */
-const ILLUSTRATION: Record<string, string> = {
-  "plant-machinery": "chair",
-  "it-networks": "rack",
-  computing: "laptop",
-  "security-systems": "cctv",
-  printing: "printer",
-  maintenance: "gear",
+/** The product render that stands for each division. */
+export const DIVISION_RENDER: Record<string, RenderName> = {
+  "plant-machinery": "product-chair",
+  "it-networks": "product-rack",
+  computing: "product-laptop",
+  "security-systems": "product-cctv",
+  printing: "product-printer",
+  maintenance: "product-gear",
 };
 
-/** Bento spans on the 12-column desktop grid, with two navy cards set diagonally. */
-const SPAN = [
-  "lg:col-span-5",
-  "lg:col-span-4",
-  "lg:col-span-3",
-  "lg:col-span-3",
-  "lg:col-span-4",
-  "lg:col-span-5",
-];
-const NAVY = new Set([1, 4]);
-
 /**
- * The six divisions as a dealt-out deck of cards: they rest tucked together
- * and open once when the section comes into view, while the numbered
- * progress line above draws across. Hovering a card lifts its product.
+ * The six divisions in ref 1's "Everything you need" layout: a sticky
+ * statement on the left, a list of rows on the right. Hovering (or focusing)
+ * a row opens it to show the division's checklist and its 3D render; on
+ * touch screens every row is open. Each row links to its division.
  */
 export function ActivityScope() {
   return (
-    <section
-      id="activity-scope"
-      aria-labelledby="activity-scope-title"
-      data-tone="steel"
-      className="relative isolate overflow-hidden py-16 md:py-24"
-    >
+    <Section id="activity-scope" tone="mist" aria-labelledby="activity-scope-title">
       <Container>
-        <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <Eyebrow>Activity scope</Eyebrow>
-            <h2 id="activity-scope-title" className="mt-5 text-headline font-bold text-fg uppercase">
-              Six divisions, <span className="text-accent">one contract</span>
-            </h2>
-          </div>
-          <p className="max-w-md text-[0.9375rem] leading-relaxed text-fg-muted lg:col-span-5 lg:justify-self-end">
-            A single purchase order can cover equipment, installation and the
-            years of service that follow.
-          </p>
-        </div>
-
-        <CardDeck className="mt-10 md:mt-12">
-          {/* Progress line: one tick per division, drawn as the deck opens */}
-          <div aria-hidden className="relative mb-6 hidden md:block">
-            <div className="absolute top-1/2 right-0 left-0 h-px bg-line" />
-            <div data-progress className="absolute top-1/2 right-0 left-0 h-px bg-accent" />
-            <ol className="relative flex justify-between">
-              {services.map((service, i) => (
-                <li
-                  key={service.id}
-                  className="grid size-7 place-items-center rounded-full bg-white font-display text-[0.6875rem] font-bold text-accent tabular-nums ring-1 ring-line"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </li>
-              ))}
-            </ol>
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-14">
+          <div className="lg:col-span-5">
+            <Reveal className="lg:sticky lg:top-28">
+              <Eyebrow>Activity scope</Eyebrow>
+              <h2 id="activity-scope-title" className="mt-5 text-h2 text-fg">
+                Six divisions, <Accent>one contract</Accent>
+              </h2>
+              <p className="mt-6 max-w-md text-lead text-fg-muted">
+                A single purchase order can cover equipment, installation and the years of service that follow.
+              </p>
+              <Button href="/services" className="mt-9">
+                Explore services
+              </Button>
+            </Reveal>
           </div>
 
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:gap-5">
-            {services.map((service, i) => {
-              const navy = NAVY.has(i);
-              return (
-                <DeckCard
-                  key={service.id}
-                  as="li"
-                  tone={navy ? "navy" : "light"}
-                  className={SPAN[i]}
-                  illustration={`/images/illustrations/${ILLUSTRATION[service.id]}.webp`}
-                >
-                  <span className="text-xs font-medium text-fg-subtle">
-                    <span className={cn("font-display font-bold tabular-nums", navy ? "text-led" : "text-accent")}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span aria-hidden> · </span>
-                    {service.short}
-                  </span>
-                  <h3 className="mt-2.5 font-display text-lg leading-tight font-bold text-fg uppercase">
-                    {service.title}
-                  </h3>
-                  <p className="mt-2.5 line-clamp-3 text-sm leading-relaxed text-fg-muted">{service.body}</p>
+          <ul className="card divide-y divide-line p-2 sm:p-3 lg:col-span-7">
+            {services.map((service, i) => (
+              <li key={service.id}>
+                <Reveal delay={i * 60}>
                   <Link
                     href={`/services#${service.id}`}
-                    className={cn(
-                      "mt-auto inline-flex items-center gap-1.5 self-start pt-5 text-sm font-semibold after:absolute after:inset-0 after:rounded-card",
-                      navy ? "text-white" : "text-accent",
-                    )}
+                    data-tilt-host
+                    className="group/row grid grid-cols-[auto_1fr_auto] items-center gap-x-4 rounded-[1.25rem] px-3 py-5 transition-colors duration-500 ease-out-expo hover:bg-mist focus-visible:bg-mist sm:gap-x-5 sm:px-4"
                   >
-                    Explore this division
-                    <ArrowUpRight className="size-4 transition-transform duration-300 group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5" />
+                    <span className="grid size-12 place-items-center rounded-2xl bg-ice text-steel ring-1 ring-steel/12 transition-[background-color,color,rotate] duration-500 ease-out-expo group-hover/row:-rotate-6 group-hover/row:bg-navy group-hover/row:text-sky sm:size-14">
+                      <Icon name={service.icon} className="size-5 sm:size-6" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-h4 text-navy">{service.title}</span>
+                      <span className="mt-1 block text-sm text-text-3">{service.short}</span>
+                    </span>
+                    <span className="grid size-10 place-items-center rounded-full text-navy ring-1 ring-line transition-[background-color,color,rotate] duration-500 ease-out-expo group-hover/row:-rotate-45 group-hover/row:bg-navy group-hover/row:text-white">
+                      <ArrowRight className="size-4" />
+                    </span>
+
+                    {/* Opens on hover / focus; always open on touch screens */}
+                    <span className="col-span-3 grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out-expo group-hover/row:grid-rows-[1fr] group-focus-visible/row:grid-rows-[1fr] [@media(hover:none)]:grid-rows-[1fr]">
+                      <span className="overflow-hidden">
+                        <span className="flex items-end gap-4 pt-4 sm:pl-[4.75rem]">
+                          <span className="flex flex-1 flex-wrap gap-2">
+                            {service.highlights.map((h) => (
+                              <span key={h} className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-medium text-navy ring-1 ring-line">
+                                <Check className="size-3.5 text-steel" />
+                                {h}
+                              </span>
+                            ))}
+                          </span>
+                          <Render3D
+                            name={DIVISION_RENDER[service.id]}
+                            tilt={10}
+                            sizes="120px"
+                            className="hidden w-24 shrink-0 translate-x-6 opacity-0 transition-[translate,opacity] duration-700 ease-out-expo group-hover/row:translate-x-0 group-hover/row:opacity-100 sm:block [@media(hover:none)]:translate-x-0 [@media(hover:none)]:opacity-100"
+                          />
+                        </span>
+                      </span>
+                    </span>
                   </Link>
-                </DeckCard>
-              );
-            })}
+                </Reveal>
+              </li>
+            ))}
           </ul>
-        </CardDeck>
+        </div>
       </Container>
-    </section>
+    </Section>
   );
 }

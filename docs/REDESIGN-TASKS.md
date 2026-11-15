@@ -10,7 +10,7 @@ style only; all text comes from `src/lib/content.ts` and `src/lib/site.ts`.
 - [x] Phase 3: notched navbar + floating pill + mobile panel
 - [x] Phase 4: hero (inset dark panel, live 3D platform scene, poster)
 - [x] Phase 5: 3D asset library + scripts/render-3d.mjs -> public/3d/
-- [ ] Phase 6: home sections
+- [x] Phase 6: home sections
 - [ ] Phase 7: inner pages (About, Services, Products, Clients, Contact, 404)
 - [ ] Phase 8: motion system pass
 - [ ] Phase 9: cleanup (dead code, atmosphere, old hero)

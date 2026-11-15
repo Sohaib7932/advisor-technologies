@@ -8,9 +8,9 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const fieldClass =
-  "w-full rounded-2xl border-0 bg-surface-2 px-5 py-3.5 text-[0.9375rem] text-fg ring-1 ring-inset ring-line transition-shadow placeholder:text-fg-subtle focus:shadow-[0_0_0_4px_rgb(91_163_208/0.16),0_0_28px_rgb(91_163_208/0.3)] focus:ring-2 focus:ring-glow focus:outline-none";
+  "w-full rounded-2xl border-0 bg-mist px-5 py-3.5 text-[0.9375rem] text-navy ring-1 ring-inset ring-line transition-[box-shadow,background-color] duration-300 placeholder:text-text-3 hover:bg-white focus:bg-white focus:shadow-[0_0_0_4px_rgb(91_163_208/0.18)] focus:ring-2 focus:ring-sky focus:outline-none";
 
-const labelClass = "block text-sm font-medium text-fg";
+const labelClass = "block text-sm font-medium text-navy";
 
 /**
  * Enquiry form. There is no backend yet, so submitting opens the visitor's
@@ -161,7 +161,7 @@ export function ContactForm() {
       </div>
 
       <div className="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs leading-relaxed text-fg-subtle">
+        <p className="text-xs leading-relaxed text-text-3">
           Your details are used only to respond to this enquiry.
         </p>
         <Button type="submit" state={status} className="shrink-0">
@@ -172,7 +172,7 @@ export function ContactForm() {
       {status === "success" && (
         <p
           role="status"
-          className="sm:col-span-2 rounded-2xl bg-glow/10 px-5 py-4 text-sm text-fg ring-1 ring-glow/30"
+          className="sm:col-span-2 rounded-2xl bg-ice px-5 py-4 text-sm text-navy ring-1 ring-sky/40"
         >
           We have opened your email client with the enquiry composed. If nothing
           happened, write to{" "}

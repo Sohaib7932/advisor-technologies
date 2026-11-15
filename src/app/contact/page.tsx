@@ -22,7 +22,7 @@ export default function ContactPage() {
         lead="Send us a specification, a bill of quantities or a tender reference and our team will respond with a documented technical and commercial proposal."
       />
 
-      <ContactSection showHeading={false} />
+      <ContactSection />
     </>
   );
 }

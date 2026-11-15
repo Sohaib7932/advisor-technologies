@@ -104,7 +104,6 @@
   color-scheme: dark;
   --color-fg: #ffffff;
   --color-text: #ffffff;
-  --color-ink: #ffffff;
   --color-fg-muted: #c3cfdc;
   --color-text-2: #c3cfdc;
   --color-fg-subtle: #9fb1c5;
@@ -128,7 +127,6 @@
   color-scheme: light;
   --color-fg: #14213a;
   --color-text: #14213a;
-  --color-ink: #0b1626;
   --color-fg-muted: #4a5568;
   --color-text-2: #4a5568;
   --color-fg-subtle: #5b6b80;

@@ -8,12 +8,8 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer
-      data-theme="dark"
-      data-tone="deep"
-      className="relative isolate overflow-hidden bg-bg-deep text-fg-muted"
-    >
-      <span aria-hidden className="glow-line absolute inset-x-0 top-0" />
+    // An inset dark panel, like every other dark section.
+    <footer data-theme="dark" className="panel relative isolate mt-6 mb-(--inset) overflow-hidden bg-ink text-fg-muted">
       <Container className="py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Brand + contact */}
@@ -29,7 +25,7 @@ export function Footer() {
                 />
               </span>
               <span className="flex flex-col leading-none">
-                <span className="font-display text-lg font-bold tracking-tight text-fg">
+                <span className="font-display text-lg font-bold tracking-tight text-white">
                   Advisor
                 </span>
                 <span className="mt-1 text-[0.625rem] font-semibold tracking-[0.22em] text-fg-subtle uppercase">
@@ -89,7 +85,7 @@ export function Footer() {
               <nav key={group.title} aria-labelledby={`footer-${group.title}`}>
                 <h2
                   id={`footer-${group.title}`}
-                  className="eyebrow font-sans text-accent"
+                  className="text-xs font-semibold tracking-[0.08em] text-white uppercase"
                 >
                   {group.title}
                 </h2>
@@ -112,17 +108,17 @@ export function Footer() {
         </div>
 
         {/* Registration + legal */}
-        <div className="mt-14 flex flex-col gap-6 border-t border-white/10 pt-8 md:flex-row md:items-center md:justify-between">
+        <div className="mt-14 flex flex-col gap-6 border-t border-white/12 pt-8 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-fg-subtle">
             <span>
               NTN{" "}
-              <span className="font-semibold text-fg">
+              <span className="font-semibold text-white">
                 {site.registration.ntn}
               </span>
             </span>
             <span>
               STN{" "}
-              <span className="font-semibold text-fg">
+              <span className="font-semibold text-white">
                 {site.registration.stn}
               </span>
             </span>
