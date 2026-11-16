@@ -197,7 +197,7 @@ export function Hero() {
     <section ref={root} aria-label="Introduction">
       <NotchedPanel
         reveal
-        bodyClassName="lg:h-[clamp(620px,calc(100svh-var(--header-h)-28px),920px)]"
+        bodyClassName="lg:min-h-[clamp(620px,calc(100svh-var(--header-h)-28px),920px)] lg:flex"
         backdrop={
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
             {/* One soft steel-blue light behind the platform, and its rings */}
@@ -206,7 +206,7 @@ export function Hero() {
           </div>
         }
       >
-        <div className="relative grid lg:h-full lg:grid-cols-12">
+        <div className="relative grid w-full lg:grid-cols-12">
           {/* Copy */}
           <div data-hero-copy className="relative z-10 flex flex-col justify-center px-(--gutter) pt-12 pb-6 lg:col-span-6 lg:py-16 xl:col-span-5 xl:pr-0">
             <span data-intro="chip" className="inline-flex w-fit items-center gap-2 rounded-full bg-white/8 px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] text-white uppercase ring-1 ring-white/15">
