@@ -76,7 +76,7 @@ export function About() {
       <section aria-label="What we stand on" className="frame pt-6 pb-(--section-y)">
         <Container>
           <CardDeck className="grid gap-4 md:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[auto_auto] lg:gap-5">
-            <article data-card data-theme="dark" className="relative isolate flex min-h-[22rem] flex-col overflow-hidden rounded-card bg-navy p-7 sm:p-8 lg:col-span-4 lg:row-span-2">
+            <article data-card data-theme="dark" className="relative isolate flex min-h-0 flex-col overflow-hidden rounded-card bg-navy p-6 sm:p-8 lg:col-span-4 lg:row-span-2">
               <div aria-hidden className="rings -right-24 -bottom-24 w-[22rem]" />
               <Eyebrow>Exclusive territory agent</Eyebrow>
               <h3 className="mt-6 text-h3 text-white">World-class industrial brands, represented in Pakistan</h3>
@@ -104,7 +104,7 @@ export function About() {
               </Button>
             </article>
 
-            <article data-card className="relative isolate min-h-[22rem] overflow-hidden rounded-card lg:col-span-5 lg:row-span-2">
+            <article data-card className="relative isolate min-h-[17rem] overflow-hidden rounded-card sm:min-h-[22rem] lg:col-span-5 lg:row-span-2">
               <Image src="/images/photos/about.webp" alt="" fill sizes="(max-width: 1024px) 100vw, 42vw" className="-z-10 object-cover" />
               <div aria-hidden className="absolute inset-0 -z-10 bg-linear-to-t from-navy/90 via-navy/30 to-transparent" />
               <div className="flex h-full flex-col justify-end p-6 sm:p-7">

@@ -50,28 +50,21 @@ export const HERO_TUNING = {
   },
 
   /** Frosted tiles at different depths; some cross the panel edge. */
+  /** Three quiet glass tiles; they drift slowly and tilt on hover. */
   tiles: {
     desktop: [
-      { icon: "shield", pos: [-3.4, 4.8, -2.6], rot: [0.2, 0.5, -0.12], size: 0.95 },
-      { icon: "network", pos: [-2.1, 4.9, -2.6], rot: [0.25, 0.25, 0.08], size: 0.9, navy: true },
-      { icon: "gear", pos: [2.6, 4.6, -2.4], rot: [0.3, -0.35, 0.1], size: 1.0 },
-      { icon: "camera", pos: [5.6, 3.1, 0.2], rot: [0.15, -0.6, 0.16], size: 1.1 },
-      { icon: "printer", pos: [5.2, 0.6, 2.9], rot: [-0.1, -0.5, -0.1], size: 0.9, navy: true },
-      { icon: "laptop", pos: [-2.6, -0.5, 4.6], rot: [-0.15, 0.5, 0.12], size: 0.8 },
+      { icon: "shield", pos: [-3.6, 4.2, -2.4], rot: [0.2, 0.45, -0.1], size: 0.9 },
+      { icon: "network", pos: [3.3, 4.5, -2.2], rot: [0.25, -0.35, 0.08], size: 0.85, navy: true },
+      { icon: "gear", pos: [4.6, 1.2, 2.6], rot: [-0.1, -0.5, -0.08], size: 0.8 },
     ] as TileSlot[],
     mobile: [
-      { icon: "shield", pos: [-3.6, 4.2, -1.2], rot: [0.2, 0.45, -0.1], size: 1.0 },
-      { icon: "gear", pos: [3.4, 4.4, -1.6], rot: [0.3, -0.35, 0.1], size: 1.0 },
-      { icon: "network", pos: [3.9, 1.0, 2.3], rot: [-0.1, -0.5, -0.1], size: 0.9, navy: true },
+      { icon: "shield", pos: [-3.2, 4.0, -1.6], rot: [0.2, 0.45, -0.1], size: 0.9 },
+      { icon: "network", pos: [3.2, 4.2, -1.6], rot: [0.25, -0.35, 0.08], size: 0.85, navy: true },
     ] as TileSlot[],
   },
   spheres: {
-    desktop: [
-      { pos: [-3.0, 2.5, 2.2] as [number, number, number], r: 0.3 },
-      { pos: [3.8, 2.6, -1.4] as [number, number, number], r: 0.22 },
-      { pos: [-0.9, 4.2, 0.6] as [number, number, number], r: 0.16 },
-    ],
-    mobile: [{ pos: [-3.0, 2.2, 2.0] as [number, number, number], r: 0.3 }],
+    desktop: [] as { pos: [number, number, number]; r: number }[],
+    mobile: [] as { pos: [number, number, number]; r: number }[],
   },
 
   idle: {

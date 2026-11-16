@@ -91,7 +91,7 @@ export function buildTile(m: Materials, icon: IconKey, variant: "frost" | "navy"
   // A sky-tinted inner card behind the glyph, so it reads through the glass.
   const inner = new THREE.Mesh(
     new RoundedBoxGeometry(size * 0.72, size * 0.72, 0.02, 2, size * 0.14),
-    new THREE.MeshBasicMaterial({ color: variant === "navy" ? "#1d3557" : "#3f74e0", transparent: true, opacity: variant === "navy" ? 1 : 0.92, toneMapped: false }),
+    new THREE.MeshBasicMaterial({ color: variant === "navy" ? "#1b2b47" : "#24395e", transparent: true, opacity: 0.94, toneMapped: false }),
   );
   inner.position.z = size * 0.06;
   group.add(inner, slab, glyph);

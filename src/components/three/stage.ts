@@ -48,6 +48,20 @@ export function createLights(scene: THREE.Scene, { key = 2.1, rim = 3.2 } = {}) 
   return { key: keyLight, rim: rimLight, fill, sweep };
 }
 
+/**
+ * Pulls the hero camera back along its view direction until a circle of
+ * `radius` (the platform, plus margin) fits the canvas width, so the
+ * platform is never cut off on narrow or tall canvases. Returns the
+ * fitted position.
+ */
+export function fitHeroCamera(camera: THREE.PerspectiveCamera, position: THREE.Vector3, target: THREE.Vector3, radius = 5.4) {
+  const offset = position.clone().sub(target);
+  const distance = offset.length();
+  const halfWidth = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect * distance;
+  const k = Math.max(1, radius / halfWidth);
+  return target.clone().add(offset.multiplyScalar(k));
+}
+
 /** Points the camera so `object` fills the frame (offline renders). */
 export function frameObject(camera: THREE.PerspectiveCamera, object: THREE.Object3D, { elevation = 0.42, azimuth = 0.5, padding = 1.12 } = {}) {
   const box = new THREE.Box3().setFromObject(object);

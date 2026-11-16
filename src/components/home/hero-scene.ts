@@ -11,7 +11,7 @@ import { gsap } from "@/lib/gsap";
 import { createMaterials, disposeMaterials, type Materials, type Quality } from "@/components/three/materials";
 import { createShared } from "@/components/three/pieces";
 import { buildHeroComposition } from "@/components/three/hero-composition";
-import { createEnvironment, createLights, createRenderer } from "@/components/three/stage";
+import { createEnvironment, createLights, createRenderer, fitHeroCamera } from "@/components/three/stage";
 import { PALETTE } from "@/components/three/materials";
 import { HERO_TUNING as T } from "./hero-tuning";
 
@@ -85,7 +85,8 @@ export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, qu
   const lights = createLights(scene, T.lights);
   const camera = new THREE.PerspectiveCamera(T.camera.fov, 1, 0.1, 100);
   const cam = T.camera[view];
-  const basePos = new THREE.Vector3(...cam.position);
+  const designPos = new THREE.Vector3(...cam.position);
+  let basePos = designPos.clone();
   const target = new THREE.Vector3(...cam.target);
 
   const m = createMaterials(quality);
@@ -102,6 +103,7 @@ export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, qu
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    basePos = fitHeroCamera(camera, designPos, target);
   }
   resize();
   const ro = new ResizeObserver(resize);
@@ -175,7 +177,8 @@ export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, qu
       }
       const a = Math.max(0.0001, s.appear);
       prod.model.scale.setScalar(prod.slot.scale * a);
-      prod.model.position.y = prod.baseY + e * 0.6 + idle * Math.sin(time * 0.9 + prod.phase) * T.idle.float;
+      // Float only lifts (never sinks into the plinth).
+      prod.model.position.y = prod.baseY + e * 0.6 + idle * (0.5 + 0.5 * Math.sin(time * 0.9 + prod.phase)) * T.idle.float;
       prod.plinth.scale.set(1, Math.max(0.0001, Math.min(1, a * 1.2)), 1);
       (prod.shadow.material as THREE.MeshBasicMaterial).opacity = 0.7 * a * (1 - e);
       (prod.glint.material as THREE.SpriteMaterial).opacity = s.glint;

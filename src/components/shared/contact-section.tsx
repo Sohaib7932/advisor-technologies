@@ -55,7 +55,7 @@ export function ContactSection({ headingLevel = "h2" }: { headingLevel?: "h1" | 
           </Reveal>
 
           <Reveal delay={120} className="lg:col-span-7">
-            <div className="card relative overflow-hidden p-6 sm:p-10">
+            <div className="card relative overflow-hidden p-5 sm:p-8 lg:p-10">
               <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-navy via-steel to-sky" />
               <h3 className="text-h3 text-navy">Tell us what you need</h3>
               <p className="mt-2 text-sm leading-relaxed text-text-2">The more detail you share, the more precise our quotation.</p>
@@ -77,7 +77,7 @@ export function ContactSection({ headingLevel = "h2" }: { headingLevel?: "h1" | 
             <DetailCard icon={<Mail className="size-5" />} label="Email us" href={`mailto:${site.contact.email}`}>
               <span className="break-all">{site.contact.email}</span>
             </DetailCard>
-            <div id="office" className="card scroll-mt-32 p-6">
+            <div id="office" className="card scroll-mt-32 p-5 sm:p-6">
               <IconTile>
                 <MapPin className="size-5" />
               </IconTile>
@@ -96,7 +96,7 @@ export function ContactSection({ headingLevel = "h2" }: { headingLevel?: "h1" | 
                 </svg>
               </a>
             </div>
-            <div className="card p-6">
+            <div className="card p-5 sm:p-6">
               <IconTile>
                 <Clock className="size-5" />
               </IconTile>
@@ -129,7 +129,7 @@ function IconTile({ children }: { children: React.ReactNode }) {
 
 function DetailCard({ icon, label, href, children }: { icon: React.ReactNode; label: string; href: string; children: React.ReactNode }) {
   return (
-    <a href={href} className="group card flex flex-col p-6 transition-[translate,box-shadow] duration-500 ease-out-expo hover:-translate-y-0.5 hover:shadow-card-hover">
+    <a href={href} className="group card flex flex-col p-5 sm:p-6 transition-[translate,box-shadow] duration-500 ease-out-expo hover:-translate-y-0.5 hover:shadow-card-hover">
       <IconTile>{icon}</IconTile>
       <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-text-3 uppercase">{label}</p>
       <p className="mt-2 text-[0.9375rem] font-semibold text-navy">{children}</p>

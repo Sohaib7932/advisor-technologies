@@ -62,12 +62,12 @@ export function createMaterials(quality: Quality) {
     }),
     /** The platform deck: deep, glossy, reflecting the blue rim light. */
     deck: new THREE.MeshPhysicalMaterial({
-      color: "#10203f",
-      metalness: 0.45,
-      roughness: 0.2,
-      clearcoat: 1,
-      clearcoatRoughness: 0.03,
-      envMapIntensity: 0.2,
+      color: "#0f1d3a",
+      metalness: 0.1,
+      roughness: 0.38,
+      clearcoat: 0.55,
+      clearcoatRoughness: 0.12,
+      envMapIntensity: 0.06,
     }),
     brand: new THREE.MeshPhysicalMaterial({
       color: PALETTE.brand,
@@ -82,6 +82,14 @@ export function createMaterials(quality: Quality) {
       roughness: 0.28,
       clearcoat: 0.7,
       clearcoatRoughness: 0.12,
+    }),
+    /** Brushed steel for mechanical parts (the gear). */
+    metal: new THREE.MeshPhysicalMaterial({
+      color: "#9aa8bd",
+      metalness: 0.9,
+      roughness: 0.34,
+      clearcoat: 0.4,
+      clearcoatRoughness: 0.2,
     }),
     chrome: new THREE.MeshStandardMaterial({ color: PALETTE.chrome, metalness: 1, roughness: 0.16 }),
     steel: new THREE.MeshPhysicalMaterial({
@@ -100,7 +108,7 @@ export function createMaterials(quality: Quality) {
     glass: glass("#e8f3fb", 0.08),
     /** Floating tiles and spheres sit over the page, not the scene, so they
      *  use fake glass: transmission over a transparent canvas reads milky. */
-    frost: glass("#9dbbf5", 0.06, 0.34, true),
+    frost: glass("#dfe9f7", 0.06, 0.22, true),
     bubble: glass("#d6ebf9", 0.04, 0.2, true),
     /** Bar-chart columns, tinted sky. */
     glassSky: glass("#a9c4ff", 0.06, 0.45),
