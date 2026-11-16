@@ -8,6 +8,14 @@ import { Render3D } from "@/components/three/render-3d";
 import type { RenderName } from "@/components/three/renders";
 import { services } from "@/lib/content";
 
+/** From the company objective in content.ts (objectiveParagraphs). */
+const ROUTE = [
+  { title: "Supply", body: "Hardware, software and equipment" },
+  { title: "Installation", body: "Network design and fitting" },
+  { title: "Service", body: "Support and training" },
+];
+const FIELDS = ["Plant & machinery", "Civil engineering", "Mechanical engineering", "Software", "Communications"];
+
 /** The product render that stands for each division. */
 export const DIVISION_RENDER: Record<string, RenderName> = {
   "plant-machinery": "product-chair",
@@ -38,6 +46,28 @@ export function ActivityScope() {
               <p className="mt-6 max-w-md text-lead text-fg-muted">
                 A single purchase order can cover equipment, installation and the years of service that follow.
               </p>
+
+              {/* One contract, three stages (company profile: complete solutions) */}
+              <ol className="mt-8 grid grid-cols-3 gap-2 rounded-[1.5rem] bg-white p-2 ring-1 ring-line">
+                {ROUTE.map((step, i) => (
+                  <li key={step.title} className="rounded-[1.1rem] bg-mist px-3 py-3.5 sm:px-4">
+                    <span className="font-display text-xs font-bold text-steel tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="mt-1 block text-sm font-semibold text-navy">{step.title}</span>
+                    <span className="mt-0.5 block text-xs leading-snug text-text-3">{step.body}</span>
+                  </li>
+                ))}
+              </ol>
+
+              {/* Specialist fields of the team (company profile) */}
+              <p className="mt-8 text-xs font-semibold tracking-[0.08em] text-text-3 uppercase">Qualified specialists in</p>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {FIELDS.map((field) => (
+                  <li key={field} className="rounded-full bg-white px-3 py-1.5 text-xs font-medium text-navy ring-1 ring-line">
+                    {field}
+                  </li>
+                ))}
+              </ul>
+
               <Button href="/services" className="mt-9">
                 Explore services
               </Button>
