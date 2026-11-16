@@ -7,6 +7,10 @@ import { ArrowRight, Check, Icon } from "@/components/ui/icons";
 import { Render3D } from "@/components/three/render-3d";
 import type { RenderName } from "@/components/three/renders";
 import { services } from "@/lib/content";
+import { RouteSteps } from "./route-steps";
+
+/** Specialist fields, from the company profile (objectiveParagraphs). */
+const FIELDS = ["Plant & machinery", "Civil engineering", "Mechanical engineering", "Software", "Communications"];
 
 /** The product render that stands for each division. */
 export const DIVISION_RENDER: Record<string, RenderName> = {
@@ -38,6 +42,20 @@ export function ActivityScope() {
               <p className="mt-6 max-w-md text-lead text-fg-muted">
                 A single purchase order can cover equipment, installation and the years of service that follow.
               </p>
+
+              {/* One contract, three stages (company profile: complete solutions) */}
+              <RouteSteps />
+
+              {/* Specialist fields of the team (company profile) */}
+              <p className="mt-8 text-xs font-semibold tracking-[0.08em] text-text-3 uppercase">Qualified specialists in</p>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {FIELDS.map((field) => (
+                  <li key={field} className="rounded-full bg-white px-3 py-1.5 text-xs font-medium text-navy ring-1 ring-line">
+                    {field}
+                  </li>
+                ))}
+              </ul>
+
               <Button href="/services" className="mt-9">
                 Explore services
               </Button>

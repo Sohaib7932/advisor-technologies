@@ -12,7 +12,7 @@ export function RenderScene({ name }: { name: string }) {
       const THREE = await import("three");
       const { createMaterials } = await import("@/components/three/materials");
       const { createShared } = await import("@/components/three/pieces");
-      const { createEnvironment, createLights, createRenderer, frameObject } = await import("@/components/three/stage");
+      const { createEnvironment, createLights, createRenderer, fitHeroCamera, frameObject } = await import("@/components/three/stage");
       const { buildNamedScene, SCENES, HERO_TUNING } = await import("@/components/three/scenes");
       const spec = SCENES[name];
       if (!spec) throw new Error(`Unknown scene ${name}`);
@@ -30,8 +30,9 @@ export function RenderScene({ name }: { name: string }) {
 
       const camera = new THREE.PerspectiveCamera(HERO_TUNING.camera.fov, spec.width / spec.height, 0.1, 200);
       if (spec.camera === "hero") {
-        camera.position.set(...HERO_TUNING.camera.desktop.position);
-        camera.lookAt(new THREE.Vector3(...HERO_TUNING.camera.desktop.target));
+        const target = new THREE.Vector3(...HERO_TUNING.camera.desktop.target);
+        camera.position.copy(fitHeroCamera(camera, new THREE.Vector3(...HERO_TUNING.camera.desktop.position), target));
+        camera.lookAt(target);
       } else {
         frameObject(camera, object, spec.camera);
       }

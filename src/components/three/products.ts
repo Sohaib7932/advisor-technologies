@@ -34,25 +34,30 @@ function assembly(children: THREE.Object3D[], [x, y, z]: V3 = [0, 0, 0], [rx, ry
 }
 
 function serverRack(m: Materials) {
-  const parts: THREE.Object3D[] = [part(rbox(1, 2, 0.9, 0.08), m.ceramic, [0, 1, 0])];
-  // Chrome door handle
-  parts.push(part(rbox(0.03, 0.5, 0.04, 0.015), m.chrome, [0.44, 1.05, 0.47]));
-  for (let i = 0; i < 6; i++) {
-    const y = 0.3 + i * 0.28;
+  // Cabinet, a recessed dark bay on its front, and four server units that
+  // stand proud of the bay. Every layer sits at its own depth (no shared
+  // faces), so nothing flickers.
+  const parts: THREE.Object3D[] = [
+    part(rbox(1, 2, 0.9, 0.08), m.ceramic, [0, 1, 0]),
+    part(rbox(0.82, 1.74, 0.03, 0.02), m.navy, [0, 1.02, 0.465]),
+  ];
+  for (let i = 0; i < 4; i++) {
+    const y = 0.42 + i * 0.4;
     parts.push(
       assembly(
         [
-          part(rbox(0.82, 0.22, 0.06, 0.03), m.navy),
-          part(new THREE.BoxGeometry(0.05, 0.05, 0.02), m.led, [0.31, 0.02, 0.035]),
-          part(new THREE.BoxGeometry(0.05, 0.05, 0.02), i % 2 ? m.led : m.ledSoft, [0.23, 0.02, 0.035]),
-          part(new THREE.BoxGeometry(0.4, 0.02, 0.02), m.chrome, [-0.14, -0.04, 0.035]),
+          part(rbox(0.74, 0.3, 0.05, 0.025), m.chrome),
+          part(rbox(0.46, 0.05, 0.012, 0.006), m.navy, [-0.08, 0.04, 0.03]),
+          part(rbox(0.46, 0.05, 0.012, 0.006), m.navy, [-0.08, -0.05, 0.03]),
+          part(new THREE.SphereGeometry(0.022, 14, 10), m.led, [0.24, 0.04, 0.03]),
+          part(new THREE.SphereGeometry(0.022, 14, 10), i % 2 ? m.led : m.ledSoft, [0.3, 0.04, 0.03]),
         ],
-        [0, y, 0.42],
+        [0, y, 0.5],
       ),
     );
   }
-  parts.push(part(rbox(1.04, 0.08, 0.94, 0.03), m.navy, [0, 0.04, 0]));
-  parts.push(part(rbox(1.04, 0.06, 0.94, 0.03), m.navy, [0, 2.0, 0]));
+  parts.push(part(rbox(1.06, 0.08, 0.96, 0.03), m.navy, [0, 0.04, 0]));
+  parts.push(part(rbox(1.06, 0.06, 0.96, 0.03), m.navy, [0, 2.02, 0]));
   return parts;
 }
 
@@ -114,8 +119,8 @@ function printer(m: Materials) {
 
 function officeChair(m: Materials) {
   const parts: THREE.Object3D[] = [
-    part(rbox(0.92, 0.16, 0.86, 0.07), m.steel, [0, 0.66, 0]),
-    part(rbox(0.86, 0.98, 0.13, 0.07), m.steel, [0, 1.28, -0.42], [-0.12, 0, 0]),
+    part(rbox(0.92, 0.16, 0.86, 0.07), m.brand, [0, 0.66, 0]),
+    part(rbox(0.86, 0.98, 0.13, 0.07), m.brand, [0, 1.28, -0.42], [-0.12, 0, 0]),
     part(rbox(0.1, 0.5, 0.06, 0.02), m.chrome, [0, 0.9, -0.46]),
     part(new THREE.CylinderGeometry(0.05, 0.05, 0.46, 20), m.chrome, [0, 0.38, 0]),
   ];
@@ -175,7 +180,7 @@ function gear(m: Materials) {
   });
   geometry.center();
   return [
-    part(geometry, m.steel, [0, 0.98, 0]),
+    part(geometry, m.metal, [0, 0.98, 0]),
     part(new THREE.TorusGeometry(0.4, 0.035, 14, 64), m.led, [0, 0.98, 0.2]),
     part(new THREE.CylinderGeometry(0.2, 0.2, 0.44, 32), m.chrome, [0, 0.98, 0], [Math.PI / 2, 0, 0]),
     part(rbox(0.7, 0.08, 0.4, 0.03), m.navy, [0, 0.04, 0]),

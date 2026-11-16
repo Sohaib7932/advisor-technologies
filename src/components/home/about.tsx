@@ -5,10 +5,19 @@ import { Reveal } from "@/components/ui/reveal";
 import { CardDeck } from "@/components/ui/card-deck";
 import { CountUp } from "@/components/ui/count-up";
 import { Button } from "@/components/ui/button";
-import { Icon } from "@/components/ui/icons";
+import { Check, Icon } from "@/components/ui/icons";
 import { Render3D } from "@/components/three/render-3d";
 import { sectors, stats } from "@/lib/content";
 import { cn } from "@/lib/utils";
+
+/** From the company profile (aboutParagraphs[1] in content.ts). */
+const AGENT_SCOPE = [
+  "Branded machinery & equipment",
+  "Office & computer stationery",
+  "All kinds of furniture",
+  "Repair & maintenance of machinery, transport, buildings and roads",
+  "Import & export",
+];
 
 /**
  * About (ref 1's stats panel, ref 3's bento). An ice panel: statement and
@@ -52,7 +61,7 @@ export function About() {
                       <li key={stat.label} className="card rounded-[1.5rem] p-5 sm:p-6">
                         <CountUp value={stat.value} className="block font-display text-[clamp(2rem,1.4rem+2vw,2.75rem)] leading-none font-bold tracking-tight text-navy tabular-nums" />
                         <p className="mt-3 text-sm font-semibold text-navy">{stat.label}</p>
-                        <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-text-3">{stat.detail}</p>
+                        <p className="mt-1.5 hidden text-[0.8125rem] leading-relaxed text-text-3 sm:block">{stat.detail}</p>
                       </li>
                     ))}
                 </ul>
@@ -67,7 +76,7 @@ export function About() {
       <section aria-label="What we stand on" className="frame pt-6 pb-(--section-y)">
         <Container>
           <CardDeck className="grid gap-4 md:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[auto_auto] lg:gap-5">
-            <article data-card data-theme="dark" className="relative isolate flex min-h-[22rem] flex-col overflow-hidden rounded-card bg-navy p-7 sm:p-8 lg:col-span-4 lg:row-span-2">
+            <article data-card data-theme="dark" className="relative isolate flex min-h-0 flex-col overflow-hidden rounded-card bg-navy p-6 sm:p-8 lg:col-span-4 lg:row-span-2">
               <div aria-hidden className="rings -right-24 -bottom-24 w-[22rem]" />
               <Eyebrow>Exclusive territory agent</Eyebrow>
               <h3 className="mt-6 text-h3 text-white">World-class industrial brands, represented in Pakistan</h3>
@@ -75,12 +84,27 @@ export function About() {
                 Advisor Technologies acts as exclusive territory agent to a number of world-class industrial manufacturing
                 brands for the Pakistan market.
               </p>
-              <Button href="/about" variant="secondary" size="sm" className="mt-auto self-start">
+              {/* What we supply, in the company profile's own words */}
+              <ul className="mt-6 grid gap-2.5 text-sm text-white">
+                {AGENT_SCOPE.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5">
+                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-sky/20 text-sky">
+                      <Check className="size-3" />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 border-t border-white/10 pt-5 text-sm leading-relaxed text-fg-muted">
+                A recognised brand within Pakistan which stands for{" "}
+                <span className="font-semibold text-white">quality and reliability</span>.
+              </p>
+              <Button href="/about" variant="secondary" size="sm" className="mt-8 self-start lg:mt-auto">
                 Our story
               </Button>
             </article>
 
-            <article data-card className="relative isolate min-h-[22rem] overflow-hidden rounded-card lg:col-span-5 lg:row-span-2">
+            <article data-card className="relative isolate min-h-[17rem] overflow-hidden rounded-card sm:min-h-[22rem] lg:col-span-5 lg:row-span-2">
               <Image src="/images/photos/about.webp" alt="" fill sizes="(max-width: 1024px) 100vw, 42vw" className="-z-10 object-cover" />
               <div aria-hidden className="absolute inset-0 -z-10 bg-linear-to-t from-navy/90 via-navy/30 to-transparent" />
               <div className="flex h-full flex-col justify-end p-6 sm:p-7">

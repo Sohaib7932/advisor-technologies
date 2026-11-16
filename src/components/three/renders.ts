@@ -12,7 +12,7 @@ export const RENDERS = {
   "banner-clients": [787, 637],
   "banner-contact": [784, 668],
   "banner-404": [770, 670],
-  "product-rack": [656, 798],
+  "product-rack": [658, 794],
   "product-cctv": [700, 704],
   "product-laptop": [780, 477],
   "product-printer": [779, 448],

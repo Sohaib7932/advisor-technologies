@@ -95,7 +95,7 @@
 :root {
   --gutter: clamp(20px, 4vw, 48px);
   --inset: clamp(12px, 1.6vw, 24px); /* panel distance from the viewport edge */
-  --section-y: clamp(72px, 9vw, 128px);
+  --section-y: clamp(56px, 7.5vw, 120px);
   --header-h: 76px; /* the white strip above the first panel */
   --notch-r: 24px; /* concave shoulders and tab corners */
   --surface-edge: var(--color-line);
@@ -153,11 +153,31 @@
     border-color: var(--color-line);
   }
 
+  /* Root scale. Type, spacing, cards and buttons are all in rem, so the whole
+     interface steps down on phones and up on very large screens, in one
+     place. */
   html {
+    font-size: 100%;
     scroll-padding-top: 6.5rem;
     -webkit-tap-highlight-color: transparent;
     color-scheme: light;
     background-color: #ffffff;
+  }
+
+  @media (max-width: 479px) {
+    html {
+      font-size: 93.75%; /* 15px */
+    }
+  }
+  @media (min-width: 1920px) {
+    html {
+      font-size: 106.25%; /* 17px */
+    }
+  }
+  @media (min-width: 2400px) {
+    html {
+      font-size: 118.75%; /* 19px */
+    }
   }
 
   body {
@@ -227,7 +247,7 @@ html.lenis body {
 @utility text-h1 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.75rem, 5.5vw, 5.25rem);
+  font-size: clamp(2rem, 0.4rem + 3.6vw, 4.25rem);
   line-height: 1.05;
   letter-spacing: -0.02em;
 }
@@ -235,15 +255,15 @@ html.lenis body {
 @utility text-h2 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2rem, 3.6vw, 3.25rem);
-  line-height: 1.05;
+  font-size: clamp(1.625rem, 0.5rem + 2.3vw, 2.875rem);
+  line-height: 1.08;
   letter-spacing: -0.02em;
 }
 
 @utility text-h3 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.25rem, 1rem + 0.7vw, 1.625rem);
+  font-size: clamp(1.125rem, 0.9rem + 0.6vw, 1.5rem);
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
@@ -257,7 +277,7 @@ html.lenis body {
 }
 
 @utility text-lead {
-  font-size: clamp(1rem, 0.94rem + 0.3vw, 1.125rem);
+  font-size: clamp(0.9375rem, 0.88rem + 0.25vw, 1.0625rem);
   line-height: 1.65;
 }
 
@@ -281,13 +301,13 @@ html.lenis body {
 /* The site frame: every panel and every section's content shares these
    left and right edges (the hero's), up to 1440px wide. */
 @utility frame {
-  width: min(100% - 2 * var(--inset), 90rem);
+  width: min(100% - 2 * var(--inset), 88rem);
   margin-inline: auto;
 }
 
 /* An inset rounded panel on the frame, radius 40 */
 @utility panel {
-  width: min(100% - 2 * var(--inset), 90rem);
+  width: min(100% - 2 * var(--inset), 88rem);
   margin-inline: auto;
   border-radius: var(--radius-panel);
 }
@@ -547,10 +567,16 @@ section:has(> [data-notched]) + .panel {
 .nav-link {
   position: relative;
   padding: 0.5rem 0.25rem;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
   font-weight: 500;
   color: rgb(255 255 255 / 0.78);
   transition: color 0.3s var(--ease-out-expo);
+}
+@media (min-width: 1280px) {
+  .nav-link {
+    font-size: 0.9375rem;
+  }
 }
 .nav-link:hover,
 .nav-link[aria-current="page"] {
@@ -611,6 +637,7 @@ section:has(> [data-notched]) + .panel {
 /* Headline line masks: GSAP slides each line up from below its mask */
 .line-mask {
   display: block;
+  width: fit-content; /* mask hugs its line: hides vertically, never clips sideways */
   overflow: hidden;
   padding-bottom: 0.08em;
   margin-bottom: -0.08em;

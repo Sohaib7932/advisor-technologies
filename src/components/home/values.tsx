@@ -30,7 +30,7 @@ export function Values({ id = "values", tone = "white" }: { id?: string; tone?: 
               key={value.title}
               as="li"
               tone={TONES[i]}
-              artClassName="h-32"
+              artClassName="h-24 sm:h-32"
               art={
                 <IconArt>
                   <Icon name={value.icon} className="size-6" />

@@ -98,7 +98,7 @@ export function PageHero({
                 {eyebrow}
               </span>
             </nav>
-            <h1 className="mt-6 max-w-3xl text-[clamp(2.4rem,4.4vw,4rem)] leading-[1.05] font-bold tracking-[-0.02em] text-white">
+            <h1 className="mt-6 max-w-3xl text-[clamp(1.875rem,0.4rem+3vw,3.5rem)] leading-[1.05] font-bold tracking-[-0.02em] text-white">
               <span className="line-mask">
                 <span>{title}</span>
               </span>
@@ -124,7 +124,7 @@ export function PageHero({
               </div>
             )}
           </div>
-          <div data-intro data-tilt-host className="mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none">
+          <div data-intro data-tilt-host className="mx-auto w-full max-w-[16rem] sm:max-w-sm lg:col-span-5 lg:max-w-none">
             <Render3D name={render} priority float sizes="(max-width: 1024px) 80vw, 36vw" />
           </div>
         </div>

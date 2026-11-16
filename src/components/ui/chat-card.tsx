@@ -46,7 +46,7 @@ export function ChatCard({ lines, className, caption }: { lines: ChatLine[]; cla
             "motion-hide max-w-[88%] px-4 py-3 text-[0.9375rem] leading-snug",
             line.from === "us"
               ? "self-start rounded-[1.25rem] rounded-bl-md bg-white text-navy shadow-card"
-              : "self-end rounded-[1.25rem] rounded-br-md bg-sky text-ink",
+              : "self-end rounded-[1.25rem] rounded-br-md bg-navy text-white",
           )}
         >
           {line.text}

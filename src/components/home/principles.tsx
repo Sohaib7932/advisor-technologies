@@ -28,7 +28,7 @@ export function Principles({ id = "principles", tone = "white" }: { id?: string;
               as="li"
               tone={TONES[i]}
               className="md:flex-row"
-              artClassName="h-32 md:h-auto md:w-44 md:shrink-0 md:[&_[data-illus]]:items-center md:[&_[data-illus]]:pt-0"
+              artClassName="h-24 sm:h-32 md:h-auto md:w-44 md:shrink-0 md:[&_[data-illus]]:items-center md:[&_[data-illus]]:pt-0"
               bodyClassName="md:py-8 md:pl-0"
               art={
                 <IconArt>
