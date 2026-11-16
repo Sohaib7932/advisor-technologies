@@ -197,7 +197,7 @@ export function Hero() {
     <section ref={root} aria-label="Introduction">
       <NotchedPanel
         reveal
-        bodyClassName="lg:min-h-[clamp(620px,calc(100svh-var(--header-h)-28px),920px)] lg:flex"
+        bodyClassName="lg:min-h-[clamp(560px,calc(100svh-var(--header-h)-28px),55rem)] lg:flex"
         backdrop={
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
             {/* One soft steel-blue light behind the platform, and its rings */}
@@ -208,12 +208,12 @@ export function Hero() {
       >
         <div className="relative grid w-full lg:grid-cols-12">
           {/* Copy */}
-          <div data-hero-copy className="relative z-10 flex flex-col justify-center px-(--gutter) pt-12 pb-6 lg:col-span-6 lg:py-16 xl:col-span-5 xl:pr-0">
+          <div data-hero-copy className="relative z-10 flex flex-col justify-center px-(--gutter) pt-9 pb-4 sm:pt-12 lg:col-span-6 lg:py-14 xl:col-span-5 xl:pr-0 2xl:col-span-6">
             <span data-intro="chip" className="inline-flex w-fit items-center gap-2 rounded-full bg-white/8 px-3.5 py-1.5 text-xs font-semibold tracking-[0.08em] text-white uppercase ring-1 ring-white/15">
               <span aria-hidden className="size-1.5 rounded-full bg-amber" />
               Islamabad · Pakistan
             </span>
-            <h1 className="mt-6 text-h1 text-white">
+            <h1 className="mt-5 text-h1 text-white sm:mt-6 lg:[&_.line-mask>span]:whitespace-nowrap">
               <span className="line-mask">
                 <span>Six divisions.</span>
               </span>
@@ -224,16 +224,16 @@ export function Hero() {
                 <span className="text-sky">partner.</span>
               </span>
             </h1>
-            <p data-intro="tagline" className="mt-6 max-w-md text-lead text-text-2">
+            <p data-intro="tagline" className="mt-5 max-w-md text-lead text-text-2 sm:mt-6">
               Complete technology and supply solutions, built for Pakistan.
             </p>
-            <div data-intro="buttons" className="mt-9 flex flex-wrap gap-3">
+            <div data-intro="buttons" className="mt-7 flex flex-wrap gap-3 sm:mt-9">
               <Button href="/contact#enquiry">Get a Quote</Button>
               <Button href="/services" variant="secondary">
                 Explore services
               </Button>
             </div>
-            <div data-intro="trust" className="mt-10 flex w-fit items-center gap-3 rounded-full bg-white/6 py-1.5 pr-4 pl-1.5 ring-1 ring-white/12">
+            <div data-intro="trust" className="mt-8 flex w-fit sm:mt-10 items-center gap-3 rounded-full bg-white/6 py-1.5 pr-4 pl-1.5 ring-1 ring-white/12">
               <span className="flex -space-x-2.5">
                 {TRUST.map((c) => (
                   <span key={c.name} className="grid size-9 place-items-center overflow-hidden rounded-full bg-white ring-2 ring-navy">
@@ -248,7 +248,7 @@ export function Hero() {
           </div>
 
           {/* 3D: live scene, with a static poster for fallbacks */}
-          <div className="relative h-[clamp(320px,90vw,520px)] lg:absolute lg:inset-y-0 lg:right-0 lg:left-[40%] lg:h-auto xl:left-[34%]">
+          <div className="relative h-[clamp(240px,68vw,460px)] lg:absolute lg:inset-y-0 lg:right-0 lg:left-[43%] lg:h-auto xl:left-[38%] 2xl:left-[46%]">
             <Image
               data-poster
               src="/3d/hero-poster.webp"

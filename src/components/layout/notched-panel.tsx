@@ -132,11 +132,11 @@ export function NotchedPanel({
           aria-label="Main"
           data-theme="dark"
           className={cn(
-            "mr-12 ml-[clamp(2.5rem,6vw,6rem)] hidden h-full flex-1 items-center justify-center self-start px-10 lg:flex xl:px-12",
+            "mr-7 ml-[clamp(1.5rem,4vw,5rem)] hidden h-full flex-1 items-center justify-center self-start px-6 lg:flex xl:mr-10 xl:px-10",
             !geo && "rounded-t-[24px] bg-ink",
           )}
         >
-          <ul data-notch-links className="flex items-center gap-12 xl:gap-16">
+          <ul data-notch-links className="flex items-center gap-[clamp(1.25rem,3.2vw,3.5rem)]">
             {navLinks.map((item) => {
               const active = isActivePath(pathname, item.href);
               return (
@@ -149,7 +149,10 @@ export function NotchedPanel({
             })}
           </ul>
         </nav>
-        <Button href="/contact#enquiry" className="hidden lg:inline-flex">
+        <Button href="/contact#enquiry" size="sm" className="hidden shrink-0 lg:inline-flex xl:hidden">
+          Get a Quote
+        </Button>
+        <Button href="/contact#enquiry" className="hidden shrink-0 xl:inline-flex">
           Get a Quote
         </Button>
         <button
