@@ -7,13 +7,9 @@ import { ArrowRight, Check, Icon } from "@/components/ui/icons";
 import { Render3D } from "@/components/three/render-3d";
 import type { RenderName } from "@/components/three/renders";
 import { services } from "@/lib/content";
+import { RouteSteps } from "./route-steps";
 
-/** From the company objective in content.ts (objectiveParagraphs). */
-const ROUTE = [
-  { title: "Supply", body: "Hardware, software and equipment" },
-  { title: "Installation", body: "Network design and fitting" },
-  { title: "Service", body: "Support and training" },
-];
+/** Specialist fields, from the company profile (objectiveParagraphs). */
 const FIELDS = ["Plant & machinery", "Civil engineering", "Mechanical engineering", "Software", "Communications"];
 
 /** The product render that stands for each division. */
@@ -48,15 +44,7 @@ export function ActivityScope() {
               </p>
 
               {/* One contract, three stages (company profile: complete solutions) */}
-              <ol className="mt-8 grid grid-cols-3 gap-2 rounded-[1.5rem] bg-white p-2 ring-1 ring-line">
-                {ROUTE.map((step, i) => (
-                  <li key={step.title} className="rounded-[1.1rem] bg-mist px-3 py-3.5 sm:px-4">
-                    <span className="font-display text-xs font-bold text-steel tabular-nums">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="mt-1 block text-sm font-semibold text-navy">{step.title}</span>
-                    <span className="mt-0.5 block text-xs leading-snug text-text-3">{step.body}</span>
-                  </li>
-                ))}
-              </ol>
+              <RouteSteps />
 
               {/* Specialist fields of the team (company profile) */}
               <p className="mt-8 text-xs font-semibold tracking-[0.08em] text-text-3 uppercase">Qualified specialists in</p>
