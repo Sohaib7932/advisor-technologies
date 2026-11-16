@@ -20,34 +20,43 @@ const mapEmbed = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
 export function ContactSection({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" }) {
   const Heading = headingLevel;
   return (
-    <Section id="enquiry" tone="navy" className="overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-[20%] -left-[10%] aspect-square w-[55%] rounded-full bg-[radial-gradient(closest-side,rgb(47_92_196/0.4),transparent)]" />
-      </div>
+    <Section id="enquiry" className="overflow-hidden">
       <Container>
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-14">
           <Reveal className="lg:col-span-5">
             <Eyebrow>Contact us</Eyebrow>
-            <Heading className="mt-5 text-h2 text-white">
+            <Heading className="mt-5 text-h2 text-navy">
               Let&rsquo;s discuss <Accent>your requirement</Accent>
             </Heading>
             <p className="mt-6 max-w-md text-lead text-fg-muted">
               Send us a specification, a bill of quantities or a tender reference and our team will respond with a
               documented technical and commercial proposal.
             </p>
-            <ChatCard
-              className="mt-10 max-w-md"
-              caption="How an enquiry goes"
+            {/* The conversation, on its own light card */}
+            <div className="mt-10 max-w-md rounded-card bg-mist p-5 ring-1 ring-line sm:p-6">
+              <div className="mb-4 flex items-center gap-3 border-b border-line pb-4">
+                <span className="relative grid size-10 place-items-center rounded-full bg-navy text-sm font-bold text-white">
+                  AT
+                  <span aria-hidden className="absolute -right-0.5 -bottom-0.5 size-3 rounded-full bg-emerald-500 ring-2 ring-mist" />
+                </span>
+                <span className="leading-tight">
+                  <span className="block text-sm font-semibold text-navy">How an enquiry goes</span>
+                  <span className="block text-xs text-text-3">{site.hours.weekdays}</span>
+                </span>
+              </div>
+              <ChatCard
               lines={[
                 { from: "you", text: "I have a BOQ to price." },
                 { from: "us", text: "Send it with the form, or email it to us." },
                 { from: "us", text: "We reply with a documented technical proposal and a transparent quotation." },
               ]}
-            />
+              />
+            </div>
           </Reveal>
 
           <Reveal delay={120} className="lg:col-span-7">
-            <div data-theme="light" className="card p-6 sm:p-10">
+            <div className="card relative overflow-hidden p-6 sm:p-10">
+              <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-navy via-steel to-sky" />
               <h3 className="text-h3 text-navy">Tell us what you need</h3>
               <p className="mt-2 text-sm leading-relaxed text-text-2">The more detail you share, the more precise our quotation.</p>
               <div className="mt-8">
