@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowRight, Icon } from "@/components/ui/icons";
-import { Button } from "@/components/ui/button";
 import type { IconName, Product } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
@@ -214,9 +213,6 @@ function DeckCardFace({ card, index, total }: { card: DeckCard; index: number; t
           {card.items[0].body}
         </p>
       )}
-      <Button href="/products" size="sm" className="relative mt-3 w-fit sm:mt-5">
-        View in catalogue
-      </Button>
     </div>
   );
 }
