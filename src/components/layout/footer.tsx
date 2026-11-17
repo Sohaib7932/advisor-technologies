@@ -100,9 +100,23 @@ export function Footer() {
               </div>
             ))}
           </dl>
-          <p className="text-fg-subtle">
-            © {year} {site.name}. All rights reserved.
-          </p>
+          <div className="flex flex-col gap-1.5 text-fg-subtle sm:flex-row sm:items-center sm:gap-4">
+            <p>
+              © {year} {site.name}. All rights reserved.
+            </p>
+            <span aria-hidden className="hidden h-3 w-px bg-white/15 sm:block" />
+            <p>
+              Created by{" "}
+              <a
+                href="https://corefinity.tech/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-white underline-offset-4 transition-colors hover:text-sky hover:underline"
+              >
+                Corefinity Tech
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
