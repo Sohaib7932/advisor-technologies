@@ -6,7 +6,7 @@ export function Eyebrow({ children, className }: { children: React.ReactNode; cl
   return (
     <span
       className={cn(
-        "eyebrow inline-flex w-fit items-center gap-2 rounded-full bg-surface px-3 py-1.5 text-[0.6875rem] text-accent ring-1 ring-line",
+        "eyebrow inline-flex w-fit items-center gap-2 rounded-full bg-surface px-3 py-1.5 text-xs text-accent ring-1 ring-line",
         className,
       )}
     >

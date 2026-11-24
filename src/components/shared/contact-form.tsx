@@ -8,7 +8,7 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const fieldClass =
-  "w-full rounded-2xl border-0 bg-mist px-5 py-3.5 text-[0.9375rem] text-navy ring-1 ring-inset ring-line transition-[box-shadow,background-color] duration-300 placeholder:text-text-3 hover:bg-white focus:bg-white focus:shadow-[0_0_0_4px_rgb(79_163_255/0.18)] focus:ring-2 focus:ring-sky focus:outline-none";
+  "w-full rounded-2xl border-0 bg-mist px-5 py-3.5 text-base text-navy ring-1 ring-inset ring-line transition-colors duration-300 placeholder:text-text-3 hover:bg-white focus:bg-white focus:shadow-[0_0_0_4px_rgb(79_163_255/0.18)] focus:ring-2 focus:ring-sky focus:outline-none";
 
 const labelClass = "block text-sm font-medium text-navy";
 
@@ -161,7 +161,7 @@ export function ContactForm() {
       </div>
 
       <div className="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs leading-relaxed text-text-3">
+        <p className="text-sm leading-relaxed text-text-3">
           Your details are used only to respond to this enquiry.
         </p>
         <Button type="submit" state={status} className="shrink-0">

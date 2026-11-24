@@ -126,7 +126,7 @@ export default function ProductsPage() {
                       </div>
 
                       <div className="mt-auto">
-                        <span className="rounded-full bg-navy-950/55 px-3.5 py-1 text-[0.625rem] font-semibold tracking-[0.14em] uppercase ring-1 ring-white/25">
+                        <span className="rounded-full bg-navy-950/55 px-3.5 py-1 text-xs font-semibold tracking-[0.14em] uppercase ring-1 ring-white/25">
                           {group.items.length} product{" "}
                           {group.items.length === 1 ? "line" : "lines"}
                         </span>
@@ -216,7 +216,7 @@ function ProductCard({
     : "/contact#enquiry";
 
   return (
-    <div className="group relative isolate flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 shadow-soft ring-1 ring-line transition-[translate,box-shadow] duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift sm:p-7">
+    <div className="group relative isolate flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 shadow-soft ring-1 ring-line transition-[translate] duration-500 ease-out-soft hover:-translate-y-1 lift sm:p-7">
       {/* Soft navy wash rising on hover */}
       <span
         aria-hidden

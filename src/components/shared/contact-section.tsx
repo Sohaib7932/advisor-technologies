@@ -129,7 +129,7 @@ function IconTile({ children }: { children: React.ReactNode }) {
 
 function DetailCard({ icon, label, href, children }: { icon: React.ReactNode; label: string; href: string; children: React.ReactNode }) {
   return (
-    <a href={href} className="group card flex flex-col p-5 sm:p-6 transition-[translate,box-shadow] duration-500 ease-out-expo hover:-translate-y-0.5 hover:shadow-card-hover">
+    <a href={href} className="group card flex flex-col p-5 sm:p-6 transition-[translate] duration-500 ease-out-expo hover:-translate-y-0.5 lift">
       <IconTile>{icon}</IconTile>
       <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-text-3 uppercase">{label}</p>
       <p className="mt-2 text-[0.9375rem] font-semibold text-navy">{children}</p>

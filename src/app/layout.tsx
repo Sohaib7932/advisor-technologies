@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Sora } from "next/font/google";
 import { FloatingNav, MobileMenu } from "@/components/layout/site-nav";
 import { Footer } from "@/components/layout/footer";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
+import { ViewportFx } from "@/components/layout/viewport-fx";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -53,6 +54,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -78,6 +80,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <SmoothScroll />
+        <ViewportFx />
         <FloatingNav />
         <MobileMenu />
         <main id="main" className="flex-1">

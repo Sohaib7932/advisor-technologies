@@ -1,8 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useRef } from "react";
-import { gsap, MOTION, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Check } from "./icons";
 
@@ -13,7 +9,7 @@ export type ButtonState = "idle" | "loading" | "success";
 type ButtonProps = {
   /** Renders a Next.js Link when set, otherwise a <button>. */
   href?: string;
-  /** primary: sky fill. secondary: outline (navy on light, white on dark). link: text + arrow. */
+  /** primary: navy fill (white on dark). secondary: outline. link: text + arrow. */
   variant?: ButtonVariant;
   /** md is 48px tall, sm is 40px. */
   size?: ButtonSize;
@@ -27,48 +23,10 @@ type ButtonProps = {
  * The site's one button. Pill, label plus an arrow-in-a-circle chip.
  * Hover (CSS, see `.btn` in globals.css): a darker fill wipes in from the
  * left, the chip turns 45° up-right, the label nudges 2px, the button lifts
- * 2px; press scales to .97. On fine pointers it is also magnetic: it leans
- * up to 6px toward the pointer (GSAP quickTo, transform only).
+ * 2px; press scales to .97. The magnetic pull (fine pointers only) is one
+ * delegated listener in ViewportFx, so buttons hydrate nothing.
  */
-export function Button({
-  href,
-  variant = "primary",
-  size = "md",
-  state = "idle",
-  className,
-  children,
-  ...props
-}: ButtonProps) {
-  const ref = useRef<HTMLElement>(null);
-
-  useGSAP(
-    (_, contextSafe) => {
-      const node = ref.current;
-      if (!node || variant === "link" || !contextSafe) return;
-      if (!window.matchMedia(`${MOTION.ok} and (hover: hover) and (pointer: fine)`).matches) return;
-
-      const toX = gsap.quickTo(node, "x", { duration: 0.5, ease: "power3.out" });
-      const toY = gsap.quickTo(node, "y", { duration: 0.5, ease: "power3.out" });
-      const clamp = gsap.utils.clamp(-6, 6);
-      const onMove = contextSafe((event: PointerEvent) => {
-        const rect = node.getBoundingClientRect();
-        toX(clamp((event.clientX - rect.left - rect.width / 2) * 0.12));
-        toY(clamp((event.clientY - rect.top - rect.height / 2) * 0.25));
-      });
-      const onLeave = contextSafe(() => {
-        toX(0);
-        toY(0);
-      });
-      node.addEventListener("pointermove", onMove);
-      node.addEventListener("pointerleave", onLeave);
-      return () => {
-        node.removeEventListener("pointermove", onMove);
-        node.removeEventListener("pointerleave", onLeave);
-      };
-    },
-    { dependencies: [variant] },
-  );
-
+export function Button({ href, variant = "primary", size = "md", state = "idle", className, children, ...props }: ButtonProps) {
   if (variant === "link") {
     const content = (
       <>
@@ -99,21 +57,14 @@ export function Button({
 
   if (href) {
     return (
-      <Link ref={ref as React.Ref<HTMLAnchorElement>} href={href} className={classes} data-size={size}>
+      <Link href={href} className={classes} data-size={size} data-magnetic="">
         {content}
       </Link>
     );
   }
 
   return (
-    <button
-      ref={ref as React.Ref<HTMLButtonElement>}
-      className={classes}
-      data-size={size}
-      data-state={state}
-      aria-busy={state === "loading" || undefined}
-      {...props}
-    >
+    <button className={classes} data-size={size} data-state={state} data-magnetic="" aria-busy={state === "loading" || undefined} {...props}>
       {content}
     </button>
   );

@@ -26,7 +26,7 @@ export function Footer() {
               </span>
               <span className="flex flex-col leading-none">
                 <span className="font-display text-lg font-bold tracking-tight text-white">Advisor</span>{" "}
-                <span className="mt-1 text-[0.625rem] font-semibold tracking-[0.22em] text-fg-subtle uppercase">Technologies</span>
+                <span aria-hidden className="mt-1 text-xs font-semibold tracking-[0.22em] text-fg-subtle uppercase">Technologies</span><span className="sr-only">Technologies</span>
               </span>
             </Link>
             <p className="max-w-md text-sm leading-relaxed sm:border-l sm:border-white/10 sm:pl-6">
@@ -88,13 +88,13 @@ export function Footer() {
         </div>
 
         {/* Registration and legal */}
-        <div className="flex flex-col gap-4 border-t border-white/10 pt-7 text-xs md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 border-t border-white/10 pt-7 text-sm md:flex-row md:items-center md:justify-between">
           <dl className="flex flex-wrap gap-2">
             {[
               ["NTN", site.registration.ntn],
               ["STN", site.registration.stn],
             ].map(([label, value]) => (
-              <div key={label} className="flex items-center gap-2 rounded-full bg-white/6 px-3.5 py-1.5 ring-1 ring-white/10">
+              <div key={label} className="flex items-center gap-2 rounded-full bg-white/6 px-3.5 py-1.5 text-xs ring-1 ring-white/10">
                 <dt className="text-fg-subtle">{label}</dt>
                 <dd className="font-semibold text-white tabular-nums">{value}</dd>
               </div>

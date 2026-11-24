@@ -183,7 +183,7 @@ export function DeckCard({
           </div>
         </div>
       )}
-      <div className={cn("relative flex flex-1 flex-col p-5 pt-4 sm:p-6 sm:pt-5", bodyClassName)}>{children}</div>
+      <div className={cn("deck-card-body relative flex flex-1 flex-col p-5 pt-4 sm:p-6 sm:pt-5", bodyClassName)}>{children}</div>
     </Tag>
   );
 }

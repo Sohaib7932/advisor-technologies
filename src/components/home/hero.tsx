@@ -248,7 +248,7 @@ export function Hero() {
           </div>
 
           {/* 3D: live scene, with a static poster for fallbacks */}
-          <div className="relative h-[clamp(240px,68vw,460px)] lg:absolute lg:inset-y-0 lg:right-0 lg:left-[43%] lg:h-auto xl:left-[38%] 2xl:left-[46%]">
+          <div className="relative h-[clamp(300px,75vw,560px)] lg:absolute lg:inset-y-0 lg:right-0 lg:left-[43%] lg:h-auto xl:left-[38%] 2xl:left-[46%]">
             <Image
               data-poster
               src="/3d/hero-poster.webp"

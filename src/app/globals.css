@@ -69,9 +69,9 @@
   --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
-  /* Radii: panels 40, cards 28, pills full */
-  --radius-panel: 2.5rem;
-  --radius-card: 1.75rem;
+  /* Radii: panels 24-40, cards 20-28 (fluid), pills full */
+  --radius-panel: clamp(24px, 4vw, 40px);
+  --radius-card: clamp(20px, 2.5vw, 28px);
   --radius-tile: 1.25rem;
   --radius-hero: 2.5rem;
 
@@ -93,9 +93,12 @@
 
 /* Layout constants for plain CSS (and the notched panel geometry) */
 :root {
-  --gutter: clamp(20px, 4vw, 48px);
-  --inset: clamp(12px, 1.6vw, 24px); /* panel distance from the viewport edge */
+  /* Responsive tokens (tune here). Every panel, section and card reads them. */
+  --gutter: clamp(16px, 4vw, 48px);
+  /* Panel distance from the viewport edge; never inside a notch/home bar. */
+  --inset: max(clamp(12px, 1.6vw, 24px), env(safe-area-inset-left), env(safe-area-inset-right));
   --section-y: clamp(56px, 7.5vw, 120px);
+  --card-pad: clamp(20px, 2.4vw, 32px);
   --header-h: 76px; /* the white strip above the first panel */
   --notch-r: 24px; /* concave shoulders and tab corners */
   --surface-edge: var(--color-line);
@@ -164,11 +167,6 @@
     background-color: #ffffff;
   }
 
-  @media (max-width: 479px) {
-    html {
-      font-size: 93.75%; /* 15px */
-    }
-  }
   @media (min-width: 1920px) {
     html {
       font-size: 106.25%; /* 17px */
@@ -184,8 +182,9 @@
     background-color: #ffffff;
     color: var(--color-fg);
     font-family: var(--font-sans);
-    font-size: 1rem;
+    font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1rem);
     line-height: 1.6;
+    overflow-wrap: break-word;
     text-rendering: optimizeLegibility;
   }
 
@@ -200,8 +199,24 @@
     text-wrap: balance;
   }
 
-  p {
+  p,
+  li,
+  dd {
     text-wrap: pretty;
+  }
+
+  img,
+  video,
+  canvas,
+  iframe {
+    max-width: 100%;
+  }
+
+  /* Form fields at 16px so iOS never zooms on focus. */
+  input,
+  select,
+  textarea {
+    font-size: 1rem;
   }
 
   ::selection {
@@ -283,7 +298,7 @@ html.lenis body {
 
 /* Small label above headings: a pill chip */
 @utility eyebrow {
-  font-size: 0.75rem;
+  font-size: 0.75rem; /* 12px: the smallest label size on the site */
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -320,6 +335,7 @@ section:has(> [data-notched]) + .panel {
 
 /* White card with the one shadow */
 @utility card {
+  container-type: inline-size;
   border-radius: var(--radius-card);
   background-color: var(--color-surface);
   box-shadow:
@@ -382,8 +398,7 @@ section:has(> [data-notched]) + .panel {
   transition:
     translate 0.35s var(--ease-out-expo),
     scale 0.2s var(--ease-out-quart),
-    color 0.35s var(--ease-out-expo),
-    box-shadow 0.35s var(--ease-out-expo);
+    color 0.35s var(--ease-out-expo);
 }
 .btn::before {
   content: "";
@@ -665,7 +680,6 @@ section:has(> [data-notched]) + .panel {
 .tilt {
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform 0.6s var(--ease-out-expo);
-  will-change: transform;
 }
 
 /* Product-line deck: its timer bar (unchanged from the original section) */
@@ -711,13 +725,12 @@ section:has(> [data-notched]) + .panel {
    ========================================================================== */
 @layer components {
 .deck-card {
+  container-type: inline-size;
   background-color: #ffffff;
   box-shadow:
     0 0 0 1px var(--color-line),
     var(--shadow-card);
-  transition:
-    translate 0.5s var(--ease-out-expo),
-    box-shadow 0.5s var(--ease-out-expo);
+  transition: translate 0.5s var(--ease-out-expo);
 }
 .deck-card[data-tone-card="navy"] {
   --color-fg-muted: #d5dee8;
@@ -759,9 +772,6 @@ section:has(> [data-notched]) + .panel {
   @media (hover: hover) {
     .deck-card:hover {
       translate: 0 -6px;
-      box-shadow:
-        0 0 0 1px rgb(47 92 196 / 0.22),
-        var(--shadow-card-hover);
     }
     .deck-card:hover img.deck-card-art {
       translate: 0 -8px;
@@ -851,5 +861,111 @@ section:has(> [data-notched]) + .panel {
   from {
     opacity: 0;
     transform: translateY(14px);
+  }
+}
+
+/* ==========================================================================
+   Touch: 44px tap targets on phones and tablets (WCAG 2.5.5). Text links
+   inside running copy are exempt.
+   ========================================================================== */
+@media (max-width: 1023px) {
+  footer nav a,
+  footer li > a,
+  .btn-link,
+  nav[aria-label="Breadcrumb"] a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  footer nav ul {
+    row-gap: 0;
+  }
+  footer nav li + li {
+    margin-top: 0;
+  }
+  /* Product line deck: controls grow to 44px (sizing only, design unchanged). */
+  #products [role="tab"],
+  #products button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ==========================================================================
+   Cards size to their own width (container queries), not the viewport:
+   a narrow card (a 4-up row on a laptop, a phone) gets compact type,
+   padding and art. Wide cards keep the desktop design.
+   ========================================================================== */
+.grid > * {
+  min-width: 0; /* grid children may shrink below their content width */
+}
+@container (max-width: 300px) {
+  .deck-card-body {
+    padding: 16px 18px 20px;
+  }
+  .deck-card-body h3 {
+    font-size: 1.0625rem;
+  }
+  .deck-card-body p {
+    font-size: 0.875rem;
+  }
+  .deck-card-art {
+    scale: 0.85;
+  }
+}
+@container (max-width: 380px) {
+  .card-compact {
+    padding: 18px;
+  }
+}
+
+/* ==========================================================================
+   Hover lift without animating box-shadow: the deeper shadow lives on a
+   pseudo-element and only its opacity changes (compositor-only).
+   ========================================================================== */
+@layer components {
+.lift {
+  position: relative;
+}
+.lift::after,
+.deck-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 1px rgb(47 92 196 / 0.16),
+    var(--shadow-card-hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease-out-expo);
+}
+@media (hover: hover) and (pointer: fine) {
+  .lift:hover::after,
+  .deck-card:hover::after {
+    opacity: 1;
+  }
+}
+}
+
+/* Marquees run only while on screen (ViewportFx toggles data-running). */
+[data-marquee]:not([data-running]) .animate-marquee,
+[data-marquee]:not([data-running]) .animate-marquee-reverse {
+  animation-play-state: paused;
+}
+
+/* Failsafe: if scripts never start, anything waiting for an entrance
+   animation is shown after 3s. ViewportFx sets <html data-js> on start. */
+html:not([data-js]) .reveal,
+html:not([data-js]) .motion-hide,
+html:not([data-js]) [data-intro] {
+  animation: fx-failsafe 0.6s ease 3s forwards;
+}
+@keyframes fx-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
   }
 }

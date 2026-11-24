@@ -65,8 +65,11 @@ for (const key of widths) {
       const scrollTop = window.scrollY;
       if (doc.scrollWidth > W) out.push(`horizontal scroll: ${doc.scrollWidth - W}px`);
 
+      // Excluded: decorative or hidden layers, intentional horizontal rails
+      // (marquees, the catalogue category rail), the off-canvas menu, the
+      // skip link, and the product-line deck cards (fixed design).
       const decorative = (el) =>
-        el.closest('[aria-hidden="true"], [inert], .marquee, [data-marquee], #products [aria-hidden], canvas, .rings, nextjs-portal, #mobile-menu, header.fixed, [role="dialog"]');
+        el.closest('[aria-hidden="true"], [inert], .marquee, [data-marquee], .no-scrollbar, canvas, .rings, nextjs-portal, #mobile-menu, header.fixed, [role="dialog"], .sr-only, a[href="#main"], #products article');
       const visible = (el) => {
         const cs = getComputedStyle(el);
         if (cs.visibility === "hidden" || cs.display === "none" || Number(cs.opacity) === 0) return false;

@@ -32,7 +32,7 @@ export function Brand({ compact = false, className }: { compact?: boolean; class
         <span className={cn("font-display font-bold tracking-tight text-navy", compact ? "text-[0.9375rem]" : "text-base")}>
           Advisor
         </span>{" "}
-        <span className="mt-1 text-[0.5625rem] font-semibold tracking-[0.22em] text-text-3 uppercase">Technologies</span>
+        <span aria-hidden className="mt-1 text-[0.5625rem] font-semibold tracking-[0.22em] text-text-3 uppercase">Technologies</span><span className="sr-only">Technologies</span>
       </span>
     </Link>
   );

@@ -6,13 +6,16 @@ import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 /**
- * Lenis smooth scrolling, driven by GSAP's ticker so ScrollTrigger and the
- * scroll position always agree on the same frame. Skipped entirely when the
- * visitor prefers reduced motion, leaving native scrolling untouched.
+ * Lenis smooth scrolling on the one clock: GSAP's ticker drives Lenis, and
+ * Lenis reports every scroll to ScrollTrigger, so both always agree on the
+ * same frame and there is no second requestAnimationFrame loop. Skipped
+ * entirely under reduced motion (native scrolling). Touch devices keep
+ * native scrolling (Lenis' default).
  */
 export function SmoothScroll() {
   const pathname = usePathname();
   const lenis = useRef<Lenis | null>(null);
+  const first = useRef(true);
 
   useEffect(() => {
     // We restore position ourselves on route changes (below).
@@ -34,16 +37,21 @@ export function SmoothScroll() {
     };
   }, []);
 
-  // New page: start at the very top. Next resets the window, but Lenis keeps
-  // the previous page's scroll target and would glide back toward it, so it
-  // is reset too. Links to an anchor (#enquiry, …) are left to land there.
+  // New page: start at the very top (Lenis would otherwise glide back toward
+  // the previous page's position). Not on the first load: the browser is
+  // already at the top, and a scroll + refresh there only forces layout
+  // during hydration. Anchor links (#enquiry, …) are left to land.
   useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
     if (!window.location.hash) {
       lenis.current?.scrollTo(0, { immediate: true, force: true });
       window.scrollTo(0, 0);
     }
-    // Pinned sections on the new page measure from the top.
-    requestAnimationFrame(() => ScrollTrigger.refresh());
+    const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(raf);
   }, [pathname]);
 
   return null;
