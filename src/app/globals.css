@@ -329,7 +329,7 @@ html.lenis body {
 
 /* Two panels in a row never touch: the same gap as the panel inset. */
 .panel + .panel,
-section:has(> [data-notched]) + .panel {
+[data-banner] + .panel {
   margin-top: max(var(--inset), 1rem);
 }
 
@@ -649,22 +649,16 @@ section:has(> [data-notched]) + .panel {
   transform: none;
 }
 
-/* Headline line masks: GSAP slides each line up from below its mask */
-.line-mask {
-  display: block;
-  width: fit-content; /* mask hugs its line: hides vertically, never clips sideways */
-  overflow: hidden;
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
-}
-.line-mask > span {
-  display: block;
-}
 
 /* Gentle bob for floating stat cards (staggered by --bob-delay) */
-@media (prefers-reduced-motion: no-preference) {
+/* Runs only while on screen (ViewportFx sets data-running) and not on
+   phones, where it is one more thing competing with scrolling. */
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
   .bob {
     animation: bob 6s var(--ease-out-quart) var(--bob-delay, 0s) infinite alternate;
+  }
+  .bob:not([data-running]) {
+    animation-play-state: paused;
   }
 }
 @keyframes bob {
@@ -677,8 +671,8 @@ section:has(> [data-notched]) + .panel {
 }
 
 /* 3D renders used as images: hover tilt set by JS (--rx/--ry) */
+/* 3D renders: ViewportFx writes the tilt transform while hovered only. */
 .tilt {
-  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform 0.6s var(--ease-out-expo);
 }
 
@@ -745,7 +739,6 @@ section:has(> [data-notched]) + .panel {
   box-shadow: 0 0 0 1px rgb(47 92 196 / 0.12);
 }
 .deck-card-art {
-  transform: perspective(700px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
   transition:
     transform 0.6s var(--ease-out-expo),
     translate 0.6s var(--ease-settle),
@@ -828,32 +821,25 @@ section:has(> [data-notched]) + .panel {
 }
 
 /* ==========================================================================
-   Hero intro: the composed state is server-rendered; with motion on, these
-   are its first-paint starting values until the GSAP timeline runs
-   (data-reveal="pending" → "done"). No JS: the <noscript> rule clears them.
+   Page intros (home hero, page banners). The panel, headline and 3D image
+   are visible from the first paint (they are the LCP); only the elements
+   that animate in after them start hidden, with motion on. No JS: the
+   <noscript> rule shows them; scripts failing: the 3s failsafe does.
    ========================================================================== */
 @media (prefers-reduced-motion: no-preference) {
-  [data-reveal="pending"] [data-notch-svg] {
-    clip-path: inset(0px 0px calc(100% - var(--header-h)) 0px);
-  }
-  [data-reveal="pending"] [data-panel-body] {
-    clip-path: inset(0% 18% 100% 18% round 40px);
-  }
-  [data-reveal="pending"] .line-mask > span {
-    transform: translateY(110%);
-  }
-  [data-reveal="pending"] [data-intro] {
+  [data-intro] {
     opacity: 0;
   }
 }
 
 /* ==========================================================================
    Page transitions: app/template.tsx remounts on every navigation, and the
-   new page rises in. Pure CSS (no View Transitions API), so it can never
-   abort when the tab is hidden. Off under reduced motion.
+   new page rises in. Only after an in-app navigation (ViewportFx sets
+   html[data-navigated]); never on the first load, where it would hold the
+   whole page at opacity 0 and delay LCP. Off under reduced motion.
    ========================================================================== */
 @media (prefers-reduced-motion: no-preference) {
-  .page-enter {
+  html[data-navigated] .page-enter {
     animation: page-enter 0.5s var(--ease-out-expo) both;
   }
 }
@@ -967,5 +953,18 @@ html:not([data-js]) [data-intro] {
     opacity: 1;
     transform: none;
     visibility: visible;
+  }
+}
+
+/* Page-banner entrance: pure CSS from the first paint, no JS. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-intro {
+    animation: page-intro 0.9s var(--ease-out-expo) var(--d, 0ms) both;
+  }
+}
+@keyframes page-intro {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
   }
 }

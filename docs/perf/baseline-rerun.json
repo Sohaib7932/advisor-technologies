@@ -1,0 +1,74 @@
+[
+  {
+    "route": "/",
+    "performance": 58,
+    "accessibility": 96,
+    "best-practices": 100,
+    "seo": 100,
+    "lcp": 4518,
+    "cls": 0,
+    "tbt": 1041,
+    "jsKB": 233,
+    "imageKB": 100
+  },
+  {
+    "route": "/about",
+    "performance": 60,
+    "accessibility": 96,
+    "best-practices": 100,
+    "seo": 100,
+    "lcp": 4257,
+    "cls": 0,
+    "tbt": 1088,
+    "jsKB": 233,
+    "imageKB": 44
+  },
+  {
+    "route": "/services",
+    "performance": 57,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "lcp": 4488,
+    "cls": 0,
+    "tbt": 1323,
+    "jsKB": 233,
+    "imageKB": 136
+  },
+  {
+    "route": "/products",
+    "performance": 49,
+    "accessibility": 96,
+    "best-practices": 100,
+    "seo": 100,
+    "lcp": 4740,
+    "cls": 0,
+    "tbt": 2962,
+    "jsKB": 233,
+    "imageKB": 82
+  },
+  {
+    "route": "/clients",
+    "performance": 53,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "lcp": 4606,
+    "cls": 0,
+    "tbt": 1900,
+    "jsKB": 233,
+    "imageKB": 133
+  },
+  {
+    "route": "/contact",
+    "performance": 60,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "lcp": 3991,
+    "cls": 0,
+    "tbt": 1404,
+    "jsKB": 670,
+    "imageKB": 47
+  }
+]

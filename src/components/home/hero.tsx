@@ -56,127 +56,52 @@ export function Hero() {
   useGSAP(
     () => {
       const section = root.current!;
-      const panel = section.querySelector<HTMLElement>("[data-notched]")!;
       const canvas = canvasRef.current!;
       const poster = section.querySelector<HTMLElement>("[data-poster]")!;
       const mobile = window.matchMedia("(max-width: 1023px)").matches;
       const view = mobile ? "mobile" : "desktop";
       const reduced = window.matchMedia(MOTION.reduced).matches;
+      const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
       const lowEnd =
-        (navigator.hardwareConcurrency ?? 8) <= 2 ||
-        Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
-      // Phones get the poster (a render of this same scene): no three.js
-      // download, no render loop, no battery drain.
+        (nav.hardwareConcurrency ?? 8) <= HERO_TUNING.tiers.lowEnd ||
+        (nav.deviceMemory ?? 8) <= HERO_TUNING.tiers.lowEnd ||
+        Boolean(nav.connection?.saveData);
+      // Phones and low-end devices get the poster (a render of this same
+      // scene): no three.js download, no render loop, no battery drain.
       const phone = window.matchMedia("(max-width: 767px)").matches;
       const use3d = !reduced && !lowEnd && !phone && hardwareWebgl();
 
       let scene: HeroScene | null = null;
       let disposed = false;
-      const showPoster = () => gsap.to(poster, { autoAlpha: 1, duration: 0.8, ease: EASE.out });
-
-      // Shared state the timeline tweens and the scene reads every frame.
-      const intro: HeroIntro = {
-        platform: 0,
-        led: 0,
-        products: HERO_TUNING.layout[view].map(() => ({ appear: 0, explode: 1, glint: 0 })),
-        tiles: HERO_TUNING.tiles[view].map(() => 0),
-        idle: 0,
+      const showPoster = () => {
+        section.dataset.poster = "";
+        gsap.to(poster, { autoAlpha: 1, duration: 0.6, ease: EASE.out });
       };
-
-      // Start the scene once the browser is idle, so the headline paints first.
-      const whenIdle = (fn: () => void) =>
-        typeof window.requestIdleCallback === "function" ? window.requestIdleCallback(fn, { timeout: 900 }) : window.setTimeout(fn, 300);
-      if (use3d) whenIdle(() => {
-        import("./hero-scene").then(({ createHeroScene }) => {
-          if (disposed) return;
-          try {
-            scene = createHeroScene(canvas, { mobile, reduced, quality: mobile ? "low" : "high", intro });
-            gsap.to(canvas, { autoAlpha: 1, duration: 0.6, ease: EASE.out });
-            // Exposed for the layout overlap check in verification.
-            Object.assign(window, { __heroBounds: () => scene?.bounds() });
-          } catch {
-            showPoster();
-          }
-        });
-      });
+      if (!use3d) showPoster();
 
       const mm = gsap.matchMedia();
-      mm.add(MOTION.reduced, () => {
-        panel.dataset.reveal = "done";
-        gsap.set(poster, { autoAlpha: 1 });
-      });
 
+      // The headline, panel and poster are visible from the first paint (they
+      // are the LCP). The intro animates what follows them.
       mm.add(MOTION.ok, () => {
-        const svg = () => panel.querySelector<SVGElement>("[data-notch-svg]");
-        const body = panel.querySelector<HTMLElement>("[data-panel-body]")!;
-        const lines = section.querySelectorAll<HTMLElement>(".line-mask > span");
         const step = (key: string) => section.querySelectorAll<HTMLElement>(`[data-intro="${key}"]`);
+        const tl = gsap.timeline({ defaults: { ease: EASE.out } });
+        tl.fromTo(step("chip"), { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7 }, 0.1);
+        tl.fromTo(step("tagline"), { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.9 }, 0.25);
+        tl.fromTo(step("buttons"), { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 }, 0.4);
+        tl.fromTo(step("trust"), { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 }, 0.55);
 
-        const tl = gsap.timeline({
-          paused: true,
-          defaults: { ease: EASE.out },
-          onComplete: () => {
-            panel.dataset.reveal = "done";
-            gsap.set([body, svg()].filter(Boolean), { clearProps: "clipPath" });
-          },
-        });
-
-        // 1. Panel pours down out of the notch.
-        tl.fromTo(
-          body,
-          { clipPath: "inset(0% 18% 100% 18% round 40px)" },
-          { clipPath: "inset(0% 0% 0% 0% round 40px)", duration: I.panelDuration, ease: "expo.inOut" },
-          I.panel,
-        );
-        tl.add(() => {
-          const s = svg();
-          if (!s) return;
-          const h = panel.offsetHeight - body.offsetTop;
-          gsap.fromTo(
-            s,
-            { clipPath: `inset(0px 0px ${h}px 0px)` },
-            { clipPath: "inset(0px 0px 0px 0px)", duration: I.panelDuration, ease: "expo.inOut" },
-          );
-        }, I.panel);
-
-        // 2. Copy.
-        tl.fromTo(step("chip"), { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7 }, I.chip);
-        tl.fromTo(lines, { yPercent: 110, y: 0 }, { yPercent: 0, y: 0, duration: 1.1, stagger: 0.1 }, I.headline);
-        tl.fromTo(step("tagline"), { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.9 }, I.tagline);
-
-        // 3. Platform rises, LED ring lights.
-        tl.to(intro, { platform: 1, duration: 1.6, ease: "expo.out" }, I.platform);
-        tl.to(intro, { led: 1, duration: 1.0, ease: "power2.out" }, I.led);
-        if (!use3d) tl.add(showPoster, I.platform);
-
-        // 4. Products assemble, staggered, each with a glint.
-        intro.products.forEach((p, i) => {
-          const at = I.products + i * I.productStagger;
-          tl.to(p, { appear: 1, duration: 0.55, ease: "power3.out" }, at);
-          tl.to(p, { explode: 0, duration: I.assemble, ease: "back.out(1.4)" }, at + 0.12);
-          tl.to(p, { glint: 1, duration: 0.18, ease: "power2.out" }, at + I.assemble * 0.85);
-          tl.to(p, { glint: 0, duration: 0.45, ease: "power2.in" }, at + I.assemble * 0.85 + 0.18);
-        });
-
-        // 5. Tiles pop in.
-        intro.tiles.forEach((_, i) => {
-          tl.to(intro.tiles, { [i]: 1, duration: 0.7, ease: "back.out(1.6)" }, I.tiles + i * I.tileStagger);
-        });
-
-        // 6. Buttons and trust chip, then idle.
-        tl.fromTo(step("buttons"), { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 }, I.buttons);
-        tl.fromTo(step("trust"), { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 }, I.trust);
-        tl.to(intro, { idle: 1, duration: 1.5, ease: "power1.inOut" }, I.idle);
-
-        // Start once the measured SVG is in place.
-        const raf = requestAnimationFrame(() => requestAnimationFrame(() => tl.play()));
-
-        // Cheap exit parallax on scroll (never needed for the intro).
+        // Exit parallax on scroll, desktop only, one write per frame.
+        if (mobile) return;
         const copy = section.querySelector<HTMLElement>("[data-hero-copy]")!;
+        let raf = 0;
         const onScroll = () => {
-          const y = Math.min(window.scrollY, 600);
-          copy.style.transform = `translate3d(0, ${y * -0.12}px, 0)`;
-          copy.style.opacity = String(1 - y / 700);
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(() => {
+            const y = Math.min(window.scrollY, 600);
+            copy.style.transform = `translate3d(0, ${y * -0.12}px, 0)`;
+            copy.style.opacity = String(1 - y / 700);
+          });
         };
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => {
@@ -184,6 +109,63 @@ export function Hero() {
           window.removeEventListener("scroll", onScroll);
         };
       });
+
+      if (use3d) {
+        // Shared state the 3D timeline tweens and the scene reads every frame.
+        const intro: HeroIntro = {
+          platform: 0,
+          led: 0,
+          products: HERO_TUNING.layout[view].map(() => ({ appear: 0, explode: 1, glint: 0 })),
+          tiles: HERO_TUNING.tiles[view].map(() => 0),
+          idle: 0,
+        };
+        // The 3D intro starts only when the scene is compiled and drawn, and
+        // the main thread is idle, so it never starts janky.
+        const play3d = () => {
+          const tl = gsap.timeline({ defaults: { ease: EASE.out } });
+          tl.to(intro, { platform: 1, duration: 1.6, ease: "expo.out" }, 0);
+          tl.to(intro, { led: 1, duration: 1.0, ease: "power2.out" }, 0.6);
+          intro.products.forEach((p, i) => {
+            const at = 0.8 + i * I.productStagger;
+            tl.to(p, { appear: 1, duration: 0.55, ease: "power3.out" }, at);
+            tl.to(p, { explode: 0, duration: I.assemble, ease: "back.out(1.4)" }, at + 0.12);
+            tl.to(p, { glint: 1, duration: 0.18, ease: "power2.out" }, at + I.assemble * 0.85);
+            tl.to(p, { glint: 0, duration: 0.45, ease: "power2.in" }, at + I.assemble * 0.85 + 0.18);
+          });
+          intro.tiles.forEach((_, i) => {
+            tl.to(intro.tiles, { [i]: 1, duration: 0.7, ease: "back.out(1.6)" }, 2.2 + i * I.tileStagger);
+          });
+          tl.to(intro, { idle: 1, duration: 1.5, ease: "power1.inOut" }, 3.6);
+        };
+        const whenIdle = (fn: () => void) =>
+          typeof window.requestIdleCallback === "function" ? window.requestIdleCallback(fn, { timeout: 900 }) : window.setTimeout(fn, 300);
+        whenIdle(() => {
+          import("./hero-scene").then(({ createHeroScene }) => {
+            if (disposed) return;
+            try {
+              scene = createHeroScene(canvas, {
+                mobile,
+                reduced,
+                quality: mobile ? "low" : "high",
+                intro,
+                onFallback: () => {
+                  showPoster();
+                  gsap.to(canvas, { autoAlpha: 0, duration: 0.4, onComplete: () => scene?.dispose() });
+                },
+              });
+              // Exposed for the layout overlap check in verification.
+              Object.assign(window, { __heroBounds: () => scene?.bounds() });
+              scene.ready.then(() => {
+                if (disposed) return;
+                gsap.to(canvas, { autoAlpha: 1, duration: 0.6, ease: EASE.out });
+                play3d();
+              });
+            } catch {
+              showPoster();
+            }
+          });
+        });
+      }
 
       return () => {
         disposed = true;
@@ -194,9 +176,8 @@ export function Hero() {
   );
 
   return (
-    <section ref={root} aria-label="Introduction">
+    <section ref={root} data-banner aria-label="Introduction">
       <NotchedPanel
-        reveal
         bodyClassName="lg:min-h-[clamp(560px,calc(100svh-var(--header-h)-28px),55rem)] lg:flex"
         backdrop={
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
@@ -213,16 +194,10 @@ export function Hero() {
               <span aria-hidden className="size-1.5 rounded-full bg-amber" />
               Islamabad · Pakistan
             </span>
-            <h1 className="mt-5 text-h1 text-white sm:mt-6 lg:[&_.line-mask>span]:whitespace-nowrap">
-              <span className="line-mask">
-                <span>Six divisions.</span>
-              </span>
-              <span className="line-mask">
-                <span className="text-sky">One accountable</span>
-              </span>
-              <span className="line-mask">
-                <span className="text-sky">partner.</span>
-              </span>
+            <h1 className="mt-5 text-h1 text-white sm:mt-6 lg:[&>span]:whitespace-nowrap">
+              <span className="block">Six divisions.</span>
+              <span className="block text-sky">One accountable</span>
+              <span className="block text-sky">partner.</span>
             </h1>
             <p data-intro="tagline" className="mt-5 max-w-md text-lead text-text-2 sm:mt-6">
               Complete technology and supply solutions, built for Pakistan.
@@ -256,7 +231,8 @@ export function Hero() {
               fill
               sizes="(max-width: 1024px) 100vw, 66vw"
               loading="eager"
-              className="motion-hide bob object-contain object-center"
+              fetchPriority="high"
+              className="bob object-contain object-center lg:invisible lg:opacity-0"
             />
             <canvas ref={canvasRef} aria-hidden className="invisible absolute inset-0 size-full opacity-0" />
           </div>

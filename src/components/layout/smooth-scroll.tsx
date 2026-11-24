@@ -22,17 +22,27 @@ export function SmoothScroll() {
     window.history.scrollRestoration = "manual";
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const instance = new Lenis({ duration: 1.1, anchors: { offset: -96 } });
-    lenis.current = instance;
-    instance.on("scroll", ScrollTrigger.update);
-
-    const tick = (time: number) => instance.raf(time * 1000);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
+    // Start once the browser is idle, not during hydration: until then the
+    // page simply scrolls natively.
+    let instance: Lenis | null = null;
+    const tick = (time: number) => instance?.raf(time * 1000);
+    const start = () => {
+      instance = new Lenis({ duration: 1.1, anchors: { offset: -96 } });
+      lenis.current = instance;
+      instance.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
+    };
+    const idle =
+      typeof window.requestIdleCallback === "function"
+        ? window.requestIdleCallback(start, { timeout: 1500 })
+        : window.setTimeout(start, 600);
 
     return () => {
+      if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idle);
+      window.clearTimeout(idle);
       gsap.ticker.remove(tick);
-      instance.destroy();
+      instance?.destroy();
       lenis.current = null;
     };
   }, []);

@@ -64,15 +64,12 @@ export function NotchedPanel({
   backdrop,
   className,
   bodyClassName,
-  reveal = false,
 }: {
   children: React.ReactNode;
   /** Decoration clipped to the panel body, behind the content. */
   backdrop?: React.ReactNode;
   className?: string;
   bodyClassName?: string;
-  /** Start clipped to the notch; a page timeline then reveals the panel. */
-  reveal?: boolean;
 }) {
   const pathname = usePathname();
   const wrap = useRef<HTMLDivElement>(null);
@@ -103,7 +100,7 @@ export function NotchedPanel({
   }, []);
 
   return (
-    <div ref={wrap} data-notched data-reveal={reveal ? "pending" : undefined} className={cn("frame relative isolate mt-2 sm:mt-3", className)}>
+    <div ref={wrap} data-notched className={cn("frame relative isolate mt-2 sm:mt-3", className)}>
       {geo && (
         <svg
           aria-hidden
