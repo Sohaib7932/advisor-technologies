@@ -14,7 +14,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer data-theme="dark" className="panel relative isolate mt-6 mb-(--inset) overflow-hidden bg-ink text-fg-muted">
+    <footer data-theme="dark" className="panel relative isolate mt-6 mb-[calc(var(--inset)+env(safe-area-inset-bottom))] overflow-hidden bg-ink text-fg-muted [content-visibility:auto] [contain-intrinsic-size:auto_560px]">
       <div aria-hidden className="pointer-events-none absolute -top-40 -right-20 -z-10 aspect-square w-[34rem] rounded-full bg-[radial-gradient(closest-side,rgb(47_92_196/0.35),transparent)]" />
       <div className="px-(--gutter) pt-12 pb-8 md:pt-14">
         {/* Top band */}

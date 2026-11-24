@@ -22,6 +22,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/products" },
   title: "Products",
   description:
     "Plant & machinery, computer systems, servers, networking, satellite communications, printing and multifunction devices, monitors, temporary office setups, web services and general order supplies.",
@@ -227,12 +228,12 @@ function ProductCard({
         <span className="grid size-12 place-items-center rounded-full bg-navy-950 text-white shadow-soft transition-transform duration-500 ease-out-soft group-hover:-rotate-6">
           <Icon name={product.icon} className="size-5" />
         </span>
+        {/* Decorative index, drawn as generated content (not text) */}
         <span
           aria-hidden
-          className="font-display text-4xl leading-none font-bold text-fg/8 transition-colors duration-500 group-hover:text-accent/25"
-        >
-          {String(index + 1).padStart(2, "0")}
-        </span>
+          data-index={String(index + 1).padStart(2, "0")}
+          className="font-display text-4xl leading-none font-bold text-fg/8 transition-colors duration-500 group-hover:text-accent/25 before:content-[attr(data-index)]"
+        />
       </div>
 
       <h3 className="mt-7 font-display text-lg font-semibold text-fg">

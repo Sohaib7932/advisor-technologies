@@ -3,7 +3,10 @@
  * throttle) against a PRODUCTION server.
  *
  *   npm run build && npm run start          (in another terminal, port 3000)
- *   npm run perf:check -- [baseUrl] [--out docs/perf/after.json]
+ *   npm run perf:check -- [baseUrl] [--runs 3] [--out docs/perf/after.json]
+ *
+ * With --runs N each route is measured N times and the median run (by
+ * Performance score) is reported, as Lighthouse recommends for noisy hosts.
  *
  * Needs Chrome/Chromium: set CHROME_PATH if it is not found automatically.
  * Lighthouse is fetched on demand with npx (no project dependency).
@@ -17,29 +20,30 @@ const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("http")) ?? "http://localhost:3000").replace(/\/$/, "");
 const outIdx = args.indexOf("--out");
 const out = outIdx >= 0 ? args[outIdx + 1] : null;
+const runsIdx = args.indexOf("--runs");
+const RUNS = runsIdx >= 0 ? Math.max(1, Number(args[runsIdx + 1]) || 1) : 1;
 const ROUTES = ["/", "/about", "/services", "/products", "/clients", "/contact"];
 
 const TARGETS = { performance: 90, accessibility: 95, "best-practices": 95, seo: 95, lcp: 2500, cls: 0.05, tbt: 200 };
 
-const rows = [];
-for (const route of ROUTES) {
+function measure(route) {
   const file = path.join(tmpdir(), `lh-${route.replace(/\W/g, "") || "home"}.json`);
   try {
     execFileSync(
       process.platform === "win32" ? "npx.cmd" : "npx",
       ["-y", "lighthouse@12", base + route, "--quiet", "--chrome-flags=--headless=new", "--output=json", `--output-path=${file}`],
-      { stdio: "inherit", shell: process.platform === "win32" },
+      { stdio: "ignore", shell: process.platform === "win32" },
     );
   } catch {
     console.error(`Lighthouse failed for ${route}`);
-    continue;
+    return null;
   }
   const r = JSON.parse(readFileSync(file, "utf8"));
   rmSync(file, { force: true });
   const a = r.audits;
   const items = a["resource-summary"]?.details?.items ?? [];
   const kb = (type) => Math.round((items.find((i) => i.resourceType === type)?.transferSize ?? 0) / 1024);
-  rows.push({
+  return {
     route,
     performance: Math.round(r.categories.performance.score * 100),
     accessibility: Math.round(r.categories.accessibility.score * 100),
@@ -50,7 +54,19 @@ for (const route of ROUTES) {
     tbt: Math.round(a["total-blocking-time"].numericValue),
     jsKB: kb("script"),
     imageKB: kb("image"),
-  });
+  };
+}
+
+const rows = [];
+for (const route of ROUTES) {
+  const runs = [];
+  for (let i = 0; i < RUNS; i++) {
+    const m = measure(route);
+    if (m) runs.push(m);
+  }
+  if (!runs.length) continue;
+  runs.sort((x, y) => x.performance - y.performance);
+  rows.push({ ...runs[Math.floor((runs.length - 1) / 2)], runs: runs.length });
 }
 
 const pad = (v, n) => String(v).padEnd(n);

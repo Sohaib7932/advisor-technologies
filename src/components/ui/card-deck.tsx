@@ -35,27 +35,33 @@ export function CardDeck({
         const progress = deck.querySelector<HTMLElement>("[data-progress]");
         if (!cards.length) return;
 
-        // Gather each card toward the deck's centre, so the group reads as a
-        // stack. A tall single column only tucks down a little instead.
-        const box = deck.getBoundingClientRect();
-        const tall = box.height > window.innerHeight * 1.1;
-        const cx = box.left + box.width / 2;
-        const cy = box.top + box.height / 2;
-        // All reads first, then all writes: no forced layout per card.
-        const rects = cards.map((card) => card.getBoundingClientRect());
-        cards.forEach((card, i) => {
-          const r = rects[i];
-          gsap.set(card, {
-            x: tall ? 0 : (cx - (r.left + r.width / 2)) * M.rest.gather,
-            y: tall ? M.rest.tuck : (cy - (r.top + r.height / 2)) * M.rest.gather,
-            rotate: (i % 2 ? -1 : 1) * M.rest.rotate * (tall ? 0.4 : 1),
-            scale: M.rest.scale,
-            autoAlpha: M.rest.opacity,
-            zIndex: cards.length - i,
+        // The rest (tucked) state is applied only as the deck nears the
+        // viewport, so decks further down stay fully visible until then
+        // (no faded content for crawlers, audits or no-scroll readers).
+        const prepare = () => {
+          // Gather each card toward the deck's centre, so the group reads as a
+          // stack. A tall single column only tucks down a little instead.
+          const box = deck.getBoundingClientRect();
+          const tall = box.height > window.innerHeight * 1.1;
+          const cx = box.left + box.width / 2;
+          const cy = box.top + box.height / 2;
+          // All reads first, then all writes: no forced layout per card.
+          const rects = cards.map((card) => card.getBoundingClientRect());
+          cards.forEach((card, i) => {
+            const r = rects[i];
+            gsap.set(card, {
+              x: tall ? 0 : (cx - (r.left + r.width / 2)) * M.rest.gather,
+              y: tall ? M.rest.tuck : (cy - (r.top + r.height / 2)) * M.rest.gather,
+              rotate: (i % 2 ? -1 : 1) * M.rest.rotate * (tall ? 0.4 : 1),
+              scale: M.rest.scale,
+              autoAlpha: M.rest.opacity,
+              zIndex: cards.length - i,
+            });
           });
-        });
-        if (art.length) gsap.set(art, { y: M.illustration.y, autoAlpha: 0 });
-        if (progress) gsap.set(progress, { scaleX: 0, transformOrigin: "left center" });
+          if (art.length) gsap.set(art, { y: M.illustration.y, autoAlpha: 0 });
+          if (progress) gsap.set(progress, { scaleX: 0, transformOrigin: "left center" });
+        };
+        ScrollTrigger.create({ trigger: deck, start: "top bottom+=300", once: true, onEnter: prepare });
 
         const touch = window.matchMedia("(hover: none)").matches;
         ScrollTrigger.create({

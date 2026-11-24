@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { Brand, isActivePath, navLinks } from "./brand";
-import { menu } from "./nav-store";
+import { menu, useMenuOpen } from "./nav-store";
 
 /** Panel corner radius, tab corner radius and shoulder radius (px). */
 const R = 40;
@@ -76,6 +76,7 @@ export function NotchedPanel({
   const tab = useRef<HTMLElement>(null);
   const body = useRef<HTMLDivElement>(null);
   const [geo, setGeo] = useState<Geometry | null>(null);
+  const menuOpen = useMenuOpen();
   const gradientId = useId();
 
   useLayoutEffect(() => {
@@ -156,6 +157,8 @@ export function NotchedPanel({
           type="button"
           onClick={() => menu.set(true)}
           aria-label="Open menu"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
           className="grid size-11 place-items-center rounded-full text-navy ring-1 ring-line transition-colors hover:bg-mist lg:hidden"
         >
           <Menu className="size-5" />

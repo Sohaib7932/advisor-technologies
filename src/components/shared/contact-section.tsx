@@ -5,6 +5,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { ChatCard } from "@/components/ui/chat-card";
 import { Clock, Mail, MapPin, Phone } from "@/components/ui/icons";
 import { ContactForm } from "./contact-form";
+import { MapEmbed } from "./map-embed";
 import { addressLines, site } from "@/lib/site";
 
 const mapQuery = encodeURIComponent(`${site.contact.address.line2}, ${site.contact.address.city}, ${site.contact.address.country}`);
@@ -109,13 +110,7 @@ export function ContactSection({ headingLevel = "h2" }: { headingLevel?: "h1" | 
             </div>
           </div>
           <div className="card relative min-h-80 overflow-hidden lg:col-span-6">
-            <iframe
-              src={mapEmbed}
-              title={`Map: ${site.contact.address.line2}, ${site.contact.address.city}`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 size-full [filter:grayscale(0.6)_contrast(0.95)_brightness(1.03)]"
-            />
+            <MapEmbed src={mapEmbed} href={directionsHref} title={`Map: ${site.contact.address.line2}, ${site.contact.address.city}`} />
           </div>
         </div>
       </Container>

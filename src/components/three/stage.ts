@@ -54,7 +54,7 @@ export function createLights(scene: THREE.Scene, { key = 2.1, rim = 3.2 } = {}) 
  * platform is never cut off on narrow or tall canvases. Returns the
  * fitted position.
  */
-export function fitHeroCamera(camera: THREE.PerspectiveCamera, position: THREE.Vector3, target: THREE.Vector3, radius = 5.4) {
+export function fitHeroCamera(camera: THREE.PerspectiveCamera, position: THREE.Vector3, target: THREE.Vector3, radius = 6) {
   const offset = position.clone().sub(target);
   const distance = offset.length();
   const halfWidth = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect * distance;

@@ -14,6 +14,7 @@ import { clients, products, services } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/services" },
   title: "Services",
   description:
     "Supply and installation of plant & machinery and furniture, IT consultancy and network solutions, computing and office equipment, security and access control, printing, and repair & maintenance works across Pakistan.",

@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "perf:check": "node scripts/perf-check.mjs",
+    "responsive:check": "node scripts/responsive-check.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -29,5 +31,13 @@
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4",
+    "ios_saf >= 16.4",
+    "samsung >= 22"
+  ]
 }

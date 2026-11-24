@@ -25,7 +25,7 @@ export const HERO_TUNING = {
   camera: {
     fov: 30,
     /** 3/4 high angle, like ref 2. */
-    desktop: { position: [0.6, 9.2, 17.6] as const, target: [-0.9, 1.5, 0] as const },
+    desktop: { position: [1.7, 9.2, 17.6] as const, target: [0.2, 1.5, 0] as const },
     mobile: { position: [0, 9.4, 18] as const, target: [0, 1.5, 0] as const },
   },
   /** DPR cap for the live scene (phones show the poster instead). */

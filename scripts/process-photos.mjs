@@ -5,7 +5,7 @@
  *
  *   node scripts/process-photos.mjs
  *
- * Output: public/images/photos/<name>.webp (+ <name>-sm.webp). Credits are in
+ * Output: public/images/photos/<name>.webp (next/image makes the smaller sizes). Credits are in
  * docs/image-credits.md. To swap a photo, change its id here and re-run.
  */
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -22,7 +22,6 @@ export const PHOTOS = [
   { name: "printing", id: "1612815154858-60aa4c59eaa6", ratio: 4 / 3 },
   { name: "maintenance", id: "1581092160562-40aa08e78837", ratio: 4 / 3 },
   { name: "about", id: "1524758631624-e2822e304c36", ratio: 16 / 10 },
-  { name: "corridor", id: "1497366216548-37526070297c", ratio: 16 / 10 },
 ];
 
 for (const photo of PHOTOS) {
@@ -37,7 +36,7 @@ for (const photo of PHOTOS) {
     .modulate({ brightness: 1.05, saturation: 0.86 })
     .linear([0.97, 1, 1.04], [0, 2, 6]);
 
-  for (const [suffix, width] of [["", 1600], ["-sm", 800]]) {
+  for (const [suffix, width] of [["", 1600]]) {
     const height = Math.round(width / photo.ratio);
     await graded
       .clone()

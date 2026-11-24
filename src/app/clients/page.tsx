@@ -9,6 +9,7 @@ import { clients, type IconName } from "@/lib/content";
 import { ClientLogo } from "@/components/ui/client-logo";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/clients" },
   title: "Our Clients",
   description:
     "Advisor Technologies serves federal ministries, authorities, utilities, law enforcement academies, NGOs and private enterprises across Islamabad, Rawalpindi and Karachi.",
