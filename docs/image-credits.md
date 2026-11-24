@@ -19,7 +19,6 @@ desaturated, cooled toward the navy/steel palette) by
 | `printing.webp` | Printing Services | https://unsplash.com/photos/1612815154858-60aa4c59eaa6 |
 | `maintenance.webp` | Repair & Maintenance Works; Works & Supply range | https://unsplash.com/photos/1581092160562-40aa08e78837 |
 | `about.webp` | Home bento photo card; About page (main photo) | https://unsplash.com/photos/1524758631624-e2822e304c36 |
-| `corridor.webp` | Not used in the current design (kept for reuse) | https://unsplash.com/photos/1497366216548-37526070297c |
 
 **Photographer names: to be confirmed.** The photos were fetched by id from
 `images.unsplash.com`; the Unsplash search API was not reachable while
@@ -37,8 +36,9 @@ to see the photographer, and add the name here if you want to credit them.
   the cleaned copies in `public/clients-logos/clean/` (transparent, trimmed,
   stray frame lines removed), made by `node scripts/clean-logos.mjs`.
 
-## Not used
+## Removed
 
-The AI-generated images `public/images/hero/hero-bg*.webp` and
-`public/hero-section-bg.png` are kept on disk but are no longer referenced
-anywhere on the site.
+The earlier AI-generated hero images (`public/images/hero/`,
+`public/hero-section-bg.png`), the old full-size PNG section images and the
+unused photo variants were deleted on branch `perf/responsive`; they remain
+in git history if ever needed.

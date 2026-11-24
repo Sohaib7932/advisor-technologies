@@ -61,7 +61,7 @@ function MarqueeRow({
         <li
           key={`${client.name}-${index}`}
           aria-hidden={index >= items.length || undefined}
-          className="group/client flex shrink-0 items-center gap-3.5 rounded-[1.25rem] bg-white py-3 pr-6 pl-3 ring-1 ring-line transition-[box-shadow,translate] duration-500 ease-out-expo hover:-translate-y-0.5 hover:shadow-card"
+          className="group/client flex shrink-0 items-center gap-3.5 rounded-[1.25rem] bg-white py-3 pr-6 pl-3 ring-1 ring-line transition-[translate] duration-500 ease-out-expo hover:-translate-y-0.5 lift"
         >
           <ClientCard client={client} />
         </li>
@@ -108,7 +108,7 @@ export function ClientsStrip() {
       {/* Two full-bleed rows drifting in opposite directions, faded at both edges */}
       <Reveal
         delay={180}
-        className="marquee mt-12 flex flex-col gap-3 py-2 mask-[linear-gradient(to_right,transparent,black_2.5rem,black_calc(100%-2.5rem),transparent)] sm:mask-[linear-gradient(to_right,transparent,black_8rem,black_calc(100%-8rem),transparent)]"
+        data-marquee className="marquee mt-12 flex flex-col gap-3 py-2 mask-[linear-gradient(to_right,transparent,black_2.5rem,black_calc(100%-2.5rem),transparent)] sm:mask-[linear-gradient(to_right,transparent,black_8rem,black_calc(100%-8rem),transparent)]"
       >
         <MarqueeRow items={clients.slice(0, half)} />
         <MarqueeRow items={clients.slice(half)} reverse />

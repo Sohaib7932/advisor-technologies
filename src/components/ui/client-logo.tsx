@@ -31,7 +31,7 @@ export function ClientLogo({
           : { "aria-hidden": true })}
         className={cn(
           "grid shrink-0 place-items-center bg-linear-to-br from-brand to-navy px-1 font-display font-semibold tracking-wider text-white",
-          badge.length > 3 ? "text-[0.625rem]" : "text-xs",
+          badge.length > 3 ? "text-xs" : "text-xs",
           className,
         )}
       >

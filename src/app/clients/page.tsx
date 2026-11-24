@@ -9,6 +9,7 @@ import { clients, type IconName } from "@/lib/content";
 import { ClientLogo } from "@/components/ui/client-logo";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/clients" },
   title: "Our Clients",
   description:
     "Advisor Technologies serves federal ministries, authorities, utilities, law enforcement academies, NGOs and private enterprises across Islamabad, Rawalpindi and Karachi.",
@@ -97,7 +98,7 @@ export default function ClientsPage() {
                         key={client.name}
                         delay={Math.min(index * 50 + sectorIndex * 20, 300)}
                       >
-                        <div className="group flex h-full items-center gap-4 rounded-[1.25rem] bg-white p-3.5 ring-1 ring-line transition-[translate,box-shadow] duration-500 ease-out-expo hover:-translate-y-0.5 hover:shadow-card">
+                        <div className="group flex h-full items-center gap-4 rounded-[1.25rem] bg-white p-3.5 ring-1 ring-line transition-[translate] duration-500 ease-out-expo hover:-translate-y-0.5 lift">
                           <ClientLogo
                             client={client}
                             sizes="64px"

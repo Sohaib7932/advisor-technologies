@@ -1,15 +1,13 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useRef } from "react";
-import { bindTilt } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { RENDERS, type RenderName } from "./renders";
 
 /**
  * One of the offline 3D renders in public/3d/ (scripts/render-3d.mjs), shown
- * as an image: it tilts toward the pointer (fine pointers) and can float.
- * Only the hero runs live WebGL, so each page has at most one context.
+ * as an image. A server component: the pointer tilt (fine pointers) is one
+ * delegated handler in ViewportFx, reading `data-tilt`; `float` bobs gently
+ * while on screen (not on phones). Only the hero runs live WebGL, so each
+ * page has at most one WebGL context.
  */
 export function Render3D({
   name,
@@ -26,17 +24,15 @@ export function Render3D({
   alt?: string;
   sizes?: string;
   float?: boolean;
+  /** Maximum tilt in degrees toward the pointer (0 disables it). */
   tilt?: number;
   priority?: boolean;
   className?: string;
   imgClassName?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
   const [width, height] = RENDERS[name];
-  useEffect(() => (ref.current && tilt > 0 ? bindTilt(ref.current, tilt) : undefined), [tilt]);
-
   return (
-    <div ref={ref} className={cn("tilt", className)}>
+    <div data-tilt={tilt || undefined} className={cn("tilt", className)}>
       <Image
         src={`/3d/${name}.webp`}
         alt={alt}
@@ -45,6 +41,7 @@ export function Render3D({
         sizes={sizes}
         preload={priority}
         loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : undefined}
         className={cn("h-auto w-full select-none", float && "bob", imgClassName)}
         draggable={false}
       />

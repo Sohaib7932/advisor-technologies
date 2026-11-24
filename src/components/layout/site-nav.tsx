@@ -22,6 +22,7 @@ import { menu, useMenuOpen } from "./nav-store";
 export function FloatingNav() {
   const pathname = usePathname();
   const pill = useRef<HTMLDivElement>(null);
+  const menuOpen = useMenuOpen();
 
   useEffect(() => {
     const el = pill.current;
@@ -137,6 +138,8 @@ export function FloatingNav() {
           type="button"
           onClick={() => menu.set(true)}
           aria-label="Open menu"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
           className="ml-auto grid size-11 place-items-center rounded-full text-navy ring-1 ring-line transition-colors hover:bg-mist lg:hidden"
         >
           <Menu className="size-5" />
@@ -171,10 +174,31 @@ export function MobileMenu() {
         gsap.fromTo(el, { clipPath: "inset(0 0 100% 0 round 2.5rem)" }, { clipPath: "inset(0 0 0% 0 round 0rem)", duration: 0.5, ease: "expo.out" });
         gsap.fromTo(el.querySelectorAll("[data-menu-item]"), { y: 28, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6, ease: "expo.out", stagger: 0.06, delay: 0.12 });
       }
+      // Remember who opened the menu, keep focus inside it, return it after.
+      const opener = document.activeElement as HTMLElement | null;
       closeRef.current?.focus();
-      const onKey = (e: KeyboardEvent) => e.key === "Escape" && menu.set(false);
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          menu.set(false);
+          return;
+        }
+        if (e.key !== "Tab") return;
+        const items = el.querySelectorAll<HTMLElement>("a[href], button:not([disabled])");
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      };
       window.addEventListener("keydown", onKey);
-      return () => window.removeEventListener("keydown", onKey);
+      return () => {
+        window.removeEventListener("keydown", onKey);
+        opener?.focus?.();
+      };
     }
     gsap.to(el, { autoAlpha: 0, duration: reduced ? 0 : 0.25 });
   }, [open]);

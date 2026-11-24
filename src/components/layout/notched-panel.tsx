@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { Brand, isActivePath, navLinks } from "./brand";
-import { menu } from "./nav-store";
+import { menu, useMenuOpen } from "./nav-store";
 
 /** Panel corner radius, tab corner radius and shoulder radius (px). */
 const R = 40;
@@ -64,21 +64,19 @@ export function NotchedPanel({
   backdrop,
   className,
   bodyClassName,
-  reveal = false,
 }: {
   children: React.ReactNode;
   /** Decoration clipped to the panel body, behind the content. */
   backdrop?: React.ReactNode;
   className?: string;
   bodyClassName?: string;
-  /** Start clipped to the notch; a page timeline then reveals the panel. */
-  reveal?: boolean;
 }) {
   const pathname = usePathname();
   const wrap = useRef<HTMLDivElement>(null);
   const tab = useRef<HTMLElement>(null);
   const body = useRef<HTMLDivElement>(null);
   const [geo, setGeo] = useState<Geometry | null>(null);
+  const menuOpen = useMenuOpen();
   const gradientId = useId();
 
   useLayoutEffect(() => {
@@ -103,7 +101,7 @@ export function NotchedPanel({
   }, []);
 
   return (
-    <div ref={wrap} data-notched data-reveal={reveal ? "pending" : undefined} className={cn("frame relative isolate mt-2 sm:mt-3", className)}>
+    <div ref={wrap} data-notched className={cn("frame relative isolate mt-2 sm:mt-3", className)}>
       {geo && (
         <svg
           aria-hidden
@@ -159,6 +157,8 @@ export function NotchedPanel({
           type="button"
           onClick={() => menu.set(true)}
           aria-label="Open menu"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
           className="grid size-11 place-items-center rounded-full text-navy ring-1 ring-line transition-colors hover:bg-mist lg:hidden"
         >
           <Menu className="size-5" />

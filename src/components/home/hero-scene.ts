@@ -31,6 +31,8 @@ export type HeroIntro = {
 
 export type HeroScene = {
   intro: HeroIntro;
+  /** Resolves once every shader is compiled and the first frame is drawn. */
+  ready: Promise<void>;
   setFinal: () => void;
   bounds: () => { left: number; top: number; right: number; bottom: number }[];
   dispose: () => void;
@@ -42,7 +44,10 @@ type Options = {
   quality: Quality;
   /** Shared state the hero timeline tweens; created here if omitted. */
   intro?: HeroIntro;
+  /** Tier 2 reached (fake glass, DPR 1). */
   onSlow?: () => void;
+  /** Tier 3: still too slow; the caller swaps in the static poster. */
+  onFallback?: () => void;
 };
 
 /** The intro state at the start of the timeline (or composed, if `final`). */
@@ -73,7 +78,7 @@ function degradeGlass(m: Materials) {
   }
 }
 
-export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, quality, onSlow, intro: given }: Options): HeroScene {
+export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, quality, onSlow, onFallback, intro: given }: Options): HeroScene {
   const view = mobile ? "mobile" : "desktop";
   const renderer = createRenderer(canvas, { antialias: !mobile });
   let dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : T.dprCap);
@@ -126,11 +131,15 @@ export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, qu
   if (fine) window.addEventListener("pointermove", onPointer, { passive: true });
 
   /* Adaptive quality ------------------------------------------------------ */
+  // Tier 1: full quality. Tier 2: DPR 1 and fake glass. Tier 3: the caller
+  // shows the static poster. Each step needs 1.6s of frames slower than
+  // HERO_TUNING.tiers.slowFrame (seconds) to trigger.
   let slow = 0;
   let degraded = quality === "low";
+  let fellBack = false;
   function adapt(dt: number) {
-    slow = dt > 1 / 38 ? slow + dt : Math.max(0, slow - dt * 0.5);
-    if (slow < 1.6) return;
+    slow = dt > T.tiers.slowFrame ? slow + dt : Math.max(0, slow - dt * 0.5);
+    if (slow < T.tiers.patience) return;
     slow = 0;
     if (dpr > 1) {
       dpr = 1;
@@ -140,11 +149,15 @@ export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, qu
       degraded = true;
       degradeGlass(m);
       onSlow?.();
+    } else if (!fellBack) {
+      fellBack = true;
+      onFallback?.();
     }
   }
 
   /* Frame ----------------------------------------------------------------- */
   const tmp = new THREE.Euler();
+  const ndc = new THREE.Vector2();
   const ledColor = new THREE.Color(PALETTE.led);
   let time = 0;
   let sweepClock = 2;
@@ -187,7 +200,7 @@ export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, qu
 
     // Tiles: pop in, drift, tilt toward the pointer when hovered.
     if (fine && pointer.inside) {
-      raycaster.setFromCamera(new THREE.Vector2(pointer.nx, pointer.ny), camera);
+      raycaster.setFromCamera(ndc.set(pointer.nx, pointer.ny), camera);
       const hit = raycaster.intersectObjects(tileMeshes, true)[0];
       const hitTile = hit ? tileMeshes.findIndex((g) => g === hit.object.parent || g === hit.object) : -1;
       tileHover.forEach((_, i) => (tileHover[i] = damp(tileHover[i], i === hitTile ? 1 : 0, 6, dt)));
@@ -245,24 +258,30 @@ export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, qu
     frame(dt);
     if (!reduced) adapt(dt);
   };
-  // On screen? A bounding-rect check on scroll/resize. (An
-  // IntersectionObserver misses the change when the panel's reveal
-  // clip-path, not layout, is what uncovers the canvas.)
+  // Render only while on screen and the tab is visible.
+  let onScreen = true;
   const checkVisible = () => {
-    const r = canvas.getBoundingClientRect();
-    const next = r.bottom > 0 && r.top < window.innerHeight && document.visibilityState === "visible";
+    const next = onScreen && document.visibilityState === "visible";
     if (next && !visible) last = performance.now();
     visible = next;
   };
-  checkVisible();
-  window.addEventListener("scroll", checkVisible, { passive: true });
-  window.addEventListener("resize", checkVisible, { passive: true });
+  const io = new IntersectionObserver(([entry]) => {
+    onScreen = entry.isIntersecting;
+    checkVisible();
+  });
+  io.observe(canvas);
   document.addEventListener("visibilitychange", checkVisible);
-  if (reduced) frame(0);
-  else gsap.ticker.add(tick);
+  const ready = renderer
+    .compileAsync(scene, camera)
+    .catch(() => undefined)
+    .then(() => {
+      frame(0);
+      if (!reduced) gsap.ticker.add(tick);
+    });
 
   return {
     intro,
+    ready,
     setFinal() {
       intro.platform = 1;
       intro.led = 1;
@@ -289,8 +308,7 @@ export function createHeroScene(canvas: HTMLCanvasElement, { mobile, reduced, qu
     },
     dispose() {
       gsap.ticker.remove(tick);
-      window.removeEventListener("scroll", checkVisible);
-      window.removeEventListener("resize", checkVisible);
+      io.disconnect();
       ro.disconnect();
       document.removeEventListener("visibilitychange", checkVisible);
       window.removeEventListener("pointermove", onPointer);

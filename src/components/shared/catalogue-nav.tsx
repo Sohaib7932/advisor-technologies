@@ -61,7 +61,7 @@ export function CatalogueNav({
                 {item.label}
                 <span
                   className={cn(
-                    "grid min-w-5 place-items-center rounded-full px-1.5 text-[0.6875rem] tabular-nums",
+                    "grid min-w-5 place-items-center rounded-full px-1.5 text-xs tabular-nums",
                     isActive ? "bg-white/15 text-white" : "bg-ice text-text-3",
                   )}
                 >

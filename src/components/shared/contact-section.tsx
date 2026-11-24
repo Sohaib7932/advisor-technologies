@@ -5,6 +5,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { ChatCard } from "@/components/ui/chat-card";
 import { Clock, Mail, MapPin, Phone } from "@/components/ui/icons";
 import { ContactForm } from "./contact-form";
+import { MapEmbed } from "./map-embed";
 import { addressLines, site } from "@/lib/site";
 
 const mapQuery = encodeURIComponent(`${site.contact.address.line2}, ${site.contact.address.city}, ${site.contact.address.country}`);
@@ -109,13 +110,7 @@ export function ContactSection({ headingLevel = "h2" }: { headingLevel?: "h1" | 
             </div>
           </div>
           <div className="card relative min-h-80 overflow-hidden lg:col-span-6">
-            <iframe
-              src={mapEmbed}
-              title={`Map: ${site.contact.address.line2}, ${site.contact.address.city}`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 size-full [filter:grayscale(0.6)_contrast(0.95)_brightness(1.03)]"
-            />
+            <MapEmbed src={mapEmbed} href={directionsHref} title={`Map: ${site.contact.address.line2}, ${site.contact.address.city}`} />
           </div>
         </div>
       </Container>
@@ -129,7 +124,7 @@ function IconTile({ children }: { children: React.ReactNode }) {
 
 function DetailCard({ icon, label, href, children }: { icon: React.ReactNode; label: string; href: string; children: React.ReactNode }) {
   return (
-    <a href={href} className="group card flex flex-col p-5 sm:p-6 transition-[translate,box-shadow] duration-500 ease-out-expo hover:-translate-y-0.5 hover:shadow-card-hover">
+    <a href={href} className="group card flex flex-col p-5 sm:p-6 transition-[translate] duration-500 ease-out-expo hover:-translate-y-0.5 lift">
       <IconTile>{icon}</IconTile>
       <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-text-3 uppercase">{label}</p>
       <p className="mt-2 text-[0.9375rem] font-semibold text-navy">{children}</p>

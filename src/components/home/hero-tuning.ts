@@ -25,10 +25,19 @@ export const HERO_TUNING = {
   camera: {
     fov: 30,
     /** 3/4 high angle, like ref 2. */
-    desktop: { position: [0.6, 9.2, 17.6] as const, target: [-0.9, 1.5, 0] as const },
+    desktop: { position: [1.7, 9.2, 17.6] as const, target: [0.2, 1.5, 0] as const },
     mobile: { position: [0, 9.4, 18] as const, target: [0, 1.5, 0] as const },
   },
+  /** DPR cap for the live scene (phones show the poster instead). */
   dprCap: 2,
+  /**
+   * Quality tiers. 1: full (transmission glass, DPR up to dprCap).
+   * 2: DPR 1 and fake glass. 3: static poster. A step happens after
+   * `patience` seconds of frames slower than `slowFrame` seconds.
+   * Devices that start on the poster: reduced motion, Save-Data, phones,
+   * no hardware WebGL, hardwareConcurrency or deviceMemory <= lowEnd.
+   */
+  tiers: { slowFrame: 1 / 38, patience: 1.6, lowEnd: 4 },
   lights: { environment: 0.85, key: 2.1, rim: 3.2, exposure: 1.02 },
 
   /** Tallest at centre-back, gear and chair at the sides, three in front. */

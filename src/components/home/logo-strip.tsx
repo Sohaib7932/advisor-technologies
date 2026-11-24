@@ -17,7 +17,7 @@ export function LogoStrip() {
           Supplying <span className="font-semibold text-navy">{clients.length}+ institutional clients</span> across Pakistan
         </p>
       </Container>
-      <div className="marquee mt-8 overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+      <div data-marquee className="marquee mt-8 overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
         <ul className="animate-marquee flex w-max items-center gap-14 md:gap-20">
           {track.map((client, i) => (
             <li key={`${client.name}-${i}`} aria-hidden={i >= withLogos.length || undefined} className="relative h-12 w-28 shrink-0 md:h-14 md:w-32">

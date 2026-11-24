@@ -27,6 +27,11 @@ const DEPTHS = [
   "translate-x-[20%] -translate-y-[30%] scale-[0.82] opacity-0",
 ];
 
+function subscribeVisibility(callback: () => void) {
+  document.addEventListener("visibilitychange", callback);
+  return () => document.removeEventListener("visibilitychange", callback);
+}
+
 function subscribeReducedMotion(callback: () => void) {
   const query = window.matchMedia("(prefers-reduced-motion: reduce)");
   query.addEventListener("change", callback);
@@ -67,7 +72,13 @@ export function ProductDeck({ cards }: { cards: DeckCard[] }) {
     return () => observer.disconnect();
   }, []);
 
-  const running = inView && !paused;
+  // Hold while the tab is hidden, too.
+  const tabVisible = useSyncExternalStore(
+    subscribeVisibility,
+    () => document.visibilityState === "visible",
+    () => true,
+  );
+  const running = inView && !paused && tabVisible;
 
   return (
     <div ref={rootRef}>

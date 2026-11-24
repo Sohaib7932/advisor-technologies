@@ -48,7 +48,7 @@ export function RouteSteps() {
         <li
           key={step.title}
           data-step
-          className="group relative flex flex-col items-center rounded-[1.25rem] bg-white px-2.5 pt-4 pb-4 text-center shadow-card ring-1 ring-line transition-[translate,box-shadow] duration-500 ease-out-expo hover:-translate-y-1 hover:shadow-card-hover sm:px-4 sm:pt-5"
+          className="group relative flex flex-col items-center rounded-[1.25rem] bg-white px-2.5 pt-4 pb-4 text-center shadow-card ring-1 ring-line transition-[translate] duration-500 ease-out-expo hover:-translate-y-1 lift sm:px-4 sm:pt-5"
         >
           <span
             data-step-icon
@@ -56,7 +56,7 @@ export function RouteSteps() {
           >
             <Icon name={step.icon} className="size-4.5 sm:size-5" />
           </span>
-          <span className="mt-3 font-display text-[0.6875rem] font-bold text-steel tabular-nums">
+          <span className="mt-3 font-display text-xs font-bold text-steel tabular-nums">
             {String(i + 1).padStart(2, "0")}
           </span>
           <span className="mt-0.5 text-sm font-semibold text-navy sm:text-[0.9375rem]">{step.title}</span>

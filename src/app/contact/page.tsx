@@ -5,6 +5,7 @@ import { site } from "@/lib/site";
 import { Accent } from "@/components/ui/section-heading";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "Contact Us",
   description: `Contact Advisor Technologies at ${site.contact.address.line1}, ${site.contact.address.line2}, ${site.contact.address.city}. Email ${site.contact.email} or call ${site.contact.phone}.`,
 };

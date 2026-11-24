@@ -1,6 +1,7 @@
 import { Container, Section, type SectionTone } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/section-heading";
-import { CardDeck, DeckCard, IconArt } from "@/components/ui/card-deck";
+import { CardDeck } from "@/components/ui/card-deck";
+import { DeckCard, IconArt } from "@/components/ui/deck-card";
 import { Icon } from "@/components/ui/icons";
 import { values } from "@/lib/content";
 

@@ -13,6 +13,7 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About Us",
   description:
     "Advisor Technologies is an Islamabad-based exclusive territory agent for world-class industrial manufacturing brands, serving government and private-sector clients across Pakistan.",

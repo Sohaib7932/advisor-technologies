@@ -21,4 +21,8 @@ export const MOTION = {
   desktop: "(min-width: 768px)",
 } as const;
 
+// Read by scripts/perf checks to confirm ScrollTriggers are cleaned up
+// after navigation (a reference only, no behaviour).
+if (typeof window !== "undefined") (window as unknown as { __st?: typeof ScrollTrigger }).__st = ScrollTrigger;
+
 export { gsap, ScrollTrigger, useGSAP };

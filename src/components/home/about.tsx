@@ -61,7 +61,7 @@ export function About() {
                       <li key={stat.label} className="card rounded-[1.5rem] p-5 sm:p-6">
                         <CountUp value={stat.value} className="block font-display text-[clamp(2rem,1.4rem+2vw,2.75rem)] leading-none font-bold tracking-tight text-navy tabular-nums" />
                         <p className="mt-3 text-sm font-semibold text-navy">{stat.label}</p>
-                        <p className="mt-1.5 hidden text-[0.8125rem] leading-relaxed text-text-3 sm:block">{stat.detail}</p>
+                        <p className="mt-1.5 hidden text-sm leading-relaxed text-text-3 sm:block">{stat.detail}</p>
                       </li>
                     ))}
                 </ul>

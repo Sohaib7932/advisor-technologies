@@ -22,6 +22,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/products" },
   title: "Products",
   description:
     "Plant & machinery, computer systems, servers, networking, satellite communications, printing and multifunction devices, monitors, temporary office setups, web services and general order supplies.",
@@ -126,7 +127,7 @@ export default function ProductsPage() {
                       </div>
 
                       <div className="mt-auto">
-                        <span className="rounded-full bg-navy-950/55 px-3.5 py-1 text-[0.625rem] font-semibold tracking-[0.14em] uppercase ring-1 ring-white/25">
+                        <span className="rounded-full bg-navy-950/55 px-3.5 py-1 text-xs font-semibold tracking-[0.14em] uppercase ring-1 ring-white/25">
                           {group.items.length} product{" "}
                           {group.items.length === 1 ? "line" : "lines"}
                         </span>
@@ -216,7 +217,7 @@ function ProductCard({
     : "/contact#enquiry";
 
   return (
-    <div className="group relative isolate flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 shadow-soft ring-1 ring-line transition-[translate,box-shadow] duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift sm:p-7">
+    <div className="group relative isolate flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 shadow-soft ring-1 ring-line transition-[translate] duration-500 ease-out-soft hover:-translate-y-1 lift sm:p-7">
       {/* Soft navy wash rising on hover */}
       <span
         aria-hidden
@@ -227,12 +228,12 @@ function ProductCard({
         <span className="grid size-12 place-items-center rounded-full bg-navy-950 text-white shadow-soft transition-transform duration-500 ease-out-soft group-hover:-rotate-6">
           <Icon name={product.icon} className="size-5" />
         </span>
+        {/* Decorative index, drawn as generated content (not text) */}
         <span
           aria-hidden
-          className="font-display text-4xl leading-none font-bold text-fg/8 transition-colors duration-500 group-hover:text-accent/25"
-        >
-          {String(index + 1).padStart(2, "0")}
-        </span>
+          data-index={String(index + 1).padStart(2, "0")}
+          className="font-display text-4xl leading-none font-bold text-fg/8 transition-colors duration-500 group-hover:text-accent/25 before:content-[attr(data-index)]"
+        />
       </div>
 
       <h3 className="mt-7 font-display text-lg font-semibold text-fg">

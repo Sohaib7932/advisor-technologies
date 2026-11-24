@@ -14,7 +14,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer data-theme="dark" className="panel relative isolate mt-6 mb-(--inset) overflow-hidden bg-ink text-fg-muted">
+    <footer data-theme="dark" className="panel relative isolate mt-6 mb-[calc(var(--inset)+env(safe-area-inset-bottom))] overflow-hidden bg-ink text-fg-muted [content-visibility:auto] [contain-intrinsic-size:auto_560px]">
       <div aria-hidden className="pointer-events-none absolute -top-40 -right-20 -z-10 aspect-square w-[34rem] rounded-full bg-[radial-gradient(closest-side,rgb(47_92_196/0.35),transparent)]" />
       <div className="px-(--gutter) pt-12 pb-8 md:pt-14">
         {/* Top band */}
@@ -26,7 +26,7 @@ export function Footer() {
               </span>
               <span className="flex flex-col leading-none">
                 <span className="font-display text-lg font-bold tracking-tight text-white">Advisor</span>{" "}
-                <span className="mt-1 text-[0.625rem] font-semibold tracking-[0.22em] text-fg-subtle uppercase">Technologies</span>
+                <span aria-hidden className="mt-1 text-xs font-semibold tracking-[0.22em] text-fg-subtle uppercase">Technologies</span><span className="sr-only">Technologies</span>
               </span>
             </Link>
             <p className="max-w-md text-sm leading-relaxed sm:border-l sm:border-white/10 sm:pl-6">
@@ -88,21 +88,35 @@ export function Footer() {
         </div>
 
         {/* Registration and legal */}
-        <div className="flex flex-col gap-4 border-t border-white/10 pt-7 text-xs md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 border-t border-white/10 pt-7 text-sm md:flex-row md:items-center md:justify-between">
           <dl className="flex flex-wrap gap-2">
             {[
               ["NTN", site.registration.ntn],
               ["STN", site.registration.stn],
             ].map(([label, value]) => (
-              <div key={label} className="flex items-center gap-2 rounded-full bg-white/6 px-3.5 py-1.5 ring-1 ring-white/10">
+              <div key={label} className="flex items-center gap-2 rounded-full bg-white/6 px-3.5 py-1.5 text-xs ring-1 ring-white/10">
                 <dt className="text-fg-subtle">{label}</dt>
                 <dd className="font-semibold text-white tabular-nums">{value}</dd>
               </div>
             ))}
           </dl>
-          <p className="text-fg-subtle">
-            © {year} {site.name}. All rights reserved.
-          </p>
+          <div className="flex flex-col gap-1.5 text-fg-subtle sm:flex-row sm:items-center sm:gap-4">
+            <p>
+              © {year} {site.name}. All rights reserved.
+            </p>
+            <span aria-hidden className="hidden h-3 w-px bg-white/15 sm:block" />
+            <p>
+              Created by{" "}
+              <a
+                href="https://corefinity.tech/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-white underline-offset-4 transition-colors hover:text-sky hover:underline"
+              >
+                Corefinity Tech
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
